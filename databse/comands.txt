@@ -1,0 +1,1 @@
+mongorestore -d db_name path/

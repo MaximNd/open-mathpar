@@ -1,0 +1,140 @@
+<template>
+  <v-layout row>
+    <v-dialog v-model="createStudentDialog" max-width="900px">
+      <v-btn color="primary" dark slot="activator">Create Student</v-btn>
+      <v-card>
+        <v-card-title>
+          <span class="headline primary--text">New Student</span>
+        </v-card-title>
+        <v-form @submit.prevent="createStudent">
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="user.lastName" label="Last name" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="user.firstName" label="First name" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="user.middleName" label="Middle name" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-select
+                    v-model="user.gender"
+                    label="Gender"
+                    :items="['Man', 'Women']"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="user.email" label="Email" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="user.password" label="Password" type="password" required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-dialog
+                    persistent
+                    v-model="modal"
+                    lazy
+                    full-width
+                  >
+                    <v-text-field
+                      slot="activator"
+                      label="Birthday"
+                      v-model="user.birthday"
+                      prepend-icon="event"
+                      readonly
+                    ></v-text-field>
+                    <v-date-picker v-model="user.birthday" scrollable actions>
+                      <template slot-scope="{ save, cancel }">
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+                          <v-btn flat color="primary" @click="save">OK</v-btn>
+                        </v-card-actions>
+                      </template>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-flex>
+                <v-flex xs6>
+                  <v-select
+                    v-model="student.classId"
+                    autocomplete
+                    label="Class"
+                    :items="classes"
+                    item-text="name"
+                    item-value="_id"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs6>
+                  <v-select
+                    v-model="student.groupId"
+                    autocomplete
+                    label="Group"
+                    :items="groups"
+                    item-text="group.name"
+                    item-value="group._id"
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error" flat @click.native="createStudentDialog = false">Close</v-btn>
+            <v-btn type="submit" color="success" flat @click.native="createStudentDialog = false">Save</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+  </v-layout>
+</template>
+
+<script>
+  export default {
+    data () {
+      return {
+        user: {
+          firstName: '',
+          middleName: '',
+          lastName: '',
+          gender: '',
+          birthday: null,
+          email: '',
+          password: '',
+          role: 'student'
+          // ,
+          // image: {
+          //     type: String,
+          //     required: false
+          // }
+        },
+        student: {
+          groupId: '',
+          classId: ''
+        },
+        classes: [],
+        groups: [],
+        studentBirthday: null,
+        menu: false,
+        modal: false,
+        createStudentDialog: false
+      }
+    },
+    methods: {
+      createStudent() {
+        this.$store.dispatch('createStudents', { user: this.user, groupId: this.student.groupId, classId: this.student.classId })
+          .then(() => console.log('Student was added'));
+      }
+    },
+    created() {
+      console.log('schoolID: ', this.$auth.user().clients[0].client.schoolId._id);
+      this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/classes`)
+        .then(data => { this.classes = data.body; });
+      this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/groups`)
+        .then(data => { this.groups = data.body.groups; });
+    }
+  }
+</script>
