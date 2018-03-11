@@ -59,7 +59,6 @@
                 });
             },
             initializeMenu() {
-                console.log('nav:', this.$auth.user());
                 if (this.$auth.user().role.indexOf('admin') !== -1) {
 
                 } else if (this.$auth.user().role.indexOf('director') !== -1) {

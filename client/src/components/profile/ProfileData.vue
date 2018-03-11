@@ -49,7 +49,6 @@
               }
             },
             clientsData() {
-                // console.log(['a'].concat(...this.$store.getters.clientsTableData));
                 if (this.$store.getters.isLoggedInUser) {
                   return this.clientsTableData(this.$auth.user());
                 } else {

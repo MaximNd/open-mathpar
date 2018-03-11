@@ -15,146 +15,150 @@
           <v-divider v-if="n !== steps" :key="index"></v-divider>
         </template>
       </v-stepper-header>
-      <v-container fluid>
-        <v-layout>
-          <v-flex xs12>
-            <v-menu offset-y :close-on-content-click="false">
-              <v-btn color="info" slot="activator">Tips</v-btn>
-              <v-expansion-panel>
-                <v-expansion-panel-content v-for="(item, itemIndx) in tips" :key="itemIndx">
-                  <div slot="header">{{ item.title }}</div>
-                  <v-card>
-                    <v-card-text>
-                      <template v-for="(subItem, subItemIndx) in item.items">
-                        <template v-if="!subItem.items">
-                          <v-chip class="mb-3" :key="subItemIndx">
-                            <span>{{ subItem.title }}</span>
-                          </v-chip>
-                        </template>
-                        <template v-else>
-                          <v-expansion-panel :key="subItemIndx">
-                            <v-expansion-panel-content>
-                              <div slot="header">{{ subItem.title }}</div>
-                              <template v-for="(subItem2, subItemIndx2) in subItem.items">
-                                <v-chip :class="{ 'mb-3': true, 'ml-4': subItemIndx2 === 0, 'mr-4': subItemIndx2 === subItem.items.length-1 }" :key="subItemIndx2">
-                                  <span>{{ subItem2.title }}</span>
-                                </v-chip>
-                              </template>
-                            </v-expansion-panel-content>
-                          </v-expansion-panel>
-                        </template>
-                      </template>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-            </v-menu>
-          </v-flex>
-        </v-layout>
-      </v-container>
       <v-stepper-content
         :step="n"
         v-for="(n, index) in steps"
         :key="`${index}-content`"
       >
-        <v-card class="mb-5 elevation-0">
-          <v-layout column>
-            <v-flex>
-              <v-card-text>
-
-                <v-card class="mb-2">
-                  <v-card-actions>
-                    <v-container fluid>
-                      <v-layout justify-start>
-                        <v-flex xs12 align-start>
-                          <v-btn color="primary" @click="execute(index)">
-                            <v-icon left>play_arrow</v-icon>
-                            Execute
-                          </v-btn>
-                          <v-btn color="info" @click="swap(index)">
-                            <v-icon left>swap_horiz</v-icon>
-                            Swap
-                          </v-btn>
-                          <v-btn color="success" @click="addInputBelow(index)">
-                            <v-icon left>add</v-icon>
-                            Add one input below
-                          </v-btn>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-card-actions>
-                  <v-card-text>
-                    <v-card class="original">
-                      <template v-if="!currentResults[index].exerciseText.isLatex">
-                        <v-card-text class="original-input">
-                          <v-text-field :value="currentResults[index].exerciseText.task" label="Exercise" multi-line auto-grow ></v-text-field>
-                        </v-card-text>
-                        <v-card-text class="original-output">
-                          <h3>Output: </h3>
-                          <p>{{ currentResults[index].exerciseText.result }}</p>
-                        </v-card-text>
-                      </template>
-                      <template v-else>
+        <v-container fluid>
+          <v-layout>
+            <v-flex xs3>
+              <v-card class="elevation-0">
+                <v-card-text>
+                  <v-expansion-panel>
+                    <v-expansion-panel-content v-for="(item, itemIndx) in tips" :key="itemIndx">
+                      <div slot="header">{{ item.title }}</div>
+                      <v-card>
                         <v-card-text>
-                          <div class="math-jax" id="latex_markup">
-                            <p>{{ currentResults[index].exerciseText.latex || 'No result yet' }}</p>
-                          </div>
+                          <template v-for="(subItem, subItemIndx) in item.items">
+                            <template v-if="!subItem.items">
+                              <v-chip class="mb-3" :key="subItemIndx">
+                                <span>{{ subItem.title }}</span>
+                              </v-chip>
+                            </template>
+                            <template v-else>
+                              <v-expansion-panel :key="subItemIndx">
+                                <v-expansion-panel-content>
+                                  <div slot="header">{{ subItem.title }}</div>
+                                  <template v-for="(subItem2, subItemIndx2) in subItem.items">
+                                    <v-chip :class="{ 'mb-3': true, 'ml-4': subItemIndx2 === 0, 'mr-4': subItemIndx2 === subItem.items.length-1 }" :key="subItemIndx2">
+                                      <span>{{ subItem2.title }}</span>
+                                    </v-chip>
+                                  </template>
+                                </v-expansion-panel-content>
+                              </v-expansion-panel>
+                            </template>
+                          </template>
                         </v-card-text>
-                      </template>
-                    </v-card>
+                      </v-card>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-card-text>
+              </v-card>
+            </v-flex>
+            <v-flex xs9>
+              <div :style="{ 'overflow-y': 'scroll', 'height': height }">
+              <v-card class="mb-5 elevation-0">
+                <v-layout column>
+                  <v-flex>
+                    <v-card-text>
 
-                  </v-card-text>
-                </v-card>
-
-                <v-card class="mb-2" v-for="(answer, index2) in currentResults[index].studentAnswers" :key="`${index2}-answer`">
-                  <v-card-actions>
-                    <v-container fluid>
-                      <v-layout justify-start>
-                        <v-flex xs12 align-start>
-                          <v-btn color="primary" @click="execute(index, index2)">
-                            <v-icon left>play_arrow</v-icon>
-                            Execute
-                          </v-btn>
-                          <v-btn color="info" @click="swap(index, index2)">
-                            <v-icon left>swap_horiz</v-icon>
-                            Swap
-                          </v-btn>
-                          <v-btn color="success" @click="addInputBelow(index, index2+1)">
-                            <v-icon left>add</v-icon>
-                            Add one input below
-                          </v-btn>
-                          <v-btn color="error" @click="deleteInputById(index, index2)">
-                            <v-icon left>close</v-icon>
-                            Delete this input
-                          </v-btn>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-card-actions>
-                  <v-card-text>
-                    <v-card class="original">
-                      <template v-if="!currentResults[index].studentAnswers[index2].isLatex">
-                        <v-card-text class="original-input">
-                          <v-text-field :value="currentResults[index].studentAnswers[index2].task" @input="updateInput(index, index2, $event)" label="Your answer" multi-line auto-grow ></v-text-field>
-                        </v-card-text>
-                        <v-card-text class="original-output">
-                          <h3>Output: {{ currentResults[index].studentAnswers[index2].result }}</h3>
-                        </v-card-text>
-                      </template>
-                      <template v-else>
+                      <v-card class="mb-2">
+                        <v-card-actions>
+                          <v-container fluid>
+                            <v-layout justify-start>
+                              <v-flex xs12 align-start>
+                                <v-btn color="primary" @click="execute(index)">
+                                  <v-icon left>play_arrow</v-icon>
+                                  Execute
+                                </v-btn>
+                                <v-btn color="info" @click="swap(index)">
+                                  <v-icon left>swap_horiz</v-icon>
+                                  Swap
+                                </v-btn>
+                                <v-btn color="success" @click="addInputBelow(index)">
+                                  <v-icon left>add</v-icon>
+                                  Add one input below
+                                </v-btn>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                        </v-card-actions>
                         <v-card-text>
-                          <div class="math-jax" v-html="currentResults[index].studentAnswers[index2].latex">
-                          </div>
-                        </v-card-text>
-                      </template>
-                    </v-card>
-                  </v-card-text>
-                </v-card>
+                          <v-card class="original">
+                            <template v-if="!currentResults[index].exerciseText.isLatex">
+                              <v-card-text class="original-input">
+                                <v-text-field :value="currentResults[index].exerciseText.task" label="Exercise" multi-line auto-grow ></v-text-field>
+                              </v-card-text>
+                              <v-card-text class="original-output">
+                                <h3>Output: </h3>
+                                <p>{{ currentResults[index].exerciseText.result }}</p>
+                              </v-card-text>
+                            </template>
+                            <template v-else>
+                              <v-card-text>
+                                <div class="math-jax" id="latex_markup" v-html="currentResults[index].exerciseText.latex">
+                                </div>
+                              </v-card-text>
+                            </template>
+                          </v-card>
 
-              </v-card-text>
+                        </v-card-text>
+                      </v-card>
+
+                      <v-card class="mb-2" v-for="(answer, index2) in currentResults[index].studentAnswers" :key="`${index2}-answer`">
+                        <v-card-actions>
+                          <v-container fluid>
+                            <v-layout justify-start>
+                              <v-flex xs12 align-start>
+                                <v-btn color="primary" @click="execute(index, index2)">
+                                  <v-icon left>play_arrow</v-icon>
+                                  Execute
+                                </v-btn>
+                                <v-btn color="info" @click="swap(index, index2)">
+                                  <v-icon left>swap_horiz</v-icon>
+                                  Swap
+                                </v-btn>
+                                <v-btn color="success" @click="addInputBelow(index, index2+1)">
+                                  <v-icon left>add</v-icon>
+                                  Add one input below
+                                </v-btn>
+                                <v-btn color="error" @click="deleteInputById(index, index2)">
+                                  <v-icon left>close</v-icon>
+                                  Delete this input
+                                </v-btn>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                        </v-card-actions>
+                        <v-card-text>
+                          <v-card class="original">
+                            <template v-if="!currentResults[index].studentAnswers[index2].isLatex">
+                              <v-card-text class="original-input">
+                                <v-text-field :value="currentResults[index].studentAnswers[index2].task" @input="updateInput(index, index2, $event)" label="Your answer" multi-line auto-grow ></v-text-field>
+                              </v-card-text>
+                              <v-card-text class="original-output">
+                                <h3>Output: {{ currentResults[index].studentAnswers[index2].result }}</h3>
+                              </v-card-text>
+                            </template>
+                            <template v-else>
+                              <v-card-text>
+                                <div class="math-jax" v-html="currentResults[index].studentAnswers[index2].latex">
+                                </div>
+                              </v-card-text>
+                            </template>
+                          </v-card>
+                        </v-card-text>
+                      </v-card>
+
+                    </v-card-text>
+                  </v-flex>
+                </v-layout>
+              </v-card>
+              </div>
             </v-flex>
           </v-layout>
-        </v-card>
+        </v-container>
         <v-flex xs12>
           <v-btn color="primary" @click="prevStep(n)">Prev</v-btn>
           <v-btn color="primary" @click="nextStep(n)">Next</v-btn>
@@ -318,6 +322,9 @@
       },
       currentResults() {
           return this.$store.getters.currentResults;
+      },
+      height() {
+        return this.currentResults[this.exercise - 1].studentAnswers.length > 0 ? '100vh' : '60vh';
       }
     },
     watch: {
@@ -369,14 +376,21 @@
         this.$store.dispatch('calc', { sectionId, task })
           .then(res => {
             if (res.body.status === 'OK') {
+              let latexArr = res.body.latex.split('\n');
+              const latex = latexArr.reduce((latex, latexArrEl) => {
+                if (latexArrEl !== '') {
+                  latex += `<div>${latexArrEl}</div>`;
+                }
+                return latex;
+              }, '');
               if (typeof section === 'undefined' || section === null) {
-                Vue.set(this.currentResults[exerciseId].exerciseText, 'latex', res.body.latex);
+                Vue.set(this.currentResults[exerciseId].exerciseText, 'latex', latex);
                 Vue.set(this.currentResults[exerciseId].exerciseText, 'result', res.body.result);
                 if (!this.currentResults[exerciseId].exerciseText.isLatex) {
                   this.swap(exerciseId, section);
                 }
               } else {
-                Vue.set(this.currentResults[exerciseId].studentAnswers[section], 'latex', res.body.latex);
+                Vue.set(this.currentResults[exerciseId].studentAnswers[section], 'latex', latex);
                 Vue.set(this.currentResults[exerciseId].studentAnswers[section], 'result', res.body.result);
                 if (!this.currentResults[exerciseId].studentAnswers[section].isLatex) {
                   this.swap(exerciseId, section);
@@ -431,7 +445,7 @@
                 exercise: i,
                 exerciseText: {
                   task: this.task.exercises[i].text,
-                  latex: '',
+                  latex: '<p>No result yet</p>',
                   isLatex: false,
                   result: '',
                   sectionId: i

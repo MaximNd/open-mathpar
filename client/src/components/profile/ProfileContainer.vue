@@ -13,8 +13,6 @@
 <script>
     import ProfileData from './ProfileData.vue';
 
-    import { store } from './../../store/store';
-
     export default {
         data() {
           return {
@@ -22,25 +20,13 @@
           };
         },
         created() {
-            console.log(0);
-            // console.log(to);
-            store.dispatch('checkIfCurrent', this.$route)
+            this.$store.dispatch('checkIfCurrent', this.$route)
               .then(result => {
                 if (!result) {
-                  store.dispatch('getUser', this.$route);
+                  this.$store.dispatch('getUser', this.$route);
                 }
               });
-            //
-
-            // store.dispatch('getUser', to)
-            //     .then(() => {
-            //         console.log(1);
-            //         next();
-            //     });
         },
-        // created() {
-        //     console.log(2);
-        // },
         components: {
             appProfileData: ProfileData
         }
