@@ -32,7 +32,7 @@
                         <v-card-text>
                           <template v-for="(subItem, subItemIndx) in item.items">
                             <template v-if="!subItem.items">
-                              <v-chip class="mb-3" :key="subItemIndx">
+                              <v-chip class="mb-3" :key="subItemIndx" @click="insertTipsData(index, subItem.dataInsert, subItem.offset)">
                                 <span>{{ subItem.title }}</span>
                               </v-chip>
                             </template>
@@ -135,7 +135,7 @@
                           <v-card class="original">
                             <template v-if="!currentResults[index].studentAnswers[index2].isLatex">
                               <v-card-text class="original-input">
-                                <v-text-field :value="currentResults[index].studentAnswers[index2].task" @input="updateInput(index, index2, $event)" label="Your answer" multi-line auto-grow ></v-text-field>
+                                <v-text-field :ref='`studentAnswerTextField${index2}`' :value="currentResults[index].studentAnswers[index2].task" @input="updateInput(index, index2, $event)" label="Your answer" multi-line auto-grow @blur="getCaretPosition(index2)" @focus="lastSection.sectionId = index2"></v-text-field>
                               </v-card-text>
                               <v-card-text class="original-output">
                                 <h3>Output: {{ currentResults[index].studentAnswers[index2].result }}</h3>
@@ -184,11 +184,15 @@
   export default {
     data () {
       return {
+        lastSection: {
+          sectionId: 0,
+          cursorIndex: 0
+        },
         tips: [
           {
             title: 'Space',
             items: [
-              { title: '$\\mathbb{Z}$', dataInsert: 'SPACE = Z[];' },
+              { title: '$\\mathbb{Z}$', dataInsert: 'SPACE = Z[];', offset: 10 },
               { title: '$\\mathbb{Z}p$', dataInsert: 'SPACE = Zp[];' },
               { title: '$\\mathbb{Z}p32$', dataInsert: 'SPACE = Zp32[];' },
               { title: '$\\mathbb{Z}64$', dataInsert: 'SPACE = Z64[];' },
@@ -488,6 +492,50 @@
             this.addInputBelow(exercise);
             this.currentResults[exercise].studentAnswers[0].task = body.solution;
           });
+      },
+      insertTipsData(exerciseId, dataToInsert, offset) {
+        if (this.currentResults[exerciseId].studentAnswers.length === 0) return;
+        let task = this.currentResults[exerciseId].studentAnswers[this.lastSection.sectionId].task.split('');
+        task.splice(this.lastSection.cursorIndex, 0, dataToInsert);
+        const newTask = task.join('');
+        Vue.set(this.currentResults[exerciseId].studentAnswers[this.lastSection.sectionId], 'task', newTask);
+        this.setCaretPosition(this.lastSection.cursorIndex + offset);
+      },
+      getCaretPosition (sectionId) {
+        // console.log(this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[1].children[0].value)
+        const textarea = this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[1].children[0];
+        if (document.selection) {
+          textarea.focus();
+          var range = document.selection.createRange();
+          var rangelen = range.text.length;
+          range.moveStart('character', -textarea.value.length);
+          var start = range.text.length - rangelen;
+          this.lastSection.cursorIndex = start;
+          // return { 'start': start, 'end': start + rangelen };
+        } else if (textarea.selectionStart || textarea.selectionStart === '0') {
+          this.lastSection.cursorIndex = textarea.selectionStart;
+          // return { 'start': textarea.selectionStart, 'end': textarea.selectionEnd };
+        } else {
+          this.lastSection.cursorIndex = 0;
+          // return {'start': 0, 'end': 0};
+        }
+      },
+      setCaretPosition(position) {
+        const start = position;
+        const end = position;
+        const textarea = this.$refs[`studentAnswerTextField${this.lastSection.sectionId}`][0].$el.children[1].children[0];
+        setTimeout(() => {
+          if (textarea.setSelectionRange) {
+            textarea.focus();
+            textarea.setSelectionRange(start, end);
+          } else if (textarea.createTextRange) {
+            var range = textarea.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', end);
+            range.moveStart('character', start);
+            range.select();
+          }
+        }, 0);
       },
       nextStep (n) {
         if (n === this.steps) {
