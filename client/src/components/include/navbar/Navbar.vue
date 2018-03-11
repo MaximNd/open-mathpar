@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="$auth.ready()">
         <v-navigation-drawer temporary v-model="sideNav" light absolute>
             <v-list class="pa-1">
                 <v-list-tile avatar>
@@ -59,6 +59,7 @@
                 });
             },
             initializeMenu() {
+                console.log('nav:', this.$auth.user());
                 if (this.$auth.user().role.indexOf('admin') !== -1) {
 
                 } else if (this.$auth.user().role.indexOf('director') !== -1) {

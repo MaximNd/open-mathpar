@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid grid-list-md>
+    <v-container v-if="updated" fluid grid-list-md>
         <v-layout row wrap>
             <v-flex xs12>
                 <v-container fluid>
@@ -16,18 +16,31 @@
     import { store } from './../../store/store';
 
     export default {
-        beforeRouteEnter(to, from, next) {
-            console.log(0);
-            console.log(to);
-            store.dispatch('getUser', to)
-                .then(() => {
-                    console.log(1);
-                    next();
-                });
+        data() {
+          return {
+            updated: true
+          };
         },
         created() {
-            console.log(2);
+            console.log(0);
+            // console.log(to);
+            store.dispatch('checkIfCurrent', this.$route)
+              .then(result => {
+                if (!result) {
+                  store.dispatch('getUser', this.$route);
+                }
+              });
+            //
+
+            // store.dispatch('getUser', to)
+            //     .then(() => {
+            //         console.log(1);
+            //         next();
+            //     });
         },
+        // created() {
+        //     console.log(2);
+        // },
         components: {
             appProfileData: ProfileData
         }

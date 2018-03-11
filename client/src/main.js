@@ -24,7 +24,8 @@ Vue.use(VueAuth, {
     router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
     loginData: { url: 'http://localhost:3000/user/login', method: 'POST', redirect: '/', fetchUser: false },
     registerData: { url: 'http://localhost:3000/user/signup', method: 'POST', redirect: '/login', fetchUser: false },
-    refreshData: {url: 'auth/refresh', method: 'GET', enabled: false, interval: 0}
+    refreshData: { url: 'auth/refresh', method: 'GET', enabled: false, interval: 0 },
+    fetchData: { url: 'auth/user', method: 'GET', enabled: false }
 });
 
 Vue.config.productionTip = false;

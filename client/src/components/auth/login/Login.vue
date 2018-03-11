@@ -43,6 +43,8 @@
             let user = data.body.user;
             user.clients = data.body.clients;
             this.$auth.user(user);
+            this.$store.commit('SET_USER', user);
+            this.$store.commit('SET_IS_LOGGED_IN_USER', true);
           },
           rememberMe: true
         });

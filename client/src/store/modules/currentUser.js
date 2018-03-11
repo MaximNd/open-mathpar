@@ -3,12 +3,20 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 const state = {
-    user: undefined
+    user: undefined,
+    otherUser: undefined,
+    isLoggedInUser: undefined
 };
 
 const getters = {
     user(state) {
-        return state.user;
+      return state.user;
+    },
+    otherUser(state) {
+      return state.otherUser;
+    },
+    isLoggedInUser(state) {
+      return state.isLoggedInUser;
     },
     userTableData(state) {
         if (typeof state.user === 'undefined') return {};
@@ -54,30 +62,83 @@ const getters = {
 const mutations = {
     SET_USER(state, payload) {
         state.user = payload;
+    },
+    SET_OTHER_USER(state, payload) {
+      state.otherUser = payload;
+    },
+    SET_IS_LOGGED_IN_USER(state, payload) {
+      state.isLoggedInUser = payload;
     }
 };
 
 const actions = {
+    fetchUser({ commit, dispatch }) {
+      console.log('fetchUser');
+      return new Promise((resolve, reject) => {
+        const token = Vue.auth.token();
+        if (token) {
+          Vue.http.get(`auth/user`, {}, { headers: { 'Authorization': `Bearer ${token}` } })
+          .then(data => {
+              let user = data.body.user;
+              let clients = data.body.clients;
+              user.clients = clients;
+              console.log(user);
+              Vue.auth.user(user);
+              commit('SET_USER', user);
+              // commit('SET_IS_LOGGED_IN_USER', true);
+              resolve();
+          })
+        } else {
+          reject();
+        }
+      });
+    },
+    checkIfCurrent({ commit }, payload) {
+      console.log('checkIfCurrent');
+      console.log('payload.params.id:', payload.params.id);
+      console.log('Vue.auth.user().id:', Vue.auth.user());
+      if (payload.params.id === Vue.auth.user().id) {
+        commit('SET_IS_LOGGED_IN_USER', true);
+        return true;
+      } else {
+        commit('SET_IS_LOGGED_IN_USER', false);
+        return false;
+      }
+    },
     getUser({ commit }, payload) {
-        console.log(payload.params.id);
-        console.log(Vue.auth.user());
+        // console.log(payload.params.id);
+        console.log('in get user:', Vue.auth.user());
+        console.log('in get user:', Vue.auth.check());
+        console.log(Vue.auth.token());
         return new Promise((resolve, reject) => {
-            if (payload.params.id === Vue.auth.user().id) {
-                commit('SET_USER', Vue.auth.user());
-                resolve();
-            } else {
-                // need watch by id in components to redirect
-                Vue.http.get(`user/${payload.params.id}`)
-                    .then(data => {
-                        let user = data.body.user;
-                        let clients = data.body.clients;
-                        user.clients = clients;
-                        console.log(user);
-                        commit('SET_USER', user);
-                        resolve();
-                    })
-                    .catch(err => reject(err));
-            }
+          Vue.http.get(`user/${payload.params.id}`)
+          .then(data => {
+              let user = data.body.user;
+              let clients = data.body.clients;
+              user.clients = clients;
+              console.log(user);
+              Vue.auth.user(user);
+              commit('SET_OTHER_USER', user);
+              resolve();
+          })
+          .catch(err => reject(err));
+            // if (payload.params.id === Vue.auth.user().id) {
+            //     commit('SET_USER', Vue.auth.user());
+            //     resolve();
+            // } else {
+            //     // need watch by id in components to redirect
+            //     Vue.http.get(`user/${payload.params.id}`)
+            //         .then(data => {
+            //             let user = data.body.user;
+            //             let clients = data.body.clients;
+            //             user.clients = clients;
+            //             console.log(user);
+            //             Vue.auth.user(user);
+            //             commit('SET_USER', user);
+            //             resolve();
+            //         })
+            //         .catch(err => reject(err));
+            // }
         });
     }
 };

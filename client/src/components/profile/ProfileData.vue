@@ -42,12 +42,57 @@
         },
         computed: {
             userData() {
-                return this.$store.getters.userTableData;
+              if (this.$store.getters.isLoggedInUser) {
+                return this.userTableData(this.$auth.user());
+              } else {
+                return this.userTableData(this.$store.getters.otherUser);
+              }
             },
             clientsData() {
                 // console.log(['a'].concat(...this.$store.getters.clientsTableData));
-                return this.$store.getters.clientsTableData;
+                if (this.$store.getters.isLoggedInUser) {
+                  return this.clientsTableData(this.$auth.user());
+                } else {
+                  return this.clientsTableData(this.$store.getters.otherUser);
+                }
             }
+        },
+        methods: {
+          userTableData(currentUser) {
+            if (typeof currentUser === 'undefined') return [];
+            let user = [
+                { title: 'Full name', text: currentUser.fullName },
+                { title: 'Gender', text: currentUser.gender },
+
+                { title: 'Role', text: currentUser.role.map(role => `${role.charAt(0).toUpperCase()}${role.substring(1, role.length)}`).join(', ') },
+                { title: 'Email', text: currentUser.email },
+                { title: 'Birthday', text: new Date(currentUser.birthday).toDateString() },
+                { title: 'Age', text: currentUser.age }
+                // { title: 'School', text: 'School' },
+                // { title: 'Group', text: 'Group' },
+                // { title: 'Subjects', text: 'Subjects' }
+            ];
+            return user;
+          },
+          clientsTableData(currentUser) {
+            if (typeof currentUser === 'undefined') return [];
+            let res = [];
+            currentUser.clients.forEach(client => {
+                if (client.clientRole === 'director' || client.clientRole === 'headTeacher') {
+                    res.push({ title: 'School', text: client.client.schoolId.name });
+                } else if (client.clientRole === 'teacher') {
+                    res.push({ title: 'Subjects',
+                            text: client.client.timetable.map(lesson => lesson.subjectId.name).filter((subject, index, subjects) => subjects.indexOf(subject) === index).join(', ') });
+                } else if (client.clientRole === 'student') {
+                    res.push({ title: 'AVG SR Mark', text: `${client.client.avgMarks.avgAllSR.avgAll.firstNumber} | ${client.client.avgMarks.avgAllSR.avgAll.secondNumber} | ${client.client.avgMarks.avgAllSR.avgAll.thirdNumber} | ${client.client.avgMarks.avgAllSR.avgAll.fourthNumber}` });
+                    res.push({ title: 'AVG KR Mark', text: client.client.avgMarks.avgAllKR == null ? 'No data yet' : client.client.avgMarks.avgAllKR });
+                    res.push({ title: 'AVG SR Dispersion', text: `${client.client.avgDispercion.allSr.firstNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.secondNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.thirdNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.fourthNumber || 'No data yet'}` });
+                    res.push({ title: 'AVG KR Dispersion', text: client.client.avgDispercion.allKr == null ? 'No data yet' : client.client.avgDispercion.allKr });
+                    res.push({ title: 'School', text: client.client.schoolId.name });
+                }
+            });
+            return res;
+          }
         },
         components: {
             appProfileChangeData: ProfileChangeData
