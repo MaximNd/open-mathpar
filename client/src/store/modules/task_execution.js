@@ -9,6 +9,7 @@ const state = {
     task: null,
     currentResults: [],
     sections: [],
+    taskFinished: false,
     resource: Vue.resource('http://localhost:8084/mathpar/api/calc', {},
     {
       calc: {
@@ -28,7 +29,10 @@ const state = {
 
 const getters = {
     task(state) {
-        return state.task;
+      return state.task;
+    },
+    taskFinished(state) {
+      return state.taskFinished;
     },
     currentResults(state) {
       return state.currentResults.slice();
@@ -41,6 +45,9 @@ const getters = {
 const mutations = {
     SET_TASK(state, payload) {
         state.task = payload;
+    },
+    SET_TASK_FINISHED(state, payload) {
+      state.taskFinished = payload;
     },
     SET_CURRENT_RESULT(state, payload) {
       state.currentResults = payload;

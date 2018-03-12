@@ -68,15 +68,15 @@
                           <v-container fluid>
                             <v-layout justify-start>
                               <v-flex xs12 align-start>
-                                <v-btn color="primary" @click="execute(index)">
+                                <v-btn :color="currentResults[index].active ? 'warning' : 'primary'" @click="execute(index)" :disabled="currentResults[index].passed || taskFinished">
                                   <v-icon left>play_arrow</v-icon>
-                                  Execute
+                                  {{ currentResults[index].active ? 'Active Task' : 'Start Task' }}
                                 </v-btn>
-                                <v-btn color="info" @click="swap(index)">
+                                <v-btn color="info" @click="swap(index)" :disabled="!currentResults[index].active">
                                   <v-icon left>swap_horiz</v-icon>
                                   Swap
                                 </v-btn>
-                                <v-btn color="success" @click="addInputBelow(index)">
+                                <v-btn color="success" @click="addInputBelow(index)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished">
                                   <v-icon left>add</v-icon>
                                   Add one input below
                                 </v-btn>
@@ -86,7 +86,12 @@
                         </v-card-actions>
                         <v-card-text>
                           <v-card class="original">
-                            <template v-if="!currentResults[index].exerciseText.isLatex">
+                            <template v-if="!currentResults[index].active">
+                              <v-card-text class="original-input">
+                                You have not started this exercise yet
+                              </v-card-text>
+                            </template>
+                            <template v-else-if="!currentResults[index].exerciseText.isLatex">
                               <v-card-text class="original-input">
                                 <v-text-field :value="currentResults[index].exerciseText.task" label="Exercise" multi-line auto-grow ></v-text-field>
                               </v-card-text>
@@ -111,19 +116,19 @@
                           <v-container fluid>
                             <v-layout justify-start>
                               <v-flex xs12 align-start>
-                                <v-btn color="primary" @click="execute(index, index2)">
+                                <v-btn color="primary" @click="execute(index, index2)" :disabled="currentResults[index].giveUp ? index2 !== 0 : (!currentResults[index].active || currentResults[index].passed || taskFinished)">
                                   <v-icon left>play_arrow</v-icon>
                                   Execute
                                 </v-btn>
-                                <v-btn color="info" @click="swap(index, index2)">
+                                <v-btn color="info" @click="swap(index, index2)" :disabled="currentResults[index].giveUp ? index2 !== 0 : (currentResults[index].passed || taskFinished || !currentResults[index].active)">
                                   <v-icon left>swap_horiz</v-icon>
                                   Swap
                                 </v-btn>
-                                <v-btn color="success" @click="addInputBelow(index, index2+1)">
+                                <v-btn color="success" @click="addInputBelow(index, index2+1)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished">
                                   <v-icon left>add</v-icon>
                                   Add one input below
                                 </v-btn>
-                                <v-btn color="error" @click="deleteInputById(index, index2)">
+                                <v-btn color="error" @click="deleteInputById(index, index2)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished">
                                   <v-icon left>close</v-icon>
                                   Delete this input
                                 </v-btn>
@@ -163,12 +168,12 @@
           <v-btn color="primary" @click="prevStep(n)">Prev</v-btn>
           <v-btn color="primary" @click="nextStep(n)">Next</v-btn>
           <template v-if="task.isTest" >
-            <v-btn @click="check(index)" :disabled="currentResults[index].passed" color="success">Check</v-btn>
-            <v-btn @click="giveUp(index)" :disabled="currentResults[index].passed" color="warning">Give up</v-btn>
+            <v-btn @click="check(index)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished" color="success">Check</v-btn>
+            <v-btn @click="giveUp(index)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished" color="warning">Give up</v-btn>
           </template>
         </v-flex>
         <v-flex xs12>
-          <v-btn @click="finish" color="error">Finish</v-btn>
+          <v-btn @click="finish" :disabled="taskFinished" color="error">Finish</v-btn>
           <!-- <v-btn v-else @click="submitForReview" color="error">Submit for review</v-btn> -->
         </v-flex>
       </v-stepper-content>
@@ -179,6 +184,7 @@
 
 <script>
   import Vue from 'vue';
+  import moment from 'moment';
   // import MathJax from 'mathjax';
 
   export default {
@@ -193,21 +199,21 @@
             title: 'Space',
             items: [
               { title: '$\\mathbb{Z}$', dataInsert: 'SPACE = Z[];', offset: 10 },
-              { title: '$\\mathbb{Z}p$', dataInsert: 'SPACE = Zp[];' },
-              { title: '$\\mathbb{Z}p32$', dataInsert: 'SPACE = Zp32[];' },
-              { title: '$\\mathbb{Z}64$', dataInsert: 'SPACE = Z64[];' },
-              { title: '$\\mathbb{Q}$', dataInsert: 'SPACE = Q[];' },
-              { title: '$\\mathbb{R}$', dataInsert: 'SPACE = R[];' },
-              { title: '$\\mathbb{R}64$', dataInsert: 'SPACE = R64[];' },
-              { title: '$\\mathbb{R}128$', dataInsert: 'SPACE = R128[];' },
-              { title: '$\\mathbb{C}$', dataInsert: 'SPACE = C[];' },
-              { title: '$\\mathbb{C}64$', dataInsert: 'SPACE = C64[];' },
-              { title: '$\\mathbb{C}128$', dataInsert: 'SPACE = C128[];' },
-              { title: '$\\mathbb{CZ}$', dataInsert: 'SPACE = CZ[];' },
-              { title: '$\\mathbb{CZ}p$', dataInsert: 'SPACE = CZp[];' },
-              { title: '$\\mathbb{CZ}p32$', dataInsert: 'SPACE = CZp32[];' },
-              { title: '$\\mathbb{CZ}64$', dataInsert: 'SPACE = CZ64[];' },
-              { title: '$\\mathbb{CQ}$', dataInsert: 'SPACE = CQ[];' },
+              { title: '$\\mathbb{Z}p$', dataInsert: 'SPACE = Zp[];', offset: 11 },
+              { title: '$\\mathbb{Z}p32$', dataInsert: 'SPACE = Zp32[];', offset: 13 },
+              { title: '$\\mathbb{Z}64$', dataInsert: 'SPACE = Z64[];', offset: 12 },
+              { title: '$\\mathbb{Q}$', dataInsert: 'SPACE = Q[];', offset: 10 },
+              { title: '$\\mathbb{R}$', dataInsert: 'SPACE = R[];', offset: 10 },
+              { title: '$\\mathbb{R}64$', dataInsert: 'SPACE = R64[];', offset: 13 },
+              { title: '$\\mathbb{R}128$', dataInsert: 'SPACE = R128[];', offset: 13 },
+              { title: '$\\mathbb{C}$', dataInsert: 'SPACE = C[];', offset: 10 },
+              { title: '$\\mathbb{C}64$', dataInsert: 'SPACE = C64[];', offset: 12 },
+              { title: '$\\mathbb{C}128$', dataInsert: 'SPACE = C128[];', offset: 13 },
+              { title: '$\\mathbb{CZ}$', dataInsert: 'SPACE = CZ[];', offset: 11 },
+              { title: '$\\mathbb{CZ}p$', dataInsert: 'SPACE = CZp[];', offset: 12 },
+              { title: '$\\mathbb{CZ}p32$', dataInsert: 'SPACE = CZp32[];', offset: 14 },
+              { title: '$\\mathbb{CZ}64$', dataInsert: 'SPACE = CZ64[];', offset: 13 },
+              { title: '$\\mathbb{CQ}$', dataInsert: 'SPACE = CQ[];', offset: 11 },
               { title: 'Constants',
                 items: [
                   { title: 'FLOATPOS', dataInsert: 'FLOATPOS = ;' },
@@ -321,6 +327,9 @@
       task() {
         return this.$store.getters.task;
       },
+      taskFinished() {
+        return this.$store.getters.taskFinished;
+      },
       steps() {
         return this.task ? this.task.exercises.length : 10;
       },
@@ -340,6 +349,8 @@
     },
     methods: {
       addInputBelow(exerciseId, sectionId) {
+        if (!this.currentResults[exerciseId].active) return;
+        if (this.currentResults[exerciseId].passed || this.taskFinished) return;
         let currentRes = this.currentResults;
         let sections = this.$store.getters.sections;
         const newSection = sections[exerciseId] + 1;
@@ -355,24 +366,40 @@
         this.$store.commit('SET_SECTIONS', sections);
       },
       deleteInputById(exerciseId, sectionId) {
+        if (!this.currentResults[exerciseId].active) return;
+        if (this.currentResults[exerciseId].passed || this.taskFinished) return;
         let currentRes = this.currentResults;
 
         currentRes[exerciseId].studentAnswers.splice(sectionId, 1);
         this.$store.commit('SET_CURRENT_RESULT', currentRes);
       },
       updateInput(exerciseId, sectionId, newVal) {
+        if (!this.currentResults[exerciseId].active) return;
+        if (this.currentResults[exerciseId].passed || this.taskFinished) return;
         let currentRes = this.currentResults;
         currentRes[exerciseId].studentAnswers[sectionId].task = newVal;
 
         this.$store.commit('SET_CURRENT_RESULT', currentRes);
       },
+      setInactiveOldTask() {
+        this.currentResults.forEach(currentResult => {
+          if (currentResult.active) currentResult.active = false;
+        });
+      },
+      setActiveTask(exerciseId) {
+        this.setInactiveOldTask();
+        this.currentResults[exerciseId].active = true;
+      },
       execute(exerciseId, section) {
+        if (this.currentResults[exerciseId].giveUp ? section !== 0 : (this.currentResults[exerciseId].passed || this.taskFinished)) return;
         let task;
         let sectionId;
         if (typeof section === 'undefined' || section === null) {
+          this.setActiveTask(exerciseId);
           sectionId = 0;
           task = this.currentResults[exerciseId].exerciseText.task;
         } else {
+          if (this.currentResults[exerciseId].giveUp ? section !== 0 : (this.currentResults[exerciseId].passed || this.taskFinished || !this.currentResults[exerciseId].active)) return;
           task = this.currentResults[exerciseId].studentAnswers[section].task;
           sectionId = this.currentResults[exerciseId].studentAnswers[section].sectionId;
         }
@@ -390,6 +417,7 @@
               if (typeof section === 'undefined' || section === null) {
                 Vue.set(this.currentResults[exerciseId].exerciseText, 'latex', latex);
                 Vue.set(this.currentResults[exerciseId].exerciseText, 'result', res.body.result);
+                this.initializeNewTimer(exerciseId);
                 if (!this.currentResults[exerciseId].exerciseText.isLatex) {
                   this.swap(exerciseId, section);
                 }
@@ -404,6 +432,7 @@
           });
       },
       swap(exerciseId, section) {
+        if (this.currentResults[exerciseId].giveUp ? section !== 0 : (this.currentResults[exerciseId].passed || this.taskFinished || !this.currentResults[exerciseId].active)) return;
         if (typeof section === 'undefined' || section === null) {
           Vue.set(this.currentResults[exerciseId].exerciseText, 'isLatex', !this.currentResults[exerciseId].exerciseText.isLatex);
         } else {
@@ -426,18 +455,87 @@
       //     });
       // },
       finish() {
-        let finalMark = '';
-        finalMark = this.currentResults.reduce((mark, exerciseResult) => {
-          if (exerciseResult.countTry === 0) return (mark + exerciseResult.mark);
-          if (!exerciseResult.passed && !exerciseResult.giveUp) return (mark + this.marks.smallLetters.find(el => el.number === exerciseResult.countTry).mark);
-          if (exerciseResult.passed) return (mark + exerciseResult.mark);
-        }, finalMark);
-        const taksResult = {
-          taskId: this.$route.params.id,
-          mark: finalMark
+        // let finalMark = '';
+        // let totalTime = { hours: 0, minutes: 0, seconds: 0 };
+        // let totalDuration = moment.duration(0);
+        if (this.taskFinished) return;
+        this.offOldTimer();
+        this.setInactiveOldTask();
+        let studentResult = [];
+        let taksResult = {};
+        if (!this.task.isTest) {
+          // If the student decide to didn't do the exercise, then the answer is an empty string('')
+          studentResult = this.currentResults.map(result => result.studentAnswers.length > 0 ? result.studentAnswers[result.studentAnswers.length - 1]['result'] : '');
+          taksResult.studentResult = studentResult;
         }
+        const { mark, time } = this.currentResults.reduce((results, exerciseResult) => {
+          // Calcukate total duration
+          // if (exerciseResult.time.totalDuration !== 0) {
+          //   totalDuration.add(exerciseResult.time.totalDuration.seconds(), 's');
+          //   totalDuration.add(exerciseResult.time.totalDuration.minutes(), 'm');
+          //   totalDuration.add(exerciseResult.time.totalDuration.hours(), 'h');
+          // }
+          let time = {};
+          if (exerciseResult.time.totalDuration !== 0) {
+            time = {
+              exerciseIndex: exerciseResult.exercise,
+              hours: exerciseResult.time.totalDuration.hours(),
+              minutes: exerciseResult.time.totalDuration.minutes(),
+              seconds: exerciseResult.time.totalDuration.seconds()
+            };
+          } else {
+            time = {
+              exerciseIndex: exerciseResult.exercise,
+              hours: exerciseResult.time.totalDuration,
+              minutes: exerciseResult.time.totalDuration,
+              seconds: exerciseResult.time.totalDuration
+            };
+          }
+          results.time.push(time);
+          if (this.task.isTest) {
+            if (exerciseResult.countTry === 0) results.mark += exerciseResult.mark;
+            else if (!exerciseResult.passed && !exerciseResult.giveUp) results.mark += this.marks.smallLetters.find(el => el.number === exerciseResult.countTry).mark;
+            else if (exerciseResult.passed) results.mark += exerciseResult.mark;
+          }
+
+          return { mark: results.mark, time: results.time };
+        }, { mark: '', time: [] });
+
+        taksResult.taskId = this.$route.params.id;
+        taksResult.isTest = this.task.isTest;
+        taksResult.mark = mark;
+        taksResult.time = time;
+
         console.log(taksResult);
-        // this.$http.put('student/set-mark', { taksResult });
+        this.$http.put('student/set-mark', { taksResult })
+          .then(res => {
+            if (res.body.status === 'OK') {
+              this.$store.commit('SET_TASK_FINISHED', true);
+              window.onbeforeunload = undefined;
+            }
+          });
+      },
+      offOldTimer() {
+        this.currentResults.forEach((currentResult, index) => {
+          if (currentResult.time.isRun) {
+            currentResult.time.isRun = false;
+            currentResult.time.end = moment();
+            const duration = moment.duration(currentResult.time.end.diff(currentResult.time.start));
+            currentResult.time.totalDuration = duration;
+            // currentResult.time.totalDuration.add(10, 'd');
+            // const diff = currentResult.time.end.diff(currentResult.time.start);
+
+            // console.log(`${duration.hours()}:${duration.minutes()}:${duration.seconds()}`);
+            // console.log(moment(`${duration.hours()}:${duration.minutes()}:${duration.seconds()}`).format());
+          }
+        });
+      },
+      initializeNewTimer(exerciseId) {
+        this.offOldTimer();
+        if (this.currentResults[exerciseId].time.start === 0) {
+          this.currentResults[exerciseId].time.start = moment();
+        }
+        this.currentResults[exerciseId].time.isRun = true;
       },
       initialize() {
         this.$store.dispatch('getTaskById', this.$route.params.id)
@@ -447,12 +545,19 @@
             for (let i = 0; i < this.steps; ++i) {
               currentRes.push({
                 exercise: i,
+                active: false,
                 exerciseText: {
                   task: this.task.exercises[i].text,
                   latex: '<p>No result yet</p>',
                   isLatex: false,
                   result: '',
                   sectionId: i
+                },
+                time: {
+                  isRun: false,
+                  start: 0,
+                  end: 0,
+                  totalDuration: 0
                 },
                 studentAnswers: [],
                 mark: 0,
@@ -467,7 +572,7 @@
           });
       },
       check(exercise) {
-        if (this.currentResults[exercise].passed) return;
+        if (!this.currentResults[exercise].active || this.currentResults[exercise].passed || this.taskFinished) return;
         const lastIndexOfStudentAnswers = this.currentResults[exercise].studentAnswers.length - 1;
         const studentAnswers = this.currentResults[exercise].studentAnswers[lastIndexOfStudentAnswers].result;
         if (studentAnswers === '') return;
@@ -479,18 +584,23 @@
             }
             if (body.correct) {
               this.currentResults[exercise].passed = true;
+              this.offOldTimer()
+              this.setInactiveOldTask();
             }
           });
       },
       giveUp(exercise) {
-        if (this.currentResults[exercise].passed) return;
+        if (!this.currentResults[exercise].active || this.currentResults[exercise].passed || this.taskFinished) return;
         this.$store.dispatch('giveUp', { id: this.$route.params.id, exercise: exercise })
           .then(({ body }) => {
-            this.currentResults[exercise].passed = true;
-            this.currentResults[exercise].giveUp = true;
             this.currentResults[exercise].mark = this.marks.bigLetters.find(el => el.number === this.currentResults[exercise].countTry).mark;
             this.addInputBelow(exercise);
             this.currentResults[exercise].studentAnswers[0].task = body.solution;
+            this.currentResults[exercise].passed = true;
+            this.currentResults[exercise].giveUp = true;
+
+            this.offOldTimer();
+            this.setInactiveOldTask();
           });
       },
       insertTipsData(exerciseId, dataToInsert, offset) {
@@ -560,10 +670,21 @@
       // console.log(window)
       // this.$http.get('task/1/check-answer/1/1');
       setTimeout(() => {
-        this.$nextTick(function() {
+        this.$nextTick(() => {
           window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
+          // start first exercise
+          this.execute(0);
         });
       }, 2000);
+    },
+    mounted() {
+      window.onbeforeunload = function (e) {
+        return true;
+      };
+    },
+    beforeRouteUpdate(to, from, next) {
+      console.log(1);
+      next(false);
     }
   }
 </script>
@@ -571,6 +692,9 @@
 <style scoped>
   .pos_abs {
     position: absolute;
+  }
+  .test {
+    border: 1px solid red;
   }
 </style>
 

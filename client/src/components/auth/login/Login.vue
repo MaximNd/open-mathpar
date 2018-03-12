@@ -26,7 +26,15 @@
 </template>
 
 <script>
+  import Vue from 'vue';
+
   export default {
+    beforeRouteEnter(to, from, next) {
+      if (Vue.auth.check()) {
+        Vue.router.push('/');
+      }
+      next();
+    },
     data() {
       return {
         data: {
