@@ -59,12 +59,6 @@
           </v-form>
         </v-card>
       </v-dialog>
-      <v-btn color="info">All Tasks</v-btn>
-      <v-btn color="info">All Your Tasks</v-btn>
-      <v-btn color="info">All SR's</v-btn>
-      <v-btn color="info">All KR's</v-btn>
-      <v-btn color="info">All Your SR's</v-btn>
-      <v-btn color="info">All Your KR's</v-btn>
       <appTasksTable></appTasksTable>
     </v-card-text>
   </v-card>

@@ -6,7 +6,7 @@ module.exports = {
     },
 
     getAllSubjects(req, res) {
-        Subject.find({})
+        Subject.find().populate({ path: 'themes' })
             .then(subjects => res.send(subjects))
             .catch(err => console.log(err));
     },

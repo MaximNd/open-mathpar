@@ -1,7 +1,78 @@
 <template>
   <v-card>
+    <v-card-text>
+      <v-card class="elevation-1">
+        <v-card-title>
+          <p class="headline primary--text">Filters</p>
+        </v-card-title>
+        <v-card-text>
+          <v-container fluid>
+            <v-layout row justify-space-between wrap>
+              <v-flex xs3>
+                <v-select
+                  :items="[{ text: 'Find in this school', value: true }, { text: 'Find in all schools', value: false }]"
+                  item-text="text"
+                  item-value="value"
+                  v-model="filterData.thisSchool"
+                  label="Select "
+                  single-line
+                ></v-select>
+              </v-flex>
+              <v-flex xs4>
+                <v-select
+                  :items="filterData.fetchTypes"
+                  v-model="filterData.fetchType"
+                  label="Select type"
+                  single-line
+                ></v-select>
+              </v-flex>
+              <v-flex xs4>
+                <v-select
+                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                  v-model="filterData.classNumber"
+                  label="Select class"
+                  single-line
+                ></v-select>
+              </v-flex>
+              <v-flex xs3>
+                <v-select
+                  :items="filterData.subjects"
+                  v-model="filterData.subjectId"
+                  item-text="name"
+                  item-value="_id"
+                  label="Select subject"
+                  single-line
+                ></v-select>
+              </v-flex>
+              <v-flex xs4>
+                <v-select
+                  :items="filterData.themes"
+                  v-model="filterData.themeId"
+                  item-text="name"
+                  item-value="_id"
+                  label="Select theme"
+                  single-line
+                ></v-select>
+              </v-flex>
+              <v-flex xs4>
+                <v-select
+                  :items="['Eazy', 'Middle', 'Hard']"
+                  v-model="filterData.difficultyLevel"
+                  label="Select difficulty level"
+                  single-line
+                ></v-select>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-text>
+          <v-layout justify-end>
+            <v-btn color="primary" @click="filter">Filter tasks</v-btn>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-card-text>
     <v-card-title class="title info--text">
-      All Tasks | Your Tasks | ...
       <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
@@ -11,21 +82,27 @@
         v-model="search"
       ></v-text-field>
     </v-card-title>
-    <v-data-table
-      v-bind:headers="headers"
-      v-bind:items="items"
-      v-bind:search="search"
-    >
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-left clickable"><router-link to="/task/1" tag="span">{{ props.item.taskName}}</router-link></td>
-        <td class="text-xs-right">{{ props.item.subject }}</td>
-        <td class="text-xs-right">{{ props.item.taskType }}</td>
-        <td class="text-xs-right">{{ props.item.teacher }}</td>
-      </template>
-      <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-        From {{ pageStart }} to {{ pageStop }}
-      </template>
-    </v-data-table>
+
+    <v-card-text>
+      <v-data-table
+        :headers="headers"
+        :items="tasks"
+        :search="search"
+      >
+        <template slot="items" slot-scope="props">
+          <td class="text-xs-left clickable"><router-link :to="`/task/${props.item._id}`" tag="span">{{ props.item.name }}</router-link></td>
+          <td class="text-xs-right">{{ props.item.subjectId.name }}</td>
+          <td class="text-xs-right">{{ props.item.isTest ? 'SR' : 'KR' }}</td>
+          <td class="text-xs-right">{{ props.item.theme.name }}</td>
+          <td class="text-xs-right">{{ props.item.class }}</td>
+          <td class="text-xs-right">{{ props.item.difficultyLevel }}</td>
+          <td class="text-xs-right clickable"><router-link :to="`/profile/${props.item.teacherId.userId._id}`" tag="span">{{ props.item.teacherId.userId.fullName }}</router-link></td>
+        </template>
+        <template slot="pageText" slot-scope="{ pageStart, pageStop }">
+          From {{ pageStart }} to {{ pageStop }}
+        </template>
+      </v-data-table>
+    </v-card-text>
   </v-card>
 </template>
 
@@ -33,89 +110,67 @@
   export default {
     data () {
       return {
+        filterData: {
+          thisSchool: true,
+          fetchTypes: ['allTasks', 'allSR', 'allKR', 'allYourTasks', 'allYourSR', 'allYourKR'],
+          fetchType: undefined,
+          classNumber: undefined,
+          subjects: [],
+          subjectId: undefined,
+          themes: [],
+          themeId: undefined,
+          difficultyLevel: undefined
+        },
         max25chars: (v) => v.length <= 25 || 'Input too long!',
         tmp: '',
         search: '',
         pagination: {},
         headers: [
-          { text: 'Task', align: 'left', value: 'taskName' },
-          { text: 'Subject', value: 'subject' },
-          { text: 'Type', value: 'taskType' },
-          { text: 'Teacher', value: 'teacher' }
-        ],
-        items: [
-          {
-            value: false,
-            taskName: 'Task1',
-            subject: 'Subject 1',
-            taskType: 'KR',
-            teacher: 'Teacher 1'
-          },
-          {
-            value: false,
-            taskName: 'Task2',
-            subject: 'Subject 2',
-            taskType: 'SR',
-            teacher: 'Teacher 2'
-          },
-          {
-            value: false,
-            taskName: 'Task3',
-            subject: 'Subject 3',
-            taskType: 'SR',
-            teacher: 'Teacher 3'
-          },
-          {
-            value: false,
-            taskName: 'Task4',
-            subject: 'Subject 4',
-            taskType: 'KR',
-            teacher: 'Teacher 4'
-          },
-          {
-            value: false,
-            taskName: 'Task5',
-            subject: 'Subject 5',
-            taskType: 'SR',
-            teacher: 'Teacher 5'
-          },
-          {
-            value: false,
-            taskName: 'Task6',
-            subject: 'Subject 4',
-            taskType: 'KR',
-            teacher: 'Teacher 2'
-          },
-          {
-            value: false,
-            taskName: 'Task7',
-            subject: 'Subject 1',
-            taskType: 'SR',
-            teacher: 'Teacher 2'
-          },
-          {
-            value: false,
-            taskName: 'Task8',
-            subject: 'Subject 2',
-            taskType: 'SR',
-            teacher: 'Teacher 3'
-          },
-          {
-            value: false,
-            taskName: 'Task9',
-            subject: 'Subject 2',
-            taskType: 'SR',
-            teacher: 'Teacher 6'
-          },
-          {
-            value: false,
-            taskName: 'Task10',
-            subject: 'Subject 1',
-            taskType: 'KR',
-            teacher: 'Teacher 1'
-          }
+          { text: 'Task', align: 'left', value: 'name' },
+          { text: 'Subject', align: 'right', value: 'subjectId.name' },
+          { text: 'Type', align: 'right', value: 'isTest' },
+          { text: 'Theme', align: 'right', value: 'theme.name' },
+          { text: 'Class', align: 'right', value: 'class' },
+          { text: 'Difficulty level', align: 'right', value: 'difficultyLevel' },
+          { text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName' }
         ]
       }
+    },
+    computed: {
+      tasks() {
+        return this.$store.getters.tasks;
+      }
+    },
+    watch: {
+      'filterData.subjectId'(newSubjectId) {
+        this.filterData.themes = this.filterData.subjects.find(subject => subject._id === newSubjectId).themes;
+      }
+    },
+    methods: {
+      filter() {
+        let filter = {};
+        if (this.filterData.thisSchool) {
+          filter.schoolId = this.$auth.user().clients.find(client => client.clientRole !== 'admin').client.schoolId._id;
+        } else {
+          filter.schoolId = undefined;
+        }
+        if (this.filterData.fetchType && (this.filterData.fetchType === 'allYourTasks' || this.filterData.fetchType === 'allYourSR' || this.filterData.fetchType === 'allYourKR')) {
+          filter.teacherId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
+        }
+        filter.fetchType = this.filterData.fetchType;
+        filter.classNumber = this.filterData.classNumber;
+        filter.subjectId = this.filterData.subjectId;
+        filter.themeId = this.filterData.themeId;
+        filter.difficultyLevel = this.filterData.difficultyLevel;
+        this.$store.dispatch('getFilteredTasks', filter);
+      }
+    },
+    created() {
+      this.$http.get('subjects')
+        .then(({ body }) => {
+          this.filterData.subjects = body;
+          this.filter();
+        });
     }
   }
 </script>

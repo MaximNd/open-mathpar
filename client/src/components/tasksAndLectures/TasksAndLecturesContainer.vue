@@ -5,11 +5,11 @@
         <v-expansion-panel popout>
           <v-expansion-panel-content class="elevation-1">
             <div slot="header" class="primary--text title">Tasks</div>
-              <appTasksContainer></appTasksContainer>
+            <appTasksContainer></appTasksContainer>
           </v-expansion-panel-content>
           <v-expansion-panel-content class="elevation-1">
             <div slot="header" class="primary--text title">Lectures</div>
-              <appLecturesContainer></appLecturesContainer>
+            <appLecturesContainer></appLecturesContainer>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-flex>

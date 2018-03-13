@@ -8,6 +8,46 @@ module.exports = {
             .then(tasks => res.send(tasks))
             .catch(err => console.log(err));
     },
+    // :schoolId - if(true) then { get tasks from your school } else { get all task from database }
+    // :fetchType - allTasks, allSR, allKR, allYourTasks, allYourSR, allYourKR
+    // :teacherId - teacherID
+    // :classNumber - (number) from 1 to 12
+    // :subjectId - subjectID
+    // :themeId - themeId of the selected subject
+    // :difficultyLevel - (Eazy,Middle,Hard)
+    getFilteredTasks(req, res) {
+        const { schoolId, fetchType, teacherId, classNumber, subjectId, themeId, difficultyLevel } = req.params;
+        console.log(schoolId, fetchType, teacherId, classNumber, subjectId, themeId, difficultyLevel);
+        let filter = {};
+        if (schoolId !== 'undefined') filter.schoolId = schoolId;
+        if (fetchType !== 'undefined' && fetchType !== 'allTasks') {
+            if (fetchType === 'allSR') {
+                filter.isTest = true;
+            } else if (fetchType === 'allKR') {
+                filter.isTest = false;
+            } else if (fetchType === 'allYourTasks' && teacherId !== 'undefined') {
+                filter.teacherId = teacherId;
+            } else if (fetchType === 'allYourSR' && teacherId !== 'undefined') {
+                filter.teacherId = teacherId;
+                filter.isTest = true;
+            } else if (fetchType === 'allYourKR' && teacherId !== 'undefined') {
+                filter.teacherId = teacherId;
+                filter.isTest = false;
+            }
+        }
+        if (classNumber !== 'undefined') filter.class = parseInt(classNumber);
+        if (subjectId !== 'undefined') filter.subjectId = subjectId;
+        if (themeId !== 'undefined') filter.theme = themeId;
+        if (difficultyLevel !== 'undefined') filter.difficultyLevel = difficultyLevel;
+        
+        // { theme: req.params.themeId, subjectId: req.params.subjectId, class: req.params.class }
+        Task.find(filter)
+            .populate({ path: 'subjectId' })
+            .populate({ path: 'teacherId', populate: { path: 'userId' } })
+            .populate({ path: 'theme' })
+            .select('-exercises')
+            .then(task => {res.send(task)});
+    },
 
     getTaskById(req, res) {
         // Student.find().populate('gradeBook.taskId', 'isTest subjectId').then(student => {
@@ -21,20 +61,20 @@ module.exports = {
             });
     },
 
-    checkKr(req, res) {
-        console.log(req.body);
-        Task.findById(req.params.id)
-            .then(task => {
-                let numberOfCorrectAnswers = 0;
-                task.exercises.forEach((exercise, index) => {
-                    if (exercise.answer === req.body.results[index]) {
-                        numberOfCorrectAnswers += 1;
-                    }
-                });
-                res.send({ finalMark: numberOfCorrectAnswers * 10 });
-            })
+    // checkKr(req, res) {
+    //     console.log(req.body);
+    //     Task.findById(req.params.id)
+    //         .then(task => {
+    //             let numberOfCorrectAnswers = 0;
+    //             task.exercises.forEach((exercise, index) => {
+    //                 if (exercise.answer === req.body.results[index]) {
+    //                     numberOfCorrectAnswers += 1;
+    //                 }
+    //             });
+    //             res.send({ finalMark: numberOfCorrectAnswers * 10 });
+    //         })
         
-    },
+    // },
 
     createTask(req, res) {
         const { subjectId, name, isTest, exercises } = req.body;

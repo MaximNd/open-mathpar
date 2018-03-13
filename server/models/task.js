@@ -2,18 +2,38 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+// const Classes
+
 const TaskSchema = new Schema({
+  schoolId: {
+    type: ObjectId,
+    ref: 'School'
+  },
+  // filter
   subjectId: {
     type: ObjectId,
     ref: 'Subject'
   },
+  // filter
   teacherId: {
     type: ObjectId,
     ref: 'Teacher'
   },
-  name: String,
   isTest: Boolean,
   isAllow: Boolean,
+  // filter
+  class: Number,
+  // filter
+  difficultyLevel: String,
+  // filter
+  theme: {
+    type: ObjectId,
+    ref: 'Theme',
+    required: true
+  },
+  // filter
+  name: String,
+  order: Number,
   exercises: {
     type: [
       {
