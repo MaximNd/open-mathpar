@@ -39,7 +39,8 @@ const getters = {
               else if (task1.order > task2.order) return 1;
               else return 0;
             });
-            tasks.forEach(task => tasksByThemeBySubTheme.push(task));
+            // tasks.forEach(task => tasksByThemeBySubTheme.push(task));
+            tasksByThemeBySubTheme = tasksByThemeBySubTheme.concat(tasks);
           });
         });
         return tasksByThemeBySubTheme;

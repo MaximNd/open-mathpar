@@ -90,13 +90,16 @@
         :search="search"
       >
         <template slot="items" slot-scope="props">
+          <td class="text-xs-left">{{ props.item.order }}</td>
           <td class="text-xs-left clickable"><router-link :to="`/task/${props.item._id}`" tag="span">{{ props.item.name }}</router-link></td>
-          <td class="text-xs-right">{{ props.item.subjectId.name }}</td>
-          <td class="text-xs-right">{{ props.item.isTest ? 'SR' : 'KR' }}</td>
-          <td class="text-xs-right">{{ props.item.theme.name }}</td>
           <td class="text-xs-right">{{ props.item.class }}</td>
           <td class="text-xs-right">{{ props.item.difficultyLevel }}</td>
+          <td class="text-xs-right">{{ props.item.subjectId.name }}</td>
+          <td class="text-xs-left">{{ props.item.theme.order }}</td>
+          <td class="text-xs-left">{{ props.item.theme.name }}</td>
+          <td class="text-xs-right">{{ props.item.isTest ? 'SR' : 'KR' }}</td>
           <td class="text-xs-right clickable"><router-link :to="`/profile/${props.item.teacherId.userId._id}`" tag="span">{{ props.item.teacherId.userId.fullName }}</router-link></td>
+          <td class="text-xs-right clickable"><router-link :to="`/school/${props.item.teacherId.schoolId._id}`" tag="span">{{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}</router-link></td>
         </template>
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}
@@ -126,13 +129,16 @@
         search: '',
         pagination: {},
         headers: [
-          { text: 'Task', align: 'left', value: 'name' },
-          { text: 'Subject', align: 'right', value: 'subjectId.name' },
-          { text: 'Type', align: 'right', value: 'isTest' },
-          { text: 'Theme', align: 'right', value: 'theme.name' },
-          { text: 'Class', align: 'right', value: 'class' },
-          { text: 'Difficulty level', align: 'right', value: 'difficultyLevel' },
-          { text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName' }
+          { text: '№ Task', align: 'left', value: 'order', sortable: false, width: '20px' },
+          { text: 'Task', align: 'left', value: 'name', sortable: false },
+          { text: 'Class', align: 'right', value: 'class', sortable: false },
+          { text: 'Difficulty level', align: 'right', value: 'difficultyLevel', sortable: false },
+          { text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false },
+          { text: '№ Theme', align: 'left', value: 'theme.order', sortable: false, width: '20px' },
+          { text: 'Theme', align: 'left', value: 'theme.name', sortable: false },
+          { text: 'Type', align: 'right', value: 'isTest', sortable: false },
+          { text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false },
+          { text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false }
         ]
       }
     },

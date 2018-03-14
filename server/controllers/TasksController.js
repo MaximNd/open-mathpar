@@ -43,7 +43,7 @@ module.exports = {
         // { theme: req.params.themeId, subjectId: req.params.subjectId, class: req.params.class }
         Task.find(filter)
             .populate({ path: 'subjectId' })
-            .populate({ path: 'teacherId', populate: { path: 'userId' } })
+            .populate({ path: 'teacherId', populate: { path: 'userId' } }).populate({ path: 'teacherId', populate: { path: 'schoolId' } })
             .populate({ path: 'theme' })
             .select('-exercises')
             .then(task => {res.send(task)});
