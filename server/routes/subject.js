@@ -8,7 +8,7 @@ const isAuthenticated = require('./../policies/isAuthenticated');
 router.get('/subject/:id', isAuthenticated, SubjectsController.getSubjectById);
 
 // Get all subjects
-router.get('/subjects', isAuthenticated, SubjectsController.getAllSubjects);
+router.get('/subjects', SubjectsController.getAllSubjects);
 
 // Create subject
 router.post('/subject', isAuthenticated, SubjectsController.createSubject);

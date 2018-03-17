@@ -1,16 +1,19 @@
 <template>
   <v-container fluid>
-    <app-task></app-task>
+    <app-task v-if="$auth.user().role.indexOf('teacher') === -1"></app-task>
+    <app-teacher-task v-else></app-teacher-task>
   </v-container>
 </template>
 
 <script>
   import Task from './Task.vue';
+  import TeacherTask from './TeacherTask.vue';
   import { store } from './../../../../store/store';
 
   export default {
     components: {
-      appTask: Task
+      appTask: Task,
+      appTeacherTask: TeacherTask
     },
     beforeRouteLeave(to, from, next) {
       function reset() {
@@ -30,6 +33,7 @@
           next(false);
         }
       }
+      next();
     }
   };
 </script>

@@ -40,10 +40,6 @@ const TaskSchema = new Schema({
         text: String,
         fullSolution: String,
         answer: String,
-        description: {
-            type: String,
-            required: false
-        },
         images: {
           type: [String],
           required: false

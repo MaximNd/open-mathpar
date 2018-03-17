@@ -55,11 +55,7 @@ const mutations = {
 
 const actions = {
     createTask({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            return Vue.http.post('task', payload)
-                .then(data => resolve(data.body))
-                .catch(err => reject(err));
-        });
+      return Vue.http.post('task', payload);
     },
     getTasksByTeacherId({ commit }, payload) {
       Vue.http.get(`tasks/teacher/${payload.teacherId}`)

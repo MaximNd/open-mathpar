@@ -9,7 +9,7 @@ const Subject = require('./../models/subject');
 
 
 // Get task by ID
-router.get('/task/:id', TasksController.getTaskById);
+router.get('/task/:id', isAuthenticated, TasksController.getTaskById);
 
 // Get all tasks by teacher ID
 router.get('/tasks/teacher/:id', isAuthenticated, TasksController.getTasksByTeacherId);

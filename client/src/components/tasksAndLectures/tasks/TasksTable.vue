@@ -28,9 +28,9 @@
               </v-flex>
               <v-flex xs4>
                 <v-select
-                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
-                  v-model="filterData.classNumber"
-                  label="Select class"
+                  :items="['Eazy', 'Middle', 'Hard']"
+                  v-model="filterData.difficultyLevel"
+                  label="Select difficulty level"
                   single-line
                 ></v-select>
               </v-flex>
@@ -46,6 +46,14 @@
               </v-flex>
               <v-flex xs4>
                 <v-select
+                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                  v-model="filterData.classNumber"
+                  label="Select class"
+                  single-line
+                ></v-select>
+              </v-flex>
+              <v-flex xs4>
+                <v-select
                   :items="filterData.themes"
                   v-model="filterData.themeId"
                   item-text="name"
@@ -54,14 +62,7 @@
                   single-line
                 ></v-select>
               </v-flex>
-              <v-flex xs4>
-                <v-select
-                  :items="['Eazy', 'Middle', 'Hard']"
-                  v-model="filterData.difficultyLevel"
-                  label="Select difficulty level"
-                  single-line
-                ></v-select>
-              </v-flex>
+
             </v-layout>
           </v-container>
         </v-card-text>
@@ -149,7 +150,16 @@
     },
     watch: {
       'filterData.subjectId'(newSubjectId) {
-        this.filterData.themes = this.filterData.subjects.find(subject => subject._id === newSubjectId).themes;
+        let allThemes = this.filterData.subjects.find(subject => subject._id === newSubjectId).themes;
+        if (typeof this.filterData.classNumber !== 'undefined') {
+          allThemes = allThemes.filter(theme => theme.class === this.filterData.classNumber);
+        }
+        this.filterData.themes = allThemes;
+      },
+      'filterData.classNumber'(newClassNumber) {
+        if (typeof this.filterData.subjectId !== 'undefined') {
+          this.filterData.themes = this.filterData.subjects.find(subject => subject._id === this.filterData.subjectId).themes.filter(theme => theme.class === newClassNumber);
+        }
       }
     },
     methods: {

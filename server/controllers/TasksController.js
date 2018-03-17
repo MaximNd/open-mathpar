@@ -17,7 +17,6 @@ module.exports = {
     // :difficultyLevel - (Eazy,Middle,Hard)
     getFilteredTasks(req, res) {
         const { schoolId, fetchType, teacherId, classNumber, subjectId, themeId, difficultyLevel } = req.params;
-        console.log(schoolId, fetchType, teacherId, classNumber, subjectId, themeId, difficultyLevel);
         let filter = {};
         if (schoolId !== 'undefined') filter.schoolId = schoolId;
         if (fetchType !== 'undefined' && fetchType !== 'allTasks') {
@@ -46,7 +45,7 @@ module.exports = {
             .populate({ path: 'teacherId', populate: { path: 'userId' } }).populate({ path: 'teacherId', populate: { path: 'schoolId' } })
             .populate({ path: 'theme' })
             .select('-exercises')
-            .then(task => {res.send(task)});
+            .then(task => { res.send(task) });
     },
 
     getTaskById(req, res) {
@@ -55,8 +54,14 @@ module.exports = {
         //         .then(result => res.send(result));
                 
         // });
-        Task.findById(req.params.id).populate({ path: 'subjectId' }).populate({ path: 'teacherId', populate: { path: 'userId' } }).select('-exercises.answer -exercises.fullSolution')
-            .then(task => {
+        let query = Task.findById(req.params.id).populate({ path: 'subjectId' }).populate({ path: 'teacherId', populate: { path: 'userId' } });
+        req.user.clients
+            .then(clients => {
+                if(!clients.find(client => client.clientRole === 'teacher')) {
+                    query.select('-exercises.answer -exercises.fullSolution');            
+                }
+                return query;
+            }).then(task => {
                 res.send(task);
             });
     },
@@ -77,31 +82,30 @@ module.exports = {
     // },
 
     createTask(req, res) {
-        const { subjectId, name, isTest, exercises } = req.body;
-
-        req.user.clients
-            .then(clients => {
-                const task = new Task({
-                    subjectId,
-                    teacherId: clients.find(client => client.clientRole === 'teacher').client.id,
-                    name,
-                    isTest,
-                    isAllow: isTest,
-                    exercises
-                });
-            
-                task.save(err => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    
-                    res.status(200, { message: 'ok' }).end();
-                });
-            });
+        const task = new Task(req.body);
+        task.save(err => {
+            if (err) {
+                console.log(err);
+            } 
+            res.status(200, { message: 'ok' }).end();
+        });
     },
 
     updateTask(req, res) {
-
+        const taskId = req.params.id;
+        const { name, isTest, isAllow, difficultyLevel, order,  exercises } = req.body;
+        // console.log(req.body);
+        Task.update({ _id: taskId }, { $set: { name, isTest, isAllow, difficultyLevel, order,  exercises } }, (err) => {
+            if (err) {
+                console.log(err);
+                res.send({
+                    status: 'ERR'
+                });
+            }
+            res.send({
+                status: 'OK'
+            });
+        });
     },
 
     deleteTask(req, res) {
