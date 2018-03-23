@@ -15,8 +15,11 @@
                 <v-text-field v-model="data.password" label="Password" type="password" required></v-text-field>
               </v-flex>
             </v-card-text>
+            <v-card-actions class="pl-3 pb-1">
+              <v-btn color="info" small :to="'register'">Register</v-btn>
+            </v-card-actions>
             <v-card-actions class="pl-3 pb-4">
-              <v-btn type="submit" color="primary">Login<v-icon right>send</v-icon></v-btn>
+                <v-btn type="submit" color="primary">Login<v-icon right>send</v-icon></v-btn>
             </v-card-actions>
           </v-card>
         </v-form>

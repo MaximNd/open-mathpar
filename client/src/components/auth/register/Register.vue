@@ -34,29 +34,27 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-dialog
-                    persistent
-                    v-model="modal"
-                    lazy
-                    full-width
-                  >
-                    <v-text-field
-                      slot="activator"
-                      label="Birthday"
-                      v-model="director.user.birthday"
-                      prepend-icon="event"
-                      readonly
-                      required
-                    ></v-text-field>
-                    <v-date-picker v-model="director.user.birthday" scrollable actions>
-                      <template slot-scope="{ save, cancel }">
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                          <v-btn flat color="primary" @click="save">OK</v-btn>
-                        </v-card-actions>
-                      </template>
-                    </v-date-picker>
-                  </v-dialog>
+            ref="directorDialog"
+            persistent
+            v-model="modal"
+            lazy
+            full-width
+            width="290px"
+            :return-value.sync="director.user.birthday"
+          >
+            <v-text-field
+              slot="activator"
+              label="Birthday"
+              v-model="director.user.birthday"
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker v-model="director.user.birthday" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="error" @click="modal = false">Cancel</v-btn>
+              <v-btn flat color="success" @click="$refs.directorDialog.save(director.user.birthday)">OK</v-btn>
+            </v-date-picker>
+          </v-dialog>
                 </v-flex>
                 <v-flex xs12>
                   <v-layout row>
@@ -125,29 +123,27 @@
                   </v-flex>
                   <v-flex xs12>
                     <v-dialog
-                      persistent
-                      v-model="authorityModal"
-                      lazy
-                      full-width
-                    >
-                      <v-text-field
-                        slot="activator"
-                        label="Birthday"
-                        v-model="authority.user.birthday"
-                        prepend-icon="event"
-                        readonly
-                        required
-                      ></v-text-field>
-                      <v-date-picker v-model="authority.user.birthday" scrollable actions>
-                        <template slot-scope="{ save, cancel }">
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                            <v-btn flat color="primary" @click="save">OK</v-btn>
-                          </v-card-actions>
-                        </template>
-                      </v-date-picker>
-                    </v-dialog>
+            ref="authorityDialog"
+            persistent
+            v-model="authorityModal"
+            lazy
+            full-width
+            width="290px"
+            :return-value.sync="authority.user.birthday"
+          >
+            <v-text-field
+              slot="activator"
+              label="Birthday"
+              v-model="authority.user.birthday"
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker v-model="authority.user.birthday" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="error" @click="modal = false">Cancel</v-btn>
+              <v-btn flat color="success" @click="$refs.authorityDialog.save(authority.user.birthday)">OK</v-btn>
+            </v-date-picker>
+          </v-dialog>
                   </v-flex>
                   <v-flex xs12>
                     <v-layout row>
@@ -270,6 +266,9 @@
             this[who].user.image.name = event.target.files[0].name;
         };
       }
+    },
+    created() {
+      console.log(this.$refs);
     }
   };
 </script>

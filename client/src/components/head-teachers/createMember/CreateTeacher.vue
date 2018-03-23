@@ -34,28 +34,27 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-dialog
-                    persistent
-                    v-model="modal"
-                    lazy
-                    full-width
-                  >
-                    <v-text-field
-                      slot="activator"
-                      label="Birthday"
-                      v-model="user.birthday"
-                      prepend-icon="event"
-                      readonly
-                    ></v-text-field>
-                    <v-date-picker v-model="user.birthday" scrollable actions>
-                      <template slot-scope="{ save, cancel }">
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                          <v-btn flat color="primary" @click="save">OK</v-btn>
-                        </v-card-actions>
-                      </template>
-                    </v-date-picker>
-                  </v-dialog>
+            ref="teacherDialog"
+            persistent
+            v-model="modal"
+            lazy
+            full-width
+            width="290px"
+            :return-value.sync="user.birthday"
+          >
+            <v-text-field
+              slot="activator"
+              label="Birthday"
+              v-model="user.birthday"
+              prepend-icon="event"
+              readonly
+            ></v-text-field>
+            <v-date-picker v-model="user.birthday" scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="error" @click="modal = false">Cancel</v-btn>
+              <v-btn flat color="success" @click="$refs.teacherDialog.save(user.birthday)">OK</v-btn>
+            </v-date-picker>
+          </v-dialog>
                 </v-flex>
                 <v-flex xs12>
                   <v-btn color="info" block @click="changeTeacherTimetableFields(1)">Add one field for teacher timetable</v-btn>

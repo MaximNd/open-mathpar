@@ -16,7 +16,8 @@
             <template slot="items" slot-scope="props">
               <td class="text-xs-left title">{{ props.item.subject.name }}</td>
               <td class="text-xs-right text">{{ props.item.group.name }}</td>
-              <td v-if="(typeof props.item.plan === 'undefined' || props.item.plan === '' || props.item.plan == null)" class="clickable text-xs-right text">
+              <!-- v-if="(typeof props.item.plan === 'undefined' || props.item.plan === '' || props.item.plan == null)"  -->
+              <td class="clickable text-xs-right text">
                 <v-dialog v-model="createPlanDialog[props.index]" max-width="2000px">
                   <v-btn style="margin-right:-10px;" color="success" slot="activator">Create Plan</v-btn>
                   <v-card>
@@ -60,28 +61,26 @@
                                 </v-flex>
                                 <v-flex sx12 sm4>
                                   <v-dialog
+                                    :ref="'planDialog'"
                                     persistent
                                     v-model="modals[index]"
-                                    lazy
                                     full-width
+                                    width="290px"
+                                    :return-value.sync="plan.timetable[index].date"
                                   >
                                     <v-text-field
                                       slot="activator"
-                                      label="Date"
+                                      label="Birthday"
                                       v-model="plan.timetable[index].date"
                                       prepend-icon="event"
                                       readonly
                                     ></v-text-field>
-                                    <v-date-picker v-model="plan.timetable[index].date" scrollable actions>
-                                      <template slot-scope="{ save, cancel }">
-                                        <v-card-actions>
-                                          <v-spacer></v-spacer>
-                                          <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                                          <v-btn flat color="primary" @click="save">OK</v-btn>
-                                        </v-card-actions>
-                                      </template>
+                                    <v-date-picker v-model="plan.timetable[index].date" scrollable>
+                                      <v-spacer></v-spacer>
+                                      <v-btn flat color="error" @click="modals.splice(index,1,false)">Cancel</v-btn>
+                                      <v-btn flat color="success" @click="$refs.planDialog[index].save(plan.timetable[index].date)">OK</v-btn>
                                     </v-date-picker>
-                                  </v-dialog>
+                                 </v-dialog>
                                 </v-flex>
                               </v-layout>
                             </v-flex>
@@ -98,7 +97,7 @@
                   </v-card>
                 </v-dialog>
               </td>
-              <td v-else class="clickable text-xs-right text"><v-btn @click="showPlan(props.item.plan)" style="margin-right:7.5px;" info>{{ props.item.plan.name }}</v-btn></td>
+              <td class="clickable text-xs-right text"><v-btn @click="showPlan(props.item.plan)" style="margin-right:7.5px;" info>{{ props.item.plan.name }}</v-btn></td>
             </template>
           </v-data-table>
         </v-card-text>
@@ -174,6 +173,7 @@
       }
     },
     created() {
+      console.log(this.$refs);
       for (let i = 0; i < this.createPlanDialog; ++i) {
         this.createPlanDialog.push(false);
       }
