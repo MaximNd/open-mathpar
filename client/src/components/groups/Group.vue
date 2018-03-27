@@ -79,7 +79,6 @@
         >
           <template slot="items" slot-scope="props">
             <td class="text-xs-left clickable"><router-link tag="span" :to="`/profile/${props.item.user.id}`">{{ props.item.user.fullName }}</router-link></td>
-            <td class="text-xs-right">{{ props.item.user.age }}</td>
             <td class="text-xs-right">
               {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber }} |
               {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber }} |
@@ -127,14 +126,123 @@
           </template>
         </v-data-table>
       </v-card>
+      <v-card class="mt-1">
+        <v-card-title class="primary--text title">
+          Marks (SR)
+          <v-spacer></v-spacer>
+          <v-select
+            :items="[{text: 'Base', value: true},{text: 'Full', value: false}]"
+            v-model="srView"
+            label="Select View"
+            single-line
+            item-text="text"
+            item-value="value"
+          ></v-select>
+          <v-spacer></v-spacer>
+          <v-select
+            :items="subjects"
+            v-model="currentSubjectId"
+            label="Select Subject"
+            single-line
+            item-text="name"
+            item-value="_id"
+          ></v-select>
+          <!-- <v-text-field
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+            v-model="seachTeacher"
+          ></v-text-field> -->
+
+        </v-card-title>
+        <v-card-title>
+          <v-checkbox v-for="(task, index) in studentSRBySubject" :key="`task-${index}`"
+            :label="`${task.name}`"
+            v-model="selectedTasks[index].show"
+          ></v-checkbox>
+        </v-card-title>
+        <v-card-text>
+          <v-data-table
+            :headers="studentSRMarksHeaders"
+            :items="studentSRMarksData"
+          >
+            <template slot="items" slot-scope="props">
+              <td>{{ props.item.fullName }}</td>
+              <template v-for="(mark, index) in props.item.marks">
+                <!-- props.item.marks[index].marks[currentIndexOfSrTries[props.index][index]-1] -->
+                <td :key="`${props.item.studentId}-number-${index}`" class="text-xs-right">
+                  <template v-if="props.item.marks[index].numbers.length > 0">
+                    <v-select
+                      :items="props.item.marks[index].numbers"
+                      v-model="currentIndexOfSrTries[props.index][index]"
+                      single-line
+                      auto
+                    ></v-select>
+                  </template>
+                  <template v-else>
+                    No Data yet
+                  </template>
+                </td>
+                <td v-if="srView" :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[currentIndexOfSrTries[props.index][index]-1].mark : 'No Data yet' }}</td>
+                <td v-else :key="`${props.item.studentId}-fourNumbers-${index}`" class="text-xs-right">{{ props.item.marks[index].fourthNumbers.length > 0 ? props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1] : 'No Data yet' }}</td>
+                <td :key="`${props.item.studentId}-time-${index}`" class="text-xs-right">{{ typeof props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1] === 'undefined' ? 'No Data yet' : `${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].hours()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].minutes()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].seconds()}` }}</td>
+              </template>
+
+            </template>
+            <!-- <v-alert slot="no-results" :value="true" color="error" icon="warning">
+              Your search for "{{ search }}" found no results.
+            </v-alert> -->
+          </v-data-table>
+        </v-card-text>
+      </v-card>
+
+      <v-card class="mt-1">
+        <v-card-title class="primary--text title">
+          Marks (KR)
+          <v-spacer></v-spacer>
+          <v-select
+            :items="[{text: 'Base', value: true},{text: 'Full', value: false}]"
+            v-model="srView"
+            label="Select View"
+            single-line
+            item-text="text"
+            item-value="value"
+          ></v-select>
+          <v-spacer></v-spacer>
+          <v-select
+            :items="subjects"
+            v-model="currentSubjectId"
+            label="Select Subject"
+            single-line
+            item-text="name"
+            item-value="_id"
+          ></v-select>
+          <!-- <v-text-field
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+            v-model="seachTeacher"
+          ></v-text-field> -->
+
+        </v-card-title>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+  import moment from 'moment';
+
   export default {
     data () {
       return {
+        selectedTasks: [],
+        srView: true,
+        currentIndexOfSrTries: [],
+        plans: [],
+        currentSubjectId: undefined,
         max25chars: (v) => v.length <= 25 || 'Input too long!',
         tmp: '',
         seachStudent: '',
@@ -142,7 +250,6 @@
         pagination: {},
         studentHeaders: [
           { text: 'Full Name', align: 'left', value: 'user.fullName' },
-          { text: 'Age', value: 'user.age' },
           { text: 'AVG SR Mark' },
           { text: 'AVG KR Mark' },
           { text: 'AVG SR Dispersion' },
@@ -156,7 +263,6 @@
           {
             value: false,
             name: 'Frozen Yogurt',
-            age: 159,
             carbs: 24,
             protein: 4.0,
             sodium: 87,
@@ -165,7 +271,6 @@
           {
             value: false,
             name: 'Ice cream sandwich',
-            age: 237,
             carbs: 37,
             protein: 4.3,
             sodium: 129,
@@ -174,7 +279,6 @@
           {
             value: false,
             name: 'Eclair',
-            age: 262,
             carbs: 23,
             protein: 6.0,
             sodium: 337,
@@ -183,7 +287,6 @@
           {
             value: false,
             name: 'Cupcake',
-            age: 305,
             carbs: 67,
             protein: 4.3,
             sodium: 413,
@@ -192,7 +295,6 @@
           {
             value: false,
             name: 'Gingerbread',
-            age: 356,
             carbs: 49,
             protein: 3.9,
             sodium: 327,
@@ -201,7 +303,6 @@
           {
             value: false,
             name: 'Jelly bean',
-            age: 375,
             carbs: 94,
             protein: 0.0,
             sodium: 50,
@@ -210,7 +311,6 @@
           {
             value: false,
             name: 'Lollipop',
-            age: 392,
             carbs: 98,
             protein: 0,
             sodium: 38,
@@ -219,7 +319,6 @@
           {
             value: false,
             name: 'Honeycomb',
-            age: 408,
             carbs: 87,
             protein: 6.5,
             sodium: 562,
@@ -228,7 +327,6 @@
           {
             value: false,
             name: 'Donut',
-            age: 452,
             carbs: 51,
             protein: 4.9,
             sodium: 326,
@@ -237,7 +335,6 @@
           {
             value: false,
             name: 'KitKat',
-            age: 518,
             carbs: 65,
             protein: 7,
             sodium: 54,
@@ -249,10 +346,132 @@
     computed: {
       group() {
         return this.$store.getters.group;
+      },
+      subjects() {
+        return this.plans.map(plan => plan.subjectId);
+      },
+      groupStudents() {
+        return this.$store.getters.groupStudents;
+      },
+      studentSRBySubject() {
+        if (typeof this.currentSubjectId === 'undefined') return undefined;
+        return this.plans
+          .filter(plan => plan.subjectId._id === this.currentSubjectId)
+          .reduce((headers, plan) => headers.concat(plan.timetable.map(timetable => timetable.taskId).filter(task => task.isTest)), []);
+      },
+      studentSRMarksHeaders() {
+        if (typeof this.studentSRBySubject === 'undefined') return undefined;
+        let SRHeaders = [{ text: 'Students', align: 'left' }];
+        const headers = this.studentSRBySubject.reduce((headers, task, index) => {
+          if (this.checkForTaskFilter(task._id)) return headers;
+          headers.push({ text: `(${index + 1}) №`, align: 'right', width: '20px' });
+          headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px' });
+          headers.push({ text: `(${index + 1}) Time`, align: 'right', width: '20px' });
+          return headers;
+        }, []);
+        return SRHeaders.concat(headers);
+      },
+      studentSRMarksData() {
+        if (typeof this.studentSRBySubject === 'undefined') return undefined;
+        return this.groupStudents.map(student => {
+          let data = { studentId: student._id, fullName: student.fullName, marks: [] };
+          this.studentSRBySubject.filter(SR => !this.checkForTaskFilter(SR._id)).forEach(SR => {
+            const grades = student.clients.gradeBook
+              .filter(grade => grade.taskId._id === SR._id)
+              .reduce((res, grade, index) => {
+                res.numbers.push(index + 1);
+                res.marks.push(grade);
+                res.fourthNumbers.push(this.calculateFourNumbersBySRMark(grade.mark));
+                let totalDuration = moment.duration(0);
+                grade.time.forEach(time => {
+                  totalDuration.add(time.seconds, 's');
+                  totalDuration.add(grade.minutes, 'm');
+                  totalDuration.add(grade.hours, 'h');
+                });
+                res.totalDuration.push(totalDuration);
+                return res;
+              }, { numbers: [], marks: [], fourthNumbers: [], totalDuration: [] });
+              // .reduce((res, grade) => {
+              //   res.push(grade.mark);
+              //   return { number: ++res.number, marks: res, fullTime: { second: 0, minutes: 0, hours: 0 } }
+              // }, { number: 0, marks: [], fullTime: { second: 0, minutes: 0, hours: 0 } });
+            // const numbers
+            data.marks.push(grades);
+          });
+          return data;
+        });
+      }
+    },
+    watch: {
+      studentSRMarksData() {
+        if (typeof this.studentSRBySubject === 'undefined') return undefined;
+        this.currentIndexOfSrTries = this.studentSRMarksData.map(mark => mark.marks.map(mark => mark.marks.length));
+      },
+      currentSubjectId() {
+        this.selectedTasks = [];
+        this.studentSRBySubject.forEach(SR => this.selectedTasks.push({ taskId: SR._id, show: true }));
+      }
+    },
+    methods: {
+      calculateFourNumbersBySRMark(mark) {
+        // Count of numbers(number of solved tasks)
+        if (typeof mark === 'undefined') return { firstNumber: null, secondNumber: null, thirdNumber: null, fourthNumber: null };
+        let firstNumber = 0;
+        let markNumbers = mark.match(/[1-9]/g);
+        if (markNumbers) {
+            firstNumber += markNumbers.length;
+        }
+
+        // Sum of numbers divided by count of numbers > 0(average number of attempts per one solved task)
+        let secondNumber = 0;
+        let sumOfNumbers = 0;
+        let countOfNumbersMoreThenZero = 0;
+
+        if (markNumbers) {
+            countOfNumbersMoreThenZero += markNumbers.length;
+            sumOfNumbers = markNumbers.reduce((sum, number) => { sum += parseInt(number); return sum; }, 0);
+        }
+        if (countOfNumbersMoreThenZero > 0) secondNumber = sumOfNumbers / countOfNumbersMoreThenZero;
+
+        // Count of big letters(number of tasks the answer was viewed)
+        let thirdNumber = 0;
+        let markBigLetters = mark.match(/[A-J]/g);
+
+        let countOfAllLetters = 0;
+
+        if (markBigLetters) {
+            countOfAllLetters += markBigLetters.length;
+            thirdNumber += markBigLetters.length;
+        }
+
+        // Sum of all big and small letters divided by count of all letters(average number of attempts per one no solved task)
+        let fourthNumber = 0;
+        let lettersToNumbersSet = {
+            'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9, 'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8, 'i': 9
+        };
+
+        let sumOfAllLetters = 0;
+        let markSmallLetters = mark.match(/[a-i]/g);
+
+        if (markSmallLetters) {
+            countOfAllLetters += markSmallLetters.length;
+            markSmallLetters.forEach(letter => { sumOfAllLetters += lettersToNumbersSet[letter] });
+        }
+
+        if (countOfAllLetters > 0) fourthNumber = sumOfAllLetters / countOfAllLetters;
+
+        return { firstNumber, secondNumber, thirdNumber, fourthNumber };
+      },
+      checkForTaskFilter(taskId) {
+        for (let i = 0; i < this.selectedTasks.length; ++i) {
+          if (this.selectedTasks[i].taskId === taskId && !this.selectedTasks[i].show) return true;
+        }
+        return false;
       }
     },
     created() {
-      this.$store.dispatch('getGroupById', { groupId: this.$route.params.id });
+      this.$http.get(`plans/group/${this.$route.params.id}`)
+        .then(({ body }) => { this.plans = body; });
     }
   }
 </script>

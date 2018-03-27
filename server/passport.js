@@ -38,7 +38,6 @@ const localStrategy = new LocalStrategy({
       if (!user) {
           return next(null, false);
       }
-
       const isMatch = await user.isValidPassword(password);
       if(!isMatch) {
           return next(null, false);

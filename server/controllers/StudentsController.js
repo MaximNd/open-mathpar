@@ -16,31 +16,31 @@ module.exports = {
             .catch(err => console.log(err));
     },
 
-    createStudent(req, res) {
-        const { user, groupId, classId }  = req.body;
-        User.createUser(new User(user), (err, userId) => {
-            if (err) {
-                console.log(err);
-            }
+    async createStudent(req, res) {
+        try {
+            const { user, groupId, classId }  = req.body;
+            const studentUser = new User(user);
+            await studentUser.save();
 
             req.user.clients
-                .then(clients => {
-                    const student = new Student({
-                        userId,
-                        schoolId: findShoollId(clients, 'headTeacher'),
-                        groupId,
-                        classId
-                    });
-                
-                    student.save(err => {
-                        if (err) {
-                            console.log(err);
-                        }
-                
+                .then(async clients => {
+                    try {   
+                        const student = new Student({
+                            userId: studentUser._id,
+                            schoolId: findShoollId(clients, 'headTeacher'),
+                            groupId,
+                            classId
+                        });
+                    
+                        await student.save();
                         res.status(200, { message: 'ok' }).end();
-                    });
+                    } catch (error) {
+                        console.log(error);  
+                    }
                 });
-        });
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     updateStudent(req, res) {

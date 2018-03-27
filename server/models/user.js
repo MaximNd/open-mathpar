@@ -45,6 +45,8 @@ UserSchema.pre('save', async function(next) {
 
 UserSchema.methods.isValidPassword = async function(password) {
     try {
+        // console.log(password);
+        console.log(this.password, ':');
         return await bcrypt.compare(password, this.password);
     } catch (error) {
         throw new Error(error);
@@ -96,26 +98,3 @@ UserSchema.virtual('age').get(function() {
 });
 
 const User = module.exports = mongoose.model('User', UserSchema);
-
-module.exports.createUser = (user, callback) => {
-	bcrypt.genSalt(10, (err, salt) => {
-	    bcrypt.hash(user.password, salt, (err, hash) => {
-            user.password = hash;
-            user.save(err => {
-                callback(err, user._id);
-            });
-	    });
-	});
-}
-
-module.exports.getUserById = (id, callback) => {
-    User.findById(id, callback);
-}
-
-module.exports.getUserByEmail = (email, callback) => {
-    User.findOne({ email: email }, callback);
-}
-
-module.exports.comparePassword = (password, hash, callback) => {
-	bcrypt.compare(password, hash, callback);
-}

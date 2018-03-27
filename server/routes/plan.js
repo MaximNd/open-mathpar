@@ -7,6 +7,9 @@ const isTeacher = require('./../policies/checkRole')('teacher');
 // Get plan by ID
 router.get('/plan/:id', isAuthenticated, PlansController.getPlanById);
 
+// Get plans by group ID
+router.get('/plans/group/:id', isAuthenticated, PlansController.getPlansByGroupId);
+
 // Create plan
 router.post('/plan', isAuthenticated, isTeacher, PlansController.createPlan);
 

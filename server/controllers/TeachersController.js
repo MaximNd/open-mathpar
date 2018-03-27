@@ -17,31 +17,31 @@ module.exports = {
             .then(timatable => res.send(timatable[0].timetable));
     },
 
-    createTeacher(req, res) {
-        const user = req.body.user;
-        const timetable = req.body.teacher.timetable;
-
-        User.createUser(new User(user), (err, userId) => {
-            if (err) {
-                console.log(err);
-            }
-
+    async createTeacher(req, res) {
+        try {
+            const user = req.body.user;
+            const timetable = req.body.teacher.timetable;
+            const teacherUser = new User(user);
+            await teacherUser.save();
             req.user.clients
-                .then(clients => {
-                    const teacher = new Teacher({
-                        userId,
-                        schoolId: findShoollId(clients, 'headTeacher'),
-                        timetable
-                    });
-                
-                    teacher.save(err => {
-                        if (err) {
-                            console.log(err);
-                        }
+                .then(async clients => {
+                    try {
+                        const teacher = new Teacher({
+                            userId: teacherUser._id,
+                            schoolId: findShoollId(clients, 'headTeacher'),
+                            timetable
+                        });
+                    
+                        await teacher.save();
+
                         res.status(200, { message: 'ok' }).end();
-                    });
+                    } catch (error) {
+                        console.log(error);
+                    }
                 });
-        });
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     updateTeacher(req, res) {

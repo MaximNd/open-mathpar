@@ -20,28 +20,30 @@ module.exports = {
             });
     },
 
-    createHeadTeacher(req, res) {
-        const user = req.body.user;
-        User.createUser(new User(user), (err, userId) => {
-            if (err) {
-                console.log(err);
-            }
+    async createHeadTeacher(req, res) {
+        try {
+            const user = req.body.user;
+            const headTeacherUser = new User(user);
+            await headTeacherUser.save();
+            
             req.user.clients
-                .then(clients => {
-                    const headTeacher = new HeadTeacher({
-                        userId,
-                        schoolId: findShoollId(clients, 'director')
-                    });
-                
-                    headTeacher.save(err => {
-                        if (err) {
-                            console.log(err);
-                        }
+                .then(async clients => {
+                    try {
+                        const headTeacher = new HeadTeacher({
+                            userId: headTeacherUser._id,
+                            schoolId: findShoollId(clients, 'director')
+                        });
                     
+                        await headTeacher.save();
+
                         res.status(200, { message: 'ok' }).end();
-                    });
+                    } catch (error) {
+                        console.log(error);
+                    }
                 });
-        });
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     updateHeadTeacher(req, res) {

@@ -14,6 +14,9 @@ const getters = {
     },
     group(state) {
         return state.group;
+    },
+    groupStudents(state) {
+      return state.group.members[0].students.map(studentData => ({...studentData.user, ...{clients: studentData.clients[0].client}}));
     }
 };
 
@@ -36,12 +39,12 @@ const actions = {
         });
     },
     getGroupById({ commit }, payload) {
-        Vue.http.get(`group/${payload.groupId}`)
+        return Vue.http.get(`group/${payload.groupId}`)
             .then(data => commit('SET_GROUP', data.body));
     },
 
     getGroupsBySchoolId({ commit }, payload) {
-        Vue.http.get(`school/${payload.schoolId}/groups`)
+      return Vue.http.get(`school/${payload.schoolId}/groups`)
             .then(data => commit('SET_GROUPS', data.body.groups));
     }
 };

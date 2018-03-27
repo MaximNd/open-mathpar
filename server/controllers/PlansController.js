@@ -3,11 +3,17 @@ const Teacher = require('./../models/teacher');
 
 module.exports = {
     getPlanById(req, res) {
-        console.time('2');
         Plan.findById(req.params.id).populate({ path: 'timetable.lectionId timetable.taskId' })
             .then(plan => {
-                res.send(plan)
-                console.timeEnd('2');
+                res.send(plan);
+            })
+            .catch(err => console.log(err));
+    },
+
+    getPlansByGroupId(req, res) {
+        Plan.find({ groupId: req.params.id }).populate({ path: 'subjectId timetable.taskId' })
+            .then(plans => {
+                res.send(plans);
             })
             .catch(err => console.log(err));
     },

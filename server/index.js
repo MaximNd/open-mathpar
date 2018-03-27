@@ -57,19 +57,19 @@ app.get('/', (req, res) => {
 
 // routes
 const { authority, director, headTeacher, student, teacher, user, class_, group, subject, lection, task, plan, school } = require('./routes/');
-
-app.use(authority);
-app.use(director);
-app.use(headTeacher);
-app.use(student);
-app.use(teacher);
-app.use(user);
-app.use(class_);
-app.use(group);
-app.use(subject);
-app.use(lection);
-app.use(task);
-app.use(plan);
-app.use(school);
+const API = '/api';
+app.use(API, authority);
+app.use(API, director);
+app.use(API, headTeacher);
+app.use(API, student);
+app.use(API, teacher);
+app.use(API, user);
+app.use(API, class_);
+app.use(API, group);
+app.use(API, subject);
+app.use(API, lection);
+app.use(API, task);
+app.use(API, plan);
+app.use(API, school);
 
 app.listen(app.get('port'), () => console.log(`Server started on port ${app.get('port')}`));
