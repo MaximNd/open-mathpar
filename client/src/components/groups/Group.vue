@@ -141,7 +141,7 @@
           <v-spacer></v-spacer>
           <v-select
             :items="subjects"
-            v-model="currentSubjectId"
+            v-model="currentSubjectSRId"
             label="Select Subject"
             single-line
             item-text="name"
@@ -202,17 +202,8 @@
           Marks (KR)
           <v-spacer></v-spacer>
           <v-select
-            :items="[{text: 'Base', value: true},{text: 'Full', value: false}]"
-            v-model="srView"
-            label="Select View"
-            single-line
-            item-text="text"
-            item-value="value"
-          ></v-select>
-          <v-spacer></v-spacer>
-          <v-select
             :items="subjects"
-            v-model="currentSubjectId"
+            v-model="currentSubjectKRId"
             label="Select Subject"
             single-line
             item-text="name"
@@ -225,8 +216,28 @@
             hide-details
             v-model="seachTeacher"
           ></v-text-field> -->
-
         </v-card-title>
+        <v-card-title>
+          <v-checkbox v-for="(task, index) in studentKRBySubject" :key="`task-${index}`"
+            :label="`${task.name}`"
+            v-model="selectedKRTasks[index].show"
+          ></v-checkbox>
+        </v-card-title>
+        <v-card-text>
+          <v-data-table
+            :headers="studentKRMarksHeaders"
+            :items="studentKRMarksData"
+          >
+            <template slot="items" slot-scope="props">
+              <td>{{ props.item.fullName }}</td>
+              <template v-for="(mark, index) in props.item.marks">
+                <td :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[0].mark : 'No Data yet' }}</td>
+                <td :key="`${props.item.studentId}-time-${index}`" class="text-xs-right">{{ typeof props.item.marks[index].totalDuration[0] === 'undefined' ? 'No Data yet' : `${props.item.marks[index].totalDuration[0].hours()}:${props.item.marks[index].totalDuration[0].minutes()}:${props.item.marks[index].totalDuration[0].seconds()}` }}</td>
+              </template>
+
+            </template>
+          </v-data-table>
+        </v-card-text>
       </v-card>
     </v-flex>
   </v-layout>
@@ -239,10 +250,12 @@
     data () {
       return {
         selectedTasks: [],
+        selectedKRTasks: [],
         srView: true,
         currentIndexOfSrTries: [],
         plans: [],
-        currentSubjectId: undefined,
+        currentSubjectSRId: undefined,
+        currentSubjectKRId: undefined,
         max25chars: (v) => v.length <= 25 || 'Input too long!',
         tmp: '',
         seachStudent: '',
@@ -354,28 +367,45 @@
         return this.$store.getters.groupStudents;
       },
       studentSRBySubject() {
-        if (typeof this.currentSubjectId === 'undefined') return undefined;
+        if (typeof this.currentSubjectSRId === 'undefined') return undefined;
         return this.plans
-          .filter(plan => plan.subjectId._id === this.currentSubjectId)
+          .filter(plan => plan.subjectId._id === this.currentSubjectSRId)
           .reduce((headers, plan) => headers.concat(plan.timetable.map(timetable => timetable.taskId).filter(task => task.isTest)), []);
+      },
+      studentKRBySubject() {
+        if (typeof this.currentSubjectKRId === 'undefined') return undefined;
+        return this.plans
+          .filter(plan => plan.subjectId._id === this.currentSubjectKRId)
+          .reduce((headers, plan) => headers.concat(plan.timetable.map(timetable => timetable.taskId).filter(task => !task.isTest)), []);
       },
       studentSRMarksHeaders() {
         if (typeof this.studentSRBySubject === 'undefined') return undefined;
-        let SRHeaders = [{ text: 'Students', align: 'left' }];
+        let SRHeaders = [{ text: 'Students', align: 'left', value: false, sortable: false }];
         const headers = this.studentSRBySubject.reduce((headers, task, index) => {
-          if (this.checkForTaskFilter(task._id)) return headers;
-          headers.push({ text: `(${index + 1}) №`, align: 'right', width: '20px' });
-          headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px' });
-          headers.push({ text: `(${index + 1}) Time`, align: 'right', width: '20px' });
+          if (this.checkForTaskFilter(task._id, 'selectedTasks')) return headers;
+          headers.push({ text: `(${index + 1}) №`, align: 'right', width: '20px', value: false, sortable: false });
+          headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px', value: false, sortable: false });
+          headers.push({ text: `(${index + 1}) Time`, align: 'right', width: '20px', value: false, sortable: false });
           return headers;
         }, []);
         return SRHeaders.concat(headers);
+      },
+      studentKRMarksHeaders() {
+        if (typeof this.studentKRBySubject === 'undefined') return undefined;
+        let KRHeaders = [{ text: 'Students', align: 'left', value: false, sortable: false }];
+        const headers = this.studentKRBySubject.reduce((headers, task, index) => {
+          if (this.checkForTaskFilter(task._id, 'selectedKRTasks')) return headers;
+          headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px', value: false, sortable: false });
+          headers.push({ text: `(${index + 1}) Time`, align: 'right', width: '20px', value: false, sortable: false });
+          return headers;
+        }, []);
+        return KRHeaders.concat(headers);
       },
       studentSRMarksData() {
         if (typeof this.studentSRBySubject === 'undefined') return undefined;
         return this.groupStudents.map(student => {
           let data = { studentId: student._id, fullName: student.fullName, marks: [] };
-          this.studentSRBySubject.filter(SR => !this.checkForTaskFilter(SR._id)).forEach(SR => {
+          this.studentSRBySubject.filter(SR => !this.checkForTaskFilter(SR._id, 'selectedTasks')).forEach(SR => {
             const grades = student.clients.gradeBook
               .filter(grade => grade.taskId._id === SR._id)
               .reduce((res, grade, index) => {
@@ -400,6 +430,29 @@
           });
           return data;
         });
+      },
+      studentKRMarksData() {
+        if (typeof this.studentKRBySubject === 'undefined') return undefined;
+        return this.groupStudents.map(student => {
+          let data = { studentId: student._id, fullName: student.fullName, marks: [] };
+          this.studentKRBySubject.filter(KR => !this.checkForTaskFilter(KR._id, 'selectedKRTasks')).forEach(KR => {
+            const grades = student.clients.gradeBook
+              .filter(grade => grade.taskId._id === KR._id)
+              .reduce((res, grade, index) => {
+                res.marks.push(grade);
+                let totalDuration = moment.duration(0);
+                grade.time.forEach(time => {
+                  totalDuration.add(time.seconds, 's');
+                  totalDuration.add(grade.minutes, 'm');
+                  totalDuration.add(grade.hours, 'h');
+                });
+                res.totalDuration.push(totalDuration);
+                return res;
+              }, { marks: [], totalDuration: [] });
+            data.marks.push(grades);
+          });
+          return data;
+        });
       }
     },
     watch: {
@@ -407,9 +460,13 @@
         if (typeof this.studentSRBySubject === 'undefined') return undefined;
         this.currentIndexOfSrTries = this.studentSRMarksData.map(mark => mark.marks.map(mark => mark.marks.length));
       },
-      currentSubjectId() {
+      currentSubjectSRId() {
         this.selectedTasks = [];
         this.studentSRBySubject.forEach(SR => this.selectedTasks.push({ taskId: SR._id, show: true }));
+      },
+      currentSubjectKRId() {
+        this.selectedKRTasks = [];
+        this.studentKRBySubject.forEach(KR => this.selectedKRTasks.push({ taskId: KR._id, show: true }));
       }
     },
     methods: {
@@ -462,9 +519,9 @@
 
         return { firstNumber, secondNumber, thirdNumber, fourthNumber };
       },
-      checkForTaskFilter(taskId) {
-        for (let i = 0; i < this.selectedTasks.length; ++i) {
-          if (this.selectedTasks[i].taskId === taskId && !this.selectedTasks[i].show) return true;
+      checkForTaskFilter(taskId, selectedTasks) {
+        for (let i = 0; i < this[selectedTasks].length; ++i) {
+          if (this[selectedTasks][i].taskId === taskId && !this[selectedTasks][i].show) return true;
         }
         return false;
       }
