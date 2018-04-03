@@ -131,7 +131,7 @@
           Marks (SR)
           <v-spacer></v-spacer>
           <v-select
-            :items="[{text: 'Base', value: true},{text: 'Full', value: false}]"
+            :items="[{text: 'Base', value: 'base'},{text: 'Full', value: 'full'},{text: 'Time', value: 'time'}]"
             v-model="srView"
             label="Select View"
             single-line
@@ -184,8 +184,18 @@
                     No Data yet
                   </template>
                 </td>
-                <td v-if="srView" :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[currentIndexOfSrTries[props.index][index]-1].mark : 'No Data yet' }}</td>
-                <td v-else :key="`${props.item.studentId}-fourNumbers-${index}`" class="text-xs-right">{{ props.item.marks[index].fourthNumbers.length > 0 ? props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1] : 'No Data yet' }}</td>
+                <td v-if="srView === 'base'" :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[currentIndexOfSrTries[props.index][index]-1].mark : 'No Data yet' }}</td>
+                <td v-else-if="srView === 'full'" :key="`${props.item.studentId}-fourNumbers-${index}`" class="text-xs-right">
+                  <template v-if="props.item.marks[index].fourthNumbers.length > 0">
+                    {{ `${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].firstNumber} ${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].secondNumber.toFixed(1)}/${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].thirdNumber}  ${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].fourthNumber.toFixed(1)}` }}
+                  </template>
+                  <template v-else>
+                    {{ 'No Data yet' }}
+                  </template>
+                </td>
+                <td v-else :key="`${props.item.studentId}-eachTime-${index}`" class="text-xs-right">
+                  {{ props.item.marks[index].times[currentIndexOfSrTries[props.index][index]-1] }}
+                </td>
                 <td :key="`${props.item.studentId}-time-${index}`" class="text-xs-right">{{ typeof props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1] === 'undefined' ? 'No Data yet' : `${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].hours()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].minutes()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].seconds()}` }}</td>
               </template>
 
@@ -251,7 +261,7 @@
       return {
         selectedTasks: [],
         selectedKRTasks: [],
-        srView: true,
+        srView: 'base',
         currentIndexOfSrTries: [],
         plans: [],
         currentSubjectSRId: undefined,
@@ -384,7 +394,11 @@
         const headers = this.studentSRBySubject.reduce((headers, task, index) => {
           if (this.checkForTaskFilter(task._id, 'selectedTasks')) return headers;
           headers.push({ text: `(${index + 1}) №`, align: 'right', width: '20px', value: false, sortable: false });
-          headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px', value: false, sortable: false });
+          if (this.srView === 'time') {
+            headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', value: false, sortable: false });
+          } else {
+            headers.push({ text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px', value: false, sortable: false });
+          }
           headers.push({ text: `(${index + 1}) Time`, align: 'right', width: '20px', value: false, sortable: false });
           return headers;
         }, []);
@@ -413,14 +427,17 @@
                 res.marks.push(grade);
                 res.fourthNumbers.push(this.calculateFourNumbersBySRMark(grade.mark));
                 let totalDuration = moment.duration(0);
+                let resTimes = '';
                 grade.time.forEach(time => {
+                  resTimes += `${time.hours}:${time.minutes}:${time.seconds} | `;
                   totalDuration.add(time.seconds, 's');
                   totalDuration.add(grade.minutes, 'm');
                   totalDuration.add(grade.hours, 'h');
                 });
+                res.times.push(resTimes);
                 res.totalDuration.push(totalDuration);
                 return res;
-              }, { numbers: [], marks: [], fourthNumbers: [], totalDuration: [] });
+              }, { numbers: [], marks: [], fourthNumbers: [], times: [], totalDuration: [] });
               // .reduce((res, grade) => {
               //   res.push(grade.mark);
               //   return { number: ++res.number, marks: res, fullTime: { second: 0, minutes: 0, hours: 0 } }
