@@ -216,6 +216,7 @@
             v-model="currentSubjectKRId"
             label="Select Subject"
             single-line
+            multiple
             item-text="name"
             item-value="_id"
           ></v-select>
@@ -383,9 +384,9 @@
           .reduce((headers, plan) => headers.concat(plan.timetable.map(timetable => timetable.taskId).filter(task => task.isTest)), []);
       },
       studentKRBySubject() {
-        if (typeof this.currentSubjectKRId === 'undefined') return undefined;
+        if (typeof this.currentSubjectKRId === 'undefined' || this.currentSubjectKRId.length === 0) return undefined;
         return this.plans
-          .filter(plan => plan.subjectId._id === this.currentSubjectKRId)
+          .filter(plan => this.currentSubjectKRId.indexOf(plan.subjectId._id) !== -1)
           .reduce((headers, plan) => headers.concat(plan.timetable.map(timetable => timetable.taskId).filter(task => !task.isTest)), []);
       },
       studentSRMarksHeaders() {
@@ -483,7 +484,9 @@
       },
       currentSubjectKRId() {
         this.selectedKRTasks = [];
-        this.studentKRBySubject.forEach(KR => this.selectedKRTasks.push({ taskId: KR._id, show: true }));
+        if (typeof this.studentKRBySubject !== 'undefined') {
+          this.studentKRBySubject.forEach(KR => this.selectedKRTasks.push({ taskId: KR._id, show: true }));
+        }
       }
     },
     methods: {

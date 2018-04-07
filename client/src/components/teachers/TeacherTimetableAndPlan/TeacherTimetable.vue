@@ -70,7 +70,7 @@
                                   >
                                     <v-text-field
                                       slot="activator"
-                                      label="Birthday"
+                                      label="Date"
                                       v-model="plan.timetable[index].date"
                                       prepend-icon="event"
                                       readonly
@@ -122,8 +122,8 @@
         modals: [],
         headers: [
           { text: 'Subject', align: 'left', value: 'subject' },
-          { text: 'Grop', value: 'group' },
-          { text: 'Plan', value: 'plan' }
+          { text: 'Grop', align: 'right', value: 'group' },
+          { text: 'Plan', align: 'right', value: 'plan' }
         ],
         countPlanCols: 5
       }

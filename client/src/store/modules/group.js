@@ -16,7 +16,9 @@ const getters = {
         return state.group;
     },
     groupStudents(state) {
-      return state.group.members[0].students.map(studentData => ({...studentData.user, ...{clients: studentData.clients[0].client}}));
+      if (typeof state.group.members !== 'undefined') {
+        return state.group.members[0].students.map(studentData => ({...studentData.user, ...{clients: studentData.clients[0].client}}));
+      }
     }
 };
 

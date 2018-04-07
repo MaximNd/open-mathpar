@@ -23,7 +23,7 @@
                   <v-select
                     v-model="director.user.gender"
                     label="Gender"
-                    :items="['Man', 'Women']"
+                    :items="['Male', 'Female']"
                   ></v-select>
                 </v-flex>
                 <v-flex xs12>

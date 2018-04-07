@@ -11,8 +11,8 @@ import School from '../components/school/SchoolContainer.vue';
 import Teacher from '../components/teachers/TeacherContainer.vue';
 // import TeacherProfile from '../components/teachers/teacherProfile/TeacherProfileContainer.vue';
 import TeacherTimetableAndPlan from '../components/teachers/TeacherTimetableAndPlan/TeacherTimetableAndPlanContainer.vue';
-import TasksAndLectures from '../components/tasksAndLectures/TasksAndLecturesContainer.vue';
-import Task from '../components/tasksAndLectures/tasks/task/TaskContainer.vue';
+import SchoolLearningStuff from '../components/schoolLearningStuff/SchoolLearningStuffContainer.vue';
+import Task from '../components/schoolLearningStuff/tasks/task/TaskContainer.vue';
 import HeadTeacher from '../components/head-teachers/HeadTeacherContainer.vue';
 // import HeadTeacherProfile from '../components/head-teachers/head-teacherProfile/headTeacherProfileContainer.vue'
 import HeadTeacherCreateMember from '../components/head-teachers/createMember/CreateMemberContainer.vue';
@@ -87,9 +87,9 @@ export default new Router({
       component: School
     },
     {
-      path: '/tasks_lectures',
-      name: 'tasks_Lectures',
-      component: TasksAndLectures
+      path: '/school_learning_stuff',
+      name: 'school_learning_stuff',
+      component: SchoolLearningStuff
     },
     {
       path: '/task/:id',

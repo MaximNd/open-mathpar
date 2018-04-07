@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
+
 
 const ThemeSchema = new Schema({
     name: String,
+    school: {
+        type: ObjectId,
+        required: true,
+        ref: 'School'
+    },
+    teacher: {
+        type: ObjectId,
+        ref: 'Teacher',
+        required: true
+    },
     order: Number,
     class: Number
 });

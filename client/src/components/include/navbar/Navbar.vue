@@ -80,7 +80,7 @@
                     this.menuItems = [
                         { title: 'View Profile', icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
                         { title: 'Timetable and Plan', icon: 'subtitles', link: `/teacher/${this.$auth.user().id}/timetable_plan` },
-                        { title: 'Tasks and Lectures', icon: 'import_contacts', link: '/tasks_lectures' },
+                        { title: 'School Learning Stuff', icon: 'import_contacts', link: '/school_learning_stuff' },
                         { title: 'Groups', icon: 'people', link: '/groups' },
                         { title: 'School №445', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` }
                     ]

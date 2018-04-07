@@ -23,7 +23,7 @@
                     <v-select
                       v-model="user.gender"
                       label="Gender"
-                      :items="['Man', 'Women']"
+                      :items="['Male', 'Female']"
                     ></v-select>
                   </v-flex>
                   <v-flex xs12>
@@ -34,27 +34,27 @@
                   </v-flex>
                   <v-flex xs12>
                     <v-dialog
-            ref="dialog"
-            persistent
-            v-model="modal"
-            lazy
-            full-width
-            width="290px"
-            :return-value.sync="user.birthday"
-          >
-            <v-text-field
-              slot="activator"
-              label="Birthday"
-              v-model="user.birthday"
-              prepend-icon="event"
-              readonly
-            ></v-text-field>
-            <v-date-picker v-model="user.birthday" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn flat color="error" @click="modal = false">Cancel</v-btn>
-              <v-btn flat color="success" @click="$refs.dialog.save(user.birthday)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
+                      ref="dialog"
+                      persistent
+                      v-model="modal"
+                      lazy
+                      full-width
+                      width="290px"
+                      :return-value.sync="user.birthday"
+                    >
+                      <v-text-field
+                        slot="activator"
+                        label="Birthday"
+                        v-model="user.birthday"
+                        prepend-icon="event"
+                        readonly
+                      ></v-text-field>
+                      <v-date-picker v-model="user.birthday" scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="error" @click="modal = false">Cancel</v-btn>
+                        <v-btn flat color="success" @click="$refs.dialog.save(user.birthday)">OK</v-btn>
+                      </v-date-picker>
+                    </v-dialog>
                   </v-flex>
                 </v-layout>
               </v-container>

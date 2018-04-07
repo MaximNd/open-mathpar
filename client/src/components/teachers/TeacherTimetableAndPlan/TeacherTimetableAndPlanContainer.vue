@@ -18,6 +18,10 @@
     components: {
       appTeacherTimetable: TeacherTimetable,
       appTeacherPlan: TeacherPlan
+    },
+    beforeRouteLeave(to, from, next) {
+      this.$store.commit('SET_TASKS', []);
+      next();
     }
   };
 </script>
