@@ -92,15 +92,15 @@
       >
         <template slot="items" slot-scope="props">
           <td class="text-xs-left">{{ props.item.order }}</td>
-          <td class="text-xs-left clickable"><router-link :to="`/task/${props.item._id}`" tag="span">{{ props.item.name }}</router-link></td>
+          <td class="text-xs-left clickable"><router-link :to="`/app/task/${props.item._id}`" tag="span">{{ props.item.name }}</router-link></td>
           <td class="text-xs-right">{{ props.item.class }}</td>
           <td class="text-xs-right">{{ props.item.difficultyLevel }}</td>
           <td class="text-xs-right">{{ props.item.subjectId.name }}</td>
           <td class="text-xs-left">{{ props.item.theme.order }}</td>
           <td class="text-xs-left">{{ props.item.theme.name }}</td>
           <td class="text-xs-right">{{ props.item.isTest ? 'SR' : 'KR' }}</td>
-          <td class="text-xs-right clickable"><router-link :to="`/profile/${props.item.teacherId.userId._id}`" tag="span">{{ props.item.teacherId.userId.fullName }}</router-link></td>
-          <td class="text-xs-right clickable"><router-link :to="`/school/${props.item.teacherId.schoolId._id}`" tag="span">{{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}</router-link></td>
+          <td class="text-xs-right clickable"><router-link :to="`/app/profile/${props.item.teacherId.userId._id}`" tag="span">{{ props.item.teacherId.userId.fullName }}</router-link></td>
+          <td class="text-xs-right clickable"><router-link :to="`/app/school/${props.item.teacherId.schoolId._id}`" tag="span">{{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}</router-link></td>
         </template>
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}

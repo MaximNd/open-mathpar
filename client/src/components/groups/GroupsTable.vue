@@ -19,7 +19,7 @@
                     v-bind:search="search"
                   >
                   <template slot="items" slot-scope="props">
-                    <td class="text-xs-left"><router-link :to="`/group/${props.item.group.id}`">{{ props.item.group.name }}</router-link></td>
+                    <td class="text-xs-left"><router-link :to="`/app/group/${props.item.group.id}`">{{ props.item.group.name }}</router-link></td>
                     <td class="text-xs-right">{{ props.item.studentsCount }}</td>
                     <td class="text-xs-right">{{ props.item.teachersCount }}</td>
                     <td class="text-xs-right">

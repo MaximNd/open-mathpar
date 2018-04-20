@@ -22,8 +22,8 @@ Vue.use(VueAuth, {
     auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
     http: require('@websanova/vue-auth/drivers/http/vue-resource.1.x.js'),
     router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-    loginData: { url: `${Vue.http.options.root}/user/login`, method: 'POST', redirect: '/', fetchUser: false },
-    registerData: { url: `${Vue.http.options.root}/user/signup`, method: 'POST', redirect: '/login', fetchUser: false },
+    loginData: { url: `${Vue.http.options.root}/user/login`, method: 'POST', redirect: '/app', fetchUser: false },
+    registerData: { url: `${Vue.http.options.root}/user/signup`, method: 'POST', redirect: '/app/login', fetchUser: false },
     refreshData: { url: 'auth/refresh', method: 'GET', enabled: false, interval: 0 },
     fetchData: { url: 'auth/user', method: 'GET', enabled: false }
 });

@@ -20,7 +20,7 @@
       v-bind:search="search"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left clickable"><router-link tag="span" to="/school/1">{{ props.item.schoolName }}</router-link></td>
+        <td class="text-xs-left clickable"><router-link tag="span" to="/app/school/1">{{ props.item.schoolName }}</router-link></td>
         <td class="text-xs-right">{{ props.item.director }}</td>
         <td class="text-xs-right">{{ props.item.address }}</td>
       </template>

@@ -13,7 +13,7 @@
                     </v-toolbar-title>
                 </v-toolbar>
                 <v-card-text bolt>
-                    <v-btn block flat :to="`/profile/${subject.subject.teacher.id}`">{{ subject.subject.teacher.fullName }}</v-btn>
+                    <v-btn block flat :to="`/app/profile/${subject.subject.teacher.id}`">{{ subject.subject.teacher.fullName }}</v-btn>
                 </v-card-text>
             </v-card>
         </v-flex>

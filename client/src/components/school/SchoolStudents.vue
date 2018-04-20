@@ -21,9 +21,9 @@
           >
             <template slot="items" slot-scope="props">
               <td class="text-xs-left clickable"><v-avatar size="44px" slot="activator">
-                <router-link tag="img" :src="props.item.avatar" to="/student/1/profile"></router-link>
+                <router-link tag="img" :src="props.item.avatar" to="/app/student/1/profile"></router-link>
               </v-avatar></td>
-              <td class="text-xs-right clickable"><router-link tag="span" to="/student/1/profile">{{ props.item.fullName }}</router-link></td>
+              <td class="text-xs-right clickable"><router-link tag="span" to="/app/student/1/profile">{{ props.item.fullName }}</router-link></td>
               <td class="text-xs-right">{{ props.item.group }}</td>
               <td class="text-xs-right">{{ props.item.avgSRMark }}</td>
               <td class="text-xs-right">{{ props.item.avgKRMark }}</td>

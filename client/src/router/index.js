@@ -28,12 +28,12 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: '/profile/:id',
+      path: '/app/profile/:id',
       name: 'profile',
       component: Profile
     },
     {
-      path: '/student/:id',
+      path: '/app/student/:id',
       name: 'student',
       component: Student,
       children: [
@@ -43,7 +43,7 @@ export default new Router({
       ]
     },
     {
-      path: '/teacher/:id',
+      path: '/app/teacher/:id',
       name: 'teacher',
       component: Teacher,
       children: [
@@ -53,7 +53,7 @@ export default new Router({
       ]
     },
     {
-      path: '/head-teacher/:id',
+      path: '/app/head-teacher/:id',
       name: 'head-teacher',
       component: HeadTeacher,
       children: [
@@ -62,7 +62,7 @@ export default new Router({
       ]
     },
     {
-      path: '/director/:id',
+      path: '/app/director/:id',
       name: 'director',
       component: Director,
       children: [
@@ -72,48 +72,48 @@ export default new Router({
       ]
     },
     {
-      path: '/groups',
+      path: '/app/groups',
       name: 'groups',
       component: Groups
     },
     {
-      path: '/group/:id',
+      path: '/app/group/:id',
       name: 'group',
       component: Group
     },
     {
-      path: '/school/:id',
+      path: '/app/school/:id',
       name: 'school',
       component: School
     },
     {
-      path: '/school_learning_stuff',
+      path: '/app/school_learning_stuff',
       name: 'school_learning_stuff',
       component: SchoolLearningStuff
     },
     {
-      path: '/task/:id',
+      path: '/app/task/:id',
       name: 'task',
       component: Task
     },
     {
-      path: '/login',
+      path: '/app/login',
       name: 'login',
       component: Login
     },
     {
-      path: '/register',
+      path: '/app/register',
       name: 'register',
       component: Register
     },
     {
-      path: '/',
+      path: '/app',
       name: 'home',
       beforeEnter: function() {
         if (typeof Vue.auth.user().role === 'undefined') {
-          Vue.router.push('/login'); return;
+          Vue.router.push('/app/login'); return;
         } else {
-          Vue.router.push(`/profile/${Vue.auth.user()._id}`); return;
+          Vue.router.push(`/app/profile/${Vue.auth.user()._id}`); return;
         }
       }
     }
