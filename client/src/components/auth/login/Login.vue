@@ -16,7 +16,7 @@
               </v-flex>
             </v-card-text>
             <v-card-actions class="pl-3 pb-1">
-              <v-btn color="info" small :to="'/app/register'">Register</v-btn>
+              <v-btn color="info" small :to="'/register'">Register</v-btn>
             </v-card-actions>
             <v-card-actions class="pl-3 pb-4">
                 <v-btn type="submit" color="primary">Login<v-icon right>send</v-icon></v-btn>
@@ -34,7 +34,7 @@
   export default {
     beforeRouteEnter(to, from, next) {
       if (Vue.auth.check()) {
-        Vue.router.push('/app');
+        Vue.router.push('/');
       }
       next();
     },

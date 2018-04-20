@@ -10,11 +10,11 @@
           <v-layout wrap align-center justify-space-beetween row spacer slot="header">
             <v-flex class="clickable" xs12 sm4 md4 lg2>
               <v-avatar size="100px" slot="activator">
-                <router-link tag="img" :src="'https://randomuser.me/api/portraits/men/83.jpg'" to="/app/director/1/profile"></router-link>
+                <router-link tag="img" :src="'https://randomuser.me/api/portraits/men/83.jpg'" to="/director/1/profile"></router-link>
               </v-avatar>
             </v-flex>
             <v-flex class="clickable" xs12 sm4 md4 lg4>
-              <div class="title"><router-link tag="span" to="/app/director/1/profile">John Leider</router-link></div>
+              <div class="title"><router-link tag="span" to="/director/1/profile">John Leider</router-link></div>
             </v-flex>
             <v-flex xs 12 sm4 md4 lg6
               class="grey--text"

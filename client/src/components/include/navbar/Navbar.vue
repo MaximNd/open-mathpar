@@ -55,7 +55,7 @@
                 this.$store.commit('SET_USER', undefined);
                 this.$store.commit('SET_PLAN', undefined);
                 this.$auth.logout({
-                    redirect: '/app/login'
+                    redirect: '/login'
                 });
             },
             initializeMenu() {
@@ -63,34 +63,34 @@
 
                 } else if (this.$auth.user().role.indexOf('director') !== -1) {
                     this.menuItems = [
-                        { title: 'View Profile', icon: 'perm_identity', link: `/app/profile/${this.$auth.user().id}` },
-                        { title: 'Create Head Teacher', icon: 'person_add', link: `/app/director/${this.$auth.user().id}/create-head-teacher` },
-                        { title: 'Create class', icon: 'group_add', link: `/app/director/${this.$auth.user().id}/create-class` },
-                        { title: 'Groups', icon: 'people', link: '/app/groups' },
-                        { title: 'School №445', icon: 'school', link: `/app/school/${this.$auth.user().clients[0].client.schoolId._id}` }
+                        { title: 'View Profile', icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
+                        { title: 'Create Head Teacher', icon: 'person_add', link: `/director/${this.$auth.user().id}/create-head-teacher` },
+                        { title: 'Create class', icon: 'group_add', link: `/director/${this.$auth.user().id}/create-class` },
+                        { title: 'Groups', icon: 'people', link: '/groups' },
+                        { title: 'School №445', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` }
                     ]
                 } else if (this.$auth.user().role.indexOf('headTeacher') !== -1) {
                     this.menuItems = [
-                        { title: 'View Profile', icon: 'perm_identity', link: `/app/profile/${this.$auth.user().id}` },
-                        { title: 'Create Member', icon: 'person_add', link: `/app/head-teacher/${this.$auth.user().id}/create-member` },
-                        { title: 'Groups', icon: 'people', link: '/app/groups' },
-                        { title: 'School №445', icon: 'school', link: `/app/school/${this.$auth.user().clients[0].client.schoolId._id}` }
+                        { title: 'View Profile', icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
+                        { title: 'Create Member', icon: 'person_add', link: `/head-teacher/${this.$auth.user().id}/create-member` },
+                        { title: 'Groups', icon: 'people', link: '/groups' },
+                        { title: 'School №445', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` }
                     ]
                 } else if (this.$auth.user().role.indexOf('teacher') !== -1) {
                     this.menuItems = [
-                        { title: 'View Profile', icon: 'perm_identity', link: `/app/profile/${this.$auth.user().id}` },
-                        { title: 'Timetable and Plan', icon: 'subtitles', link: `/app/teacher/${this.$auth.user().id}/timetable_plan` },
-                        { title: 'School Learning Stuff', icon: 'import_contacts', link: '/app/school_learning_stuff' },
-                        { title: 'Groups', icon: 'people', link: '/app/groups' },
-                        { title: 'School №445', icon: 'school', link: `/app/school/${this.$auth.user().clients[0].client.schoolId._id}` }
+                        { title: 'View Profile', icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
+                        { title: 'Timetable and Plan', icon: 'subtitles', link: `/teacher/${this.$auth.user().id}/timetable_plan` },
+                        { title: 'School Learning Stuff', icon: 'import_contacts', link: '/school_learning_stuff' },
+                        { title: 'Groups', icon: 'people', link: '/groups' },
+                        { title: 'School №445', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` }
                     ]
                 } else if (this.$auth.user().role.indexOf('student') !== -1) {
                     this.menuItems = [
-                        { title: 'View Profile', icon: 'perm_identity', link: `/app/profile/${this.$auth.user().id}` },
-                        { title: 'Subjects', icon: 'local_library', link: `/app/student/${this.$auth.user().id}/subjects` },
-                        { title: 'Gradebook', icon: 'subtitles', link: `/app/student/${this.$auth.user().id}/gradebook` },
-                        { title: 'Group', icon: 'people', link: `/app/group/${this.$auth.user().clients[0].client.groupId}` },
-                        { title: 'School №445', icon: 'school', link: `/app/school/${this.$auth.user().clients[0].client.schoolId._id}` }
+                        { title: 'View Profile', icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
+                        { title: 'Subjects', icon: 'local_library', link: `/student/${this.$auth.user().id}/subjects` },
+                        { title: 'Gradebook', icon: 'subtitles', link: `/student/${this.$auth.user().id}/gradebook` },
+                        { title: 'Group', icon: 'people', link: `/group/${this.$auth.user().clients[0].client.groupId}` },
+                        { title: 'School №445', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` }
                     ]
                 }
             }

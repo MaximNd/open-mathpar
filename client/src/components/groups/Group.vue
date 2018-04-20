@@ -78,7 +78,7 @@
           v-bind:search="seachStudent"
         >
           <template slot="items" slot-scope="props">
-            <td class="text-xs-left clickable"><router-link tag="span" :to="`/app/profile/${props.item.user.id}`">{{ props.item.user.fullName }}</router-link></td>
+            <td class="text-xs-left clickable"><router-link tag="span" :to="`/profile/${props.item.user.id}`">{{ props.item.user.fullName }}</router-link></td>
             <td class="text-xs-right">
               {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber }} |
               {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber }} |
@@ -118,7 +118,7 @@
           v-bind:search="seachTeacher"
         >
           <template slot="items" slot-scope="props">
-            <td class="text-xs-left clickable"><router-link tag="span" :to="`/app/profile/${props.item.user.id}`">{{ props.item.user.fullName }}</router-link></td>
+            <td class="text-xs-left clickable"><router-link tag="span" :to="`/profile/${props.item.user.id}`">{{ props.item.user.fullName }}</router-link></td>
             <td class="text-xs-left">{{ props.item.user.email }}</td>
           </template>
           <template slot="pageText" slot-scope="{ pageStart, pageStop }">
