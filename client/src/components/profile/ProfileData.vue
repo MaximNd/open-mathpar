@@ -2,7 +2,7 @@
     <v-layout wrap>
         <v-flex d-flex sm12 md5 lg4>
             <v-card>
-                <v-card-media src="https://randomuser.me/api/portraits/men/85.jpg" height="450px">
+                <v-card-media :src="`http://localhost:3000/images/${$auth.user().image}`" height="450px">
                 </v-card-media>
                 <v-card-actions>
                     <v-btn block flat color="blue" @click="changeDataDialog = !changeDataDialog">Edit profile</v-btn>
@@ -95,6 +95,9 @@
         },
         components: {
             appProfileChangeData: ProfileChangeData
+        },
+        created() {
+            console.log(this.$auth.user())
         }
     }
 </script>

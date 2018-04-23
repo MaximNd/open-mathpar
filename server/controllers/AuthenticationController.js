@@ -6,7 +6,7 @@ const School = require('../models/school');
 const path = require('path');
 const uniqid = require('uniqid');
 
-const { decodeBase64Image, saveImage, jwtSignUser } = require('./../helpers/helpers');
+const { jwtSignUser } = require('./../helpers/helpers');
 
 // function getClientByRole(user) {
 //     const rolesMap = {
@@ -37,15 +37,11 @@ module.exports = {
             });
     },
     async register(req, res) {
-        const directorData = req.body.director;
-        const schoolData = req.body.school;
-        const authorityData = req.body.authority || undefined;
-        const imageName = uniqid() + path.extname(path.basename(directorData.user.image.name));
-    
-        // await saveImage(decodeBase64Image(directorData.user.image.data), imageName);
-        await saveImage(directorData.user.image.data, imageName);
+        const directorData = JSON.parse(req.body.director);
+        const schoolData = JSON.parse(req.body.school);
+        const authorityData = JSON.parse(req.body.authority) || undefined;
 
-        directorData.user.image = imageName;
+        directorData.user.image = req.files.director[0].filename;
     
         // Create User for director
         const directorUser = new User(directorData.user);
@@ -62,10 +58,7 @@ module.exports = {
 
         // Create Authority if not exist
         if (typeof schoolData.authorityId === 'undefined' && typeof authorityData !== 'undefined') {
-            const authorityImageName = uniqid() + path.extname(path.basename(authorityData.user.image.name));
-            // await saveImage(decodeBase64Image(authorityData.user.image.data), authorityImageName);
-            await saveImage(authorityData.user.image.data, authorityImageName);
-            authorityData.user.image = authorityImageName;
+            authorityData.user.image = req.files.authority[0].filename;
 
             // Create User for authority
             const authorityUser = new User(authorityData.user);

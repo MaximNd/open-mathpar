@@ -7,7 +7,9 @@
           <v-card-title class="primary white--text title">
             Register
           </v-card-title>
+
           <v-card-text>
+            <form ref='form'>
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
@@ -63,7 +65,7 @@
                       <input @change="onFilePicked($event, 'director')" type="file" style="display:none;" ref="directorAvatar">
                     </v-flex>
                     <v-flex xs6>
-                      <img :src="director.user.image.data" height="140">
+                      <img ref="directorAvatarPreview" src="" height="140">
                     </v-flex>
                   </v-layout>
                 </v-flex>
@@ -152,7 +154,7 @@
                         <input @change="onFilePicked($event, 'authority')" type="file" style="display:none;" ref="authorityAvatar">
                       </v-flex>
                       <v-flex xs6>
-                        <img :src="authority.user.image.data" height="140">
+                        <img ref="authorityAvatarPreview" src="" height="140">
                       </v-flex>
                     </v-layout>
                   </v-flex>
@@ -162,6 +164,7 @@
                 </v-flex>
               </v-layout>
             </v-container>
+            </form>
           </v-card-text>
           <v-card-actions class="pl-3 pb-4">
             <v-btn type="submit" color="primary">Register<v-icon right>send</v-icon></v-btn>
@@ -178,6 +181,7 @@
   export default {
     data() {
       return {
+        testFormData: new FormData(),
         director: {
           user: {
             lastName: '',
@@ -188,10 +192,7 @@
             password: '',
             birthday: null,
             role: 'director',
-            image: {
-              data: '',
-              name: ''
-            }
+            image: ''
           }
           // ,
           // isMainDirector: true,
@@ -217,10 +218,7 @@
             password: '',
             birthday: null,
             role: 'admin',
-            image: {
-              data: '',
-              name: ''
-            }
+            image: ''
           },
           company: ''
         },
@@ -249,26 +247,34 @@
     },
     methods: {
       registerUser() {
-        // this.$http.post('user/signup', this.data).then(res => console.log(res));
+        this.testFormData.append('text', 'text');
+        this.testFormData.append('director', JSON.stringify(this.director));
+        this.testFormData.append('school', JSON.stringify(this.school));
+        this.testFormData.append('authority', JSON.stringify(this.authority));
+        // this.testFormData.append('obj', { test: 'value', test2: [1, 2, 3, 4], test3: { key: 1234 } });
+        // console.log(this.testFormData);
+        // this.$http.post('user/signup', this.testFormData).then(res => console.log(res));
+        // this.$auth.register(this.testFormData);
         this.$auth.register({
-          body: { director: this.director, school: this.school, authority: this.authority }
+          body: this.testFormData
         });
       },
       onPickFile(who) {
         this.$refs[who].click();
       },
       onFilePicked(event, who) {
-        let fileReader = new FileReader();
-        fileReader.readAsDataURL(event.target.files[0]);
-
-        fileReader.onload = (e) => {
-            this[who].user.image.data = e.target.result;
-            this[who].user.image.name = event.target.files[0].name;
-        };
+        this.testFormData.append(who, event.target.files[0]);
+        // let fileReader = new FileReader();
+        this.$refs[`${who}AvatarPreview`].setAttribute('src', URL.createObjectURL(event.target.files[0]));
+        // fileReader.onload = (e) => {
+        //     this.$refs[`${who}AvatarPreview`].setAttribute('src', e.target.result);
+        // };
+        // fileReader.readAsDataURL(event.target.files[0]);
       }
     },
     created() {
       console.log(this.$refs);
+      // this.testFormData = new FormData(this.$refs.form);
     }
   };
 </script>
