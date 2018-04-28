@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
 
 // routes
 const { authority, director, headTeacher, student, teacher, user, class_, group, subject, lection, task, plan, school } = require('./routes/');
-const API = '/api';
+const API = '/app-api';
 app.use(API, authority);
 app.use(API, director);
 app.use(API, headTeacher);

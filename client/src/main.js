@@ -16,7 +16,7 @@ Vue.use(Vuetify);
 Vue.use(VueResource);
 Vue.use(VeeValidate);
 
-Vue.http.options.root = 'http://localhost:3000/api';
+Vue.http.options.root = 'http://localhost:3000/app-api';
 
 Vue.use(VueAuth, {
     auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),

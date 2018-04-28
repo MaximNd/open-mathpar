@@ -235,7 +235,7 @@
         this.$store.dispatch('createTask', Object.assign({}, this.task, { exercises, class: this.task.classNumber }));
       },
       execute(index, field) {
-        this.$http.post('http://localhost:8084/mathpar/api/calc', { task: this.task.exercises[index][field].task })
+        this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.task.exercises[index][field].task })
           .then(({ body }) => {
             if (body.status === 'OK') {
               let latexArr = body.latex.split('\n');

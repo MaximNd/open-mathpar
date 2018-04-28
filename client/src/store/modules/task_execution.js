@@ -10,11 +10,11 @@ const state = {
     currentResults: [],
     sections: [],
     taskFinished: false,
-    resource: Vue.resource('http://localhost:8084/mathpar/api/calc', {},
+    resource: Vue.resource('http://mathpar.ukma.edu.ua/api/calc', {},
     {
       calc: {
         method: 'POST',
-        url: 'http://localhost:8084/mathpar/api/calc'
+        url: 'http://mathpar.ukma.edu.ua/api/calc'
       }
     },
     {
