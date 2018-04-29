@@ -66,7 +66,7 @@ module.exports = {
                                 'Accept': 'application/json',
                                 'Accept-Charset': 'utf-8',
                             },
-                            url: 'http://localhost:8084/mathpar/api/check',
+                            url: 'http://mathpar.ukma.edu.ua/api/check',
                             json: true,
                             body: {
                                 userAnswer: result,
@@ -91,7 +91,6 @@ module.exports = {
                         return req.user.clients;
                     })
                     .then(clients => {
-                        console.log('clients:', clients);
                         Student.update({ _id: clients.find(client => client.clientRole === 'student').client.id, }, { $push: { gradeBook: { taskId, mark, time } } }, (err) => {
                             if (err) {
                                 console.log(err);
@@ -108,8 +107,6 @@ module.exports = {
         } else {
             req.user.clients
                 .then(clients => {
-                    console.log('clients:', clients);
-                    console.log(1);
                     Student.update({ _id: clients.find(client => client.clientRole === 'student').client.id, }, { $push: { gradeBook: { taskId, mark, time } } }, (err) => {
                         if (err) {
                             console.log(err);

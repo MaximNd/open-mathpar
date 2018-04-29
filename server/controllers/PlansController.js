@@ -25,7 +25,6 @@ module.exports = {
         req.user.clients
             .then(clients => {
                 const teacherId = clients.find(client => client.clientRole === 'teacher').client.id;
-                console.log(teacherId.toString());
                 const plan = new Plan({
                     name,
                     groupId,

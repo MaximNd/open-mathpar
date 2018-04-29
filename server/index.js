@@ -47,7 +47,7 @@ mongoose.connect(databaseConfig.dbUrl, { useMongoClient: true })
 
 // cors
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: ['http://mathpar.ukma.edu.ua', 'http://localhost:8080'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 

@@ -5,7 +5,6 @@ const Subject = require('./../models/subject');
 
 module.exports = {
     getSchoolById(req, res) {
-        console.time('1');
         School.findById(req.params.id).populate({ path: 'directorId', populate: { path: 'userId' } })
             .then(school => {
                 let promises = [
@@ -56,7 +55,6 @@ module.exports = {
 
                                     return { group, studentsCount, teachersCount, groupAVGMarks, groupAVGDispersion };
                                 });
-                                console.timeEnd('1');
                                 return res.send({ school, schoolAVGMarks, schoolAVGDispersion, filials, headTeachers, teachers, students, groups });
                             });
                     });
@@ -65,7 +63,6 @@ module.exports = {
     },
 
     getGroups(req, res) {
-        console.log(req.params.id);
         Group.find({ schoolId: req.params.id })
             .then(groups => {
                 let promises = [];

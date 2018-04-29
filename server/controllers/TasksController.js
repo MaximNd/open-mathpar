@@ -113,17 +113,15 @@ module.exports = {
     },
 
     checkExercise(req, res) {
-        console.log(req.params);
         Task.findById(req.params.id)
             .then(task => {
-                console.log(task.exercises[req.params.exercise].answer)
                 request.post({
                     headers: { 
                         'content-type': 'application/json',
                         'Accept': 'application/json',
                         'Accept-Charset': 'utf-8',
                     },
-                    url: 'http://localhost:8084/mathpar/api/check',
+                    url: 'http://mathpar.ukma.edu.ua/api/check',
                     json: true,
                     body: {
                         userAnswer: req.params.answer,

@@ -2,7 +2,7 @@
     <v-layout wrap>
         <v-flex d-flex sm12 md5 lg4>
             <v-card>
-                <v-card-media :src="`http://localhost:3000/images/${$auth.user().image}`" height="450px">
+                <v-card-media :src="`http://mathpar.ukma.edu.ua/images/${$auth.user().image}`" height="450px">
                 </v-card-media>
                 <v-card-actions>
                     <v-btn block flat color="blue" @click="changeDataDialog = !changeDataDialog">Edit profile</v-btn>
