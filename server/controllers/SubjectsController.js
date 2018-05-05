@@ -9,10 +9,10 @@ module.exports = {
 
     getAllSubjects(req, res) {
         req.user.clients
-            .then(clients => findShoollId(clients, 'teacher'))
+            .then(clients => findShoollId(clients, req.user.role[0]))
             .then(school => Subject.find().populate({ path: 'themes', match: { school } }))
             .then(subjects => res.send(subjects))
-            .catch(err => console.log(err));    
+            .catch(err => console.log(err));
     },
     
     createSubject(req, res) {

@@ -10,7 +10,12 @@
           <v-data-table :items="timetable" hide-actions hide-headers class="elevation-1">
             <template slot="items" slot-scope="props">
               <td class="text-xs-left title">{{ props.item[0] }}</td>
-              <td class="text-xs-left text clickable" v-if="index != 0" v-for="(i, index) in props.item" :key="index">{{ i.name || i }}</td>
+              <td class="text-xs-left text clickable"
+                v-if="index != 0" v-for="(i, index) in props.item"
+                :key="index + '-Teacher_plan'">
+                  <router-link v-if="props.item[0] === 'Tasks'" :to="`/task/${i._id}`">{{ i.name || i }}</router-link>
+                  <template v-else>{{ i.name || i }}</template>
+              </td>
             </template>
           </v-data-table>
         </v-card-text>
@@ -21,7 +26,7 @@
               <v-btn color="info" slot="activator">Edit Plan</v-btn>
               <v-card>
                 <v-card-title class="primary white--text">
-                  <span class="headline">Edit Plan 123</span>
+                  <span class="headline">Edit Plan {{ planName }}</span>
                 </v-card-title>
                 <v-card-text>
                   <v-container grid-list-md>
@@ -75,7 +80,7 @@
                 <v-btn color="error" slot="activator">Delete Plan</v-btn>
                 <v-card>
                   <v-card-title class="secondary--text">
-                    <span class="headline">Delete Plan 123?</span>
+                    <span class="headline">Delete Plan {{ planName }}?</span>
                   </v-card-title>
                   <v-card-actions>
                     <v-spacer></v-spacer>
