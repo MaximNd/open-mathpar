@@ -10,7 +10,7 @@ const PlanSchema = new Schema({
     groupId: {
         type: ObjectId,
         ref: 'Group',
-        required: true
+        required: false
     },
     teacherId: {
         type: ObjectId,

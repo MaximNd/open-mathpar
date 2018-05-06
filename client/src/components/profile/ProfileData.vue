@@ -2,21 +2,28 @@
     <v-layout wrap>
         <v-flex d-flex sm12 md5 lg4>
             <v-card>
-                <v-card-media :src="`http://mathpar.ukma.edu.ua/images/${$auth.user().image}`" height="450px">
-                </v-card-media>
-                <v-card-actions>
+                <template v-if="userAndClientsData.length !== 0">
+                  <v-card-media :src="`http://mathpar.ukma.edu.ua/images/${$auth.user().image}`" height="450px">
+                  </v-card-media>
+                  <v-card-actions>
                     <v-btn block flat color="blue" @click="changeDataDialog = !changeDataDialog">Edit profile</v-btn>
-                </v-card-actions>
+                  </v-card-actions>
+                </template>
             </v-card>
         </v-flex>
         <v-flex d-flex sm12 md7 lg8>
             <v-card>
                 <v-card-title primary-title>
                     <div>
-                        <div class="headline">Your account data:</div>
+                        <div class="headline">Account data:</div>
                     </div>
                 </v-card-title>
-                <v-data-table :items="userData.concat(clientsData)" hide-actions hide-headers>
+                <v-data-table
+                  style="margin-top:-10px;"
+                  :loading="userAndClientsData.length === 0"
+                  :items="userAndClientsData"
+                  hide-actions
+                  :no-data-text="'Loading...'">
                     <template slot="items" slot-scope="props">
                         <td class="text-xs-left title">{{ props.item.title }}</td>
                         <td class="text-xs-left text">{{ props.item.text }}</td>
@@ -54,6 +61,9 @@
                 } else {
                   return this.clientsTableData(this.$store.getters.otherUser);
                 }
+            },
+            userAndClientsData() {
+              return this.userData.concat(this.clientsData)
             }
         },
         methods: {

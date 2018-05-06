@@ -19,6 +19,11 @@
       appTeacherTimetable: TeacherTimetable,
       appTeacherPlan: TeacherPlan
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.$store.commit('SET_PLAN', undefined);
+      })
+    },
     beforeRouteLeave(to, from, next) {
       this.$store.commit('SET_TASKS', []);
       next();

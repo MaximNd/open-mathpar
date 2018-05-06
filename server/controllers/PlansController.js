@@ -2,6 +2,15 @@ const Plan = require('./../models/plan');
 const Teacher = require('./../models/teacher');
 
 module.exports = {
+    getAllPlans(req, res) {
+        Plan.find({})
+            .populate({ path: 'subjectId' })
+            .populate({ path: 'teacherId', populate: { path: 'userId' }})
+            .populate({ path: 'teacherId', populate: { path: 'schoolId' }})
+            .populate({ path: 'timetable.lectionId timetable.taskId' })
+            .then(plans => res.send(plans))
+    },
+
     getPlanById(req, res) {
         Plan.findById(req.params.id).populate({ path: 'timetable.lectionId timetable.taskId' })
             .then(plan => {
@@ -37,7 +46,10 @@ module.exports = {
                     if (err) {
                         console.log(err);
                     }
-                    Teacher.findById(teacherId)
+                    if (typeof recordId === 'undefined') {
+                        return res.status(200, { message: 'ok' }).end();
+                    } else {
+                        Teacher.findById(teacherId)
                         .then(teacher => {
                             teacher.timetable = teacher.timetable.map(row => {
                                 if (row.id.toString() === recordId) {
@@ -53,6 +65,7 @@ module.exports = {
                                 res.status(200, { message: 'ok' }).end();
                             });
                         });
+                    }
                 });
             });
     },

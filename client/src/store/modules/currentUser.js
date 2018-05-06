@@ -52,6 +52,7 @@ const actions = {
       });
     },
     checkIfCurrent({ commit }, payload) {
+      console.log('check:', payload.params.id === Vue.auth.user().id);
       if (payload.params.id === Vue.auth.user().id) {
         commit('SET_IS_LOGGED_IN_USER', true);
         return true;
@@ -67,7 +68,7 @@ const actions = {
               let user = data.body.user;
               let clients = data.body.clients;
               user.clients = clients;
-              Vue.auth.user(user);
+              // Vue.auth.user(user);
               commit('SET_OTHER_USER', user);
               resolve();
           })

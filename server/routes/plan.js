@@ -4,6 +4,9 @@ const isAuthenticated = require('./../policies/isAuthenticated');
 const isTeacher = require('./../policies/checkRole')('teacher');
 
 
+// Get all plans
+router.get('/plans', isAuthenticated, PlansController.getAllPlans);
+
 // Get plan by ID
 router.get('/plan/:id', isAuthenticated, PlansController.getPlanById);
 
