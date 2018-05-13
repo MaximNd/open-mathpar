@@ -22,73 +22,15 @@
         <v-card-text>
           <v-layout row wrap justify-start>
             <v-flex>
-              <v-dialog v-model="editTimetableDialog" max-width="2000px">
-              <v-btn color="info" slot="activator">Edit Plan</v-btn>
-              <v-card>
-                <v-card-title class="primary white--text">
-                  <span class="headline">Edit Plan {{ planName }}</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container grid-list-md>
-                    <v-layout wrap>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field label="Legal first name" required></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field label="Legal last name" hint="example of persistent helper text"
-                                      persistent-hint
-                                      required
-                        ></v-text-field>
-                      </v-flex>
-                      <v-flex xs12>
-                        <v-text-field label="Email" required></v-text-field>
-                      </v-flex>
-                      <v-flex xs12>
-                        <v-text-field label="Password" type="password" required></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6>
-                        <v-select
-                          label="Age"
-                          required
-                          :items="['0-17', '18-29', '30-54', '54+']"
-                        ></v-select>
-                      </v-flex>
-                      <v-flex xs12 sm6>
-                        <v-select
-                          label="Interests"
-                          multiple
-                          autocomplete
-                          chips
-                          :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                        ></v-select>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                  <small>*indicates required field</small>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="error" flat @click.native="editTimetableDialog = false">Close</v-btn>
-                  <v-btn color="success" flat @click.native="editTimetableDialog = false">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-              <v-dialog v-model="deleteTimetableDialog" max-width="400px">
-                <v-btn color="error" slot="activator">Delete Plan</v-btn>
-                <v-card>
-                  <v-card-title class="secondary--text">
-                    <span class="headline">Delete Plan {{ planName }}?</span>
-                  </v-card-title>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="success" flat @click.native="deleteTimetableDialog = false">No</v-btn>
-                    <v-btn color="error" flat @click.native="deleteTimetableDialog = false">Yes</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              <template v-if="isThisTeacherPlan">
+                <appEditPlan :planName="planName"></appEditPlan>
+                <appDeletePlan :planName="planName"></appDeletePlan>
+              </template>
+              <!-- <appChoosePlan v-if="chooseMode"></appChoosePlan> -->
+              <v-btn
+                v-if="chooseMode"
+                @click="choosePlan"
+                color="info">Choose This Plan</v-btn>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -99,11 +41,22 @@
 </template>
 
 <script>
+  import EditPlan from './EditPlan.vue';
+  import DeletePlan from './DeletePlan.vue';
+
   export default {
+    props: {
+      chooseMode: {
+        type: Boolean,
+        required: true
+      },
+      planKey: {
+        type: String,
+        required: true
+      }
+    },
     data() {
       return {
-        editTimetableDialog: false,
-        deleteTimetableDialog: false,
         lectures: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
         tasks: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
         date: null,
@@ -112,17 +65,29 @@
       };
     },
     computed: {
+      isThisTeacherPlan() {
+        return this.$store.getters[this.planKey].teacherId._id === this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
+      },
       planName() {
-        return this.$store.getters.plan.name;
+        return this.$store.getters[this.planKey].name;
       },
       timetable() {
-        return this.$store.getters.plan.timetable.reduce((resultTimetable, lesson) => {
+        return this.$store.getters[this.planKey].timetable.reduce((resultTimetable, lesson) => {
           resultTimetable[0].push(lesson.lectionId);
           resultTimetable[1].push(lesson.taskId);
           resultTimetable[2].push(new Date(lesson.date).toDateString());
           return resultTimetable;
         }, [['Lections'], ['Tasks'], ['Date']]);
       }
+    },
+    methods: {
+      choosePlan() {
+        this.$emit('clicked-choose', this.$store.getters[this.planKey]._id);
+      }
+    },
+    components: {
+      appEditPlan: EditPlan,
+      appDeletePlan: DeletePlan
     }
   };
 </script>

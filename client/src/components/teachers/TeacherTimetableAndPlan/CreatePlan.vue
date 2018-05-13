@@ -1,13 +1,13 @@
 <template>
   <v-card>
     <v-card-title class="success white--text">
-      <span class="headline">Create Paln</span>
+      <span class="headline">Create Plan</span>
     </v-card-title>
     <v-form @submit.prevent="createPlan(subjectId, groupId, recordId)">
       <v-card-text>
         <v-container grid-list-md>
           <v-layout wrap>
-            <v-flex xs12>
+            <v-flex xs12 :sm6="typeof subjectId === 'undefined'">
               <v-text-field v-model="plan.name" label="Plan name" required></v-text-field>
             </v-flex>
             <v-flex xs12 sm6 v-if="typeof subjectId === 'undefined'">
@@ -164,6 +164,8 @@
         if (typeof groupId !== 'undefined') {
           this.plan.groupId = groupId;
         }
+
+        this.plan.schoolId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client.schoolId._id;
 
         this.$http.post('plan', Object.assign({}, this.plan, { recordId }))
           .then(() => {

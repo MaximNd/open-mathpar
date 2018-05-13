@@ -9,7 +9,7 @@
           </v-card-title>
 
           <v-card-text>
-            <form ref='form'>
+            
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
@@ -164,7 +164,6 @@
                 </v-flex>
               </v-layout>
             </v-container>
-            </form>
           </v-card-text>
           <v-card-actions class="pl-3 pb-4">
             <v-btn type="submit" color="primary">Register<v-icon right>send</v-icon></v-btn>

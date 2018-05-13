@@ -34,6 +34,7 @@
   export default {
     beforeRouteLeave(to, from, next) {
       this.$store.commit('SET_PLAN', undefined);
+      this.$store.commit('SET_PLAN_IN_TABLE', undefined);
       next();
     },
     components: {

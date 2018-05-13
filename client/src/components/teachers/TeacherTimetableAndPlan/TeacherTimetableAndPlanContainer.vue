@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <appTeacherTimetable></appTeacherTimetable>
-    <appTeacherPlan v-if="isShow"></appTeacherPlan>
+    <appTeacherPlan v-if="isShow" :planKey="'plan'" :chooseMode="false"></appTeacherPlan>
   </v-container>
 </template>
 

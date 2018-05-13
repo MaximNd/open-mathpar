@@ -2,7 +2,7 @@
   <v-card>
     <v-card-text>
       <appCreatePlan></appCreatePlan>
-      <appPlansTable></appPlansTable>
+      <appPlansTable :chooseMode="false"></appPlansTable>
     </v-card-text>
   </v-card>
 </template>

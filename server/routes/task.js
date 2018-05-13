@@ -21,7 +21,7 @@ router.get('/tasks/teacher/:id', isAuthenticated, TasksController.getTasksByTeac
 // :subjectId - subjectID
 // :themeId - themeId of the selected subject
 // :difficultyLevel - (Eazy,Middle,Hard)
-router.get('/tasks/:schoolId/:fetchType/:teacherId/:classNumber/:subjectId/:themeId/:difficultyLevel', TasksController.getFilteredTasks);
+router.get('/tasks/:schoolId/:fetchType/:teacherId/:classNumber/:subjectId/:themeId/:difficultyLevel', isAuthenticated, isTeacher, TasksController.getFilteredTasks);
 
 // add theme
 // router.post('/theme/:themeName/:themeOrder', (req, res) => {

@@ -4,9 +4,9 @@
     <transition
       appear
       enter-class=""
-      enter-active-class="vivify popInLeft"
+      enter-active-class="vivify swoopInLeft"
       leave-class=""
-      leave-active-class="vivify popOutRight"
+      leave-active-class="vivify swoopOutRight"
       mode="out-in"
     >
       <router-view :key="$route.fullPath"></router-view>

@@ -1,34 +1,41 @@
 import Vue from 'vue';
 
 const state = {
-    plan: undefined,
-    plans: []
+  plan: undefined,
+  planInTable: undefined,
+  plans: []
 };
 
 const getters = {
-    isShow(state) {
-        return !!state.plan;
-    },
-    plan(state) {
-        return state.plan;
-    },
-    plans(state) {
-      return state.plans;
-    }
+  isShow(state) {
+    return !!state.plan;
+  },
+  plan(state) {
+    return state.plan;
+  },
+  planInTable(state) {
+    return state.planInTable;
+  },
+  plans(state) {
+    return state.plans;
+  }
 };
 
 const mutations = {
-    SET_PLAN(state, payload) {
-        state.plan = payload;
-    },
-    SET_PLANS(state, payload) {
-      state.plans = payload;
-    }
+  SET_PLAN(state, payload) {
+    state.plan = payload;
+  },
+  SET_PLAN_IN_TABLE(state, payload) {
+    state.planInTable = payload;
+  },
+  SET_PLANS(state, payload) {
+    state.plans = payload;
+  }
 };
 
 const actions = {
-  getFilteredPlans({ commit }, payload) {
-    Vue.http.get('plans')
+  getFilteredPlans({ commit }, { schoolId, fetchType, teacherId, subjectId }) {
+    return Vue.http.get(`plans/${schoolId}/${fetchType}/${teacherId}/${subjectId}`)
             .then(data => commit('SET_PLANS', data.body))
             .catch(err => console.log(err));
   }

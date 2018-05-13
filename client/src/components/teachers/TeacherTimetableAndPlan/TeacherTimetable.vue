@@ -19,87 +19,18 @@
               <td class="text-xs-left title">{{ props.item.subject.name }}</td>
               <td class="text-xs-right text">{{ props.item.group.name }}</td>
               <td class="clickable text-xs-right text" v-if="(typeof props.item.plan === 'undefined' || props.item.plan === '' || props.item.plan == null)">
-                <v-dialog v-model="choosePlanDialog[props.index]" max-width="2000px">
-                  <v-btn style="margin-right:-10px;" color="info" slot="activator">Choose Plan</v-btn>
-                  <v-card>
-                    <v-card-title class="error white--text">
-                      <span class="headline">At the moment this functionality does not work :(</span>
-                    </v-card-title>
-                    <!-- <v-card-title class="success white--text">
-                      <span class="headline">Create Paln</span>
-                    </v-card-title>
-                    <v-form @submit.prevent="createPlan(props.item.subject._id, props.item.group._id, props.item._id)">
-                      <v-card-text>
-                        <v-container grid-list-md>
-                          <v-layout wrap>
-                            <v-flex xs12>
-                              <v-text-field v-model="plan.name" label="Plan name" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12>
-                              <v-btn @click="changeCountFieldsOfPlan(1)" block color="success">Add one field</v-btn>
-                            </v-flex>
-                            <v-flex xs12>
-                              <v-btn v-if="countPlanCols > 0" @click="changeCountFieldsOfPlan(-1)" block color="error">Delete last field</v-btn>
-                            </v-flex>
-                            <v-flex v-for="(planCount, index) in countPlanCols" :key="index" xs12>
-                              <v-layout>
-                                <v-flex xs12 sm4>
-                                  <v-select
-                                    v-model="plan.timetable[index].lectionId"
-                                    :items="lections"
-                                    item-text="name"
-                                    item-value="_id"
-                                    label="Select lecture"
-                                    autocomplete
-                                  ></v-select>
-                                </v-flex>
-                                <v-flex xs12 sm4>
-                                  <v-select
-                                    v-model="plan.timetable[index].taskId"
-                                    :items="tasks"
-                                    item-text="name"
-                                    item-value="_id"
-                                    label="Select task"
-                                    autocomplete
-                                  ></v-select>
-                                </v-flex>
-                                <v-flex sx12 sm4>
-                                  <v-dialog
-                                    :ref="'planDialog'"
-                                    persistent
-                                    v-model="modals[index]"
-                                    full-width
-                                    width="290px"
-                                  >
-                                    <v-text-field
-                                      slot="activator"
-                                      label="Date"
-                                      v-model="plan.timetable[index].date"
-                                      prepend-icon="event"
-                                      readonly
-                                    ></v-text-field>
-                                    <v-date-picker v-model="plan.timetable[index].date" scrollable>
-                                      <v-spacer></v-spacer>
-                                      <v-btn flat color="error" @click="modals.splice(index,1,false)">Cancel</v-btn>
-                                      <v-btn flat color="success" @click="$refs.planDialog[index].save(plan.timetable[index].date)">OK</v-btn>
-                                    </v-date-picker>
-                                 </v-dialog>
-                                </v-flex>
-                              </v-layout>
-                            </v-flex>
-                          </v-layout>
-                        </v-container>
-                        <small>*indicates required field</small>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="error" flat @click.native="closePlanDialog(props.index)">Close</v-btn>
-                        <v-btn type="submit" color="success" flat @click.native="closePlanDialog(props.index)">Save</v-btn>
-                      </v-card-actions>
-                    </v-form> -->
-                  </v-card>
+                <v-dialog persistent v-model="choosePlanDialog[props.index]" max-width="2000px">
+                  <v-btn @click="filter(props.index)" style="margin-right:-10px;" color="info" slot="activator">Choose Plan</v-btn>
+                  <appChoosePlan
+                    :ref="`choosePlanRef${props.index}`"
+                    @closed-choose-plan-dialog="closePlanChooseDialog($event)"
+                    @plan-choosed="updateTeacherTimeTable"
+                    :subjectId="props.item.subject._id"
+                    :index="props.index"
+                    :groupId="props.item.group._id"
+                    :recordId="props.item._id"></appChoosePlan>
                 </v-dialog>
-                <v-dialog v-model="createPlanDialog[props.index]" max-width="2000px">
+                <v-dialog lazy persistent v-model="createPlanDialog[props.index]" max-width="2000px">
                   <v-btn style="margin-right:-10px;" color="success" slot="activator">Create Plan</v-btn>
                   <appCreatePlan
                     @closed-create-plan-dialog="closePlanCreateDialog($event)"
@@ -123,16 +54,15 @@
 
 <script>
   import CreatePlan from './CreatePlan.vue';
+  import ChoosePlan from './ChoosePlan.vue';
 
   export default {
     data () {
       return {
-
         choosePlanDialog: [],
         createPlanDialog: [],
         date: null,
         menu: false,
-
         headers: [
           { text: 'Subject', align: 'left', value: 'subject' },
           { text: 'Grop', align: 'right', value: 'group' },
@@ -140,7 +70,6 @@
         ]
       }
     },
-
     computed: {
       timetable() {
         return this.$store.getters.timetable.map(row => ({ plan: ((typeof row.planId === 'undefined') ? '' : row.planId), group: row.groupId, subject: row.subjectId, _id: row._id }));
@@ -165,9 +94,13 @@
       updateTeacherTimeTable() {
         const teacherId = { teacherId: this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id };
         this.$store.dispatch('getTeacherTimeTable', teacherId);
+      },
+      filter(index) {
+        this.$refs[`choosePlanRef${index}`].filter();
       }
     },
     created() {
+      // console.log(this.$refs);
       // for (let i = 0; i < this.createPlanDialog; ++i) {
       //   this.createPlanDialog.push(false);
       //   this.choosePlanDialog.push(false);
@@ -187,7 +120,8 @@
         // .then(timetable => { this.timetable = timetable });
     },
     components: {
-      appCreatePlan: CreatePlan
+      appCreatePlan: CreatePlan,
+      appChoosePlan: ChoosePlan
     }
   }
 </script>

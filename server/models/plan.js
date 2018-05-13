@@ -7,6 +7,11 @@ const PlanSchema = new Schema({
         type: String,
         required: true
     },
+    schoolId: {
+        type: ObjectId,
+        ref: 'School',
+        required: true
+    },
     groupId: {
         type: ObjectId,
         ref: 'Group',

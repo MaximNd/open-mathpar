@@ -13,7 +13,7 @@ module.exports = {
         Teacher.find({ _id: teacherId })
             .populate('timetable.groupId')
             .populate('timetable.subjectId')
-            .populate({ path: 'timetable.planId', populate: { path: 'timetable.lectionId timetable.taskId' } })
+            .populate({ path: 'timetable.planId', populate: { path: 'timetable.lectionId timetable.taskId teacherId' } })
             .then(timatable => res.send(timatable[0].timetable));
     },
 
