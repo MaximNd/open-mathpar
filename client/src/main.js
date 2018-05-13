@@ -7,6 +7,7 @@ import VueResource from 'vue-resource';
 import Vuetify from 'vuetify';
 import VeeValidate from 'vee-validate';
 import VueAuth from '@websanova/vue-auth';
+import VueAlertify from 'vue-alertify';
 
 import App from './App';
 import router from './router';
@@ -15,6 +16,7 @@ Vue.router = router;
 Vue.use(Vuetify);
 Vue.use(VueResource);
 Vue.use(VeeValidate);
+Vue.use(VueAlertify);
 
 Vue.http.options.root = 'http://localhost:3000/app-api';
 

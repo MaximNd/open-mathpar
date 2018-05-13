@@ -586,6 +586,9 @@
               this.currentResults[exercise].passed = true;
               this.offOldTimer()
               this.setInactiveOldTask();
+              this.$alertify.success('Success');
+            } else {
+              this.$alertify.error('Wrong');
             }
           });
       },

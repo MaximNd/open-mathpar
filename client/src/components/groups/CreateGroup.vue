@@ -52,8 +52,11 @@
       createGroup() {
         this.$store.dispatch('createGroup', this.group)
           .then(() => {
-            console.log('Group created');
+            this.$alertify.success('Success');
             this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
+          })
+          .catch(() => {
+            this.$alertify.error('Error! Try again later please.');
           });
       }
     }

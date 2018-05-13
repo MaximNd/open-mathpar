@@ -57,7 +57,12 @@
     methods: {
       createLection() {
         this.$store.dispatch('createLection', this.lection)
-            .then(() => console.log('Lection created'));
+          .then(() => {
+            this.$alertify.success('Success');
+          })
+          .catch(() => {
+            this.$alertify.error('Error! Try again later please.');
+          });
       }
     },
     components: {

@@ -169,7 +169,11 @@
 
         this.$http.post('plan', Object.assign({}, this.plan, { recordId }))
           .then(() => {
+            this.$alertify.success('Success');
             this.$emit('plan-added');
+          })
+          .catch(() => {
+            this.$alertify.error('Error! Try again later please.');
           });
       },
       closePlanDialog(index) {

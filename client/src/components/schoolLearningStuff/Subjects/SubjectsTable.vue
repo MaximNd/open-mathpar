@@ -240,7 +240,6 @@
         const subjectId = this.subjects[subjectIndex]._id;
         this.$http.put(`subject/${subjectId}/themes`, { themes })
           .then(({ body }) => {
-            console.log(body);
             this.subjects[subjectIndex].themes.push(...body.themes);
             this.subjects[subjectIndex].themes.sort((a, b) => {
               if (a.order < b.order) {
@@ -251,7 +250,11 @@
               }
               return 0;
             });
-            this.addThemesDialogs.splice(dialogIndex, 1, false)
+            this.addThemesDialogs.splice(dialogIndex, 1, false);
+            this.$alertify.success('Success');
+          })
+          .catch(() => {
+            this.$alertify.error('Error! Try again later please.');
           });
       }
     },

@@ -97,7 +97,12 @@
     methods: {
       createHeadTeacher() {
         this.$store.dispatch('createHeadTeacher', { user: this.user })
-          .then(() => console.log('headTeacher added'));
+          .then(() => {
+            this.$alertify.success('Success');
+          })
+          .catch(() => {
+            this.$alertify.error('Error! Try again later please.');
+          });
       }
     }
   };

@@ -1,8 +1,12 @@
 <template>
   <v-container fluid>
-    <v-layout row justify-center>
-      <v-flex xs1><appCreateStudent></appCreateStudent></v-flex>
-      <v-flex xs1><appCreateTeacher></appCreateTeacher></v-flex>
+    <v-layout row wrap>
+      <v-flex xs12 sm6>
+        <appCreateStudent></appCreateStudent>
+      </v-flex>
+      <v-flex xs12 sm6>
+        <appCreateTeacher></appCreateTeacher>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>

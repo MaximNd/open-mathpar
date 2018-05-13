@@ -232,7 +232,13 @@
       createTask() {
         this.task.isAllow = this.task.isTest;
         const exercises = this.task.exercises.map(exercise => ({ text: exercise.task.task, fullSolution: exercise.fullSolution.task, answer: exercise.fullSolution.result }));
-        this.$store.dispatch('createTask', Object.assign({}, this.task, { exercises, class: this.task.classNumber }));
+        this.$store.dispatch('createTask', Object.assign({}, this.task, { exercises, class: this.task.classNumber }))
+          .then(() => {
+            this.$alertify.success('Success');
+          })
+          .catch(() => {
+            this.$alertify.error('Error! Try again later please.');
+          });
       },
       execute(index, field) {
         this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.task.exercises[index][field].task })
