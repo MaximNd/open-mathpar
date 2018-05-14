@@ -31,7 +31,7 @@
                 <v-flex xs12 sm4>
                   <v-select
                     v-model="plan.timetable[index].lectionId"
-                    :items="lections"
+                    :items="filteredLectures"
                     item-text="name"
                     item-value="_id"
                     label="Select lecture"
@@ -149,8 +149,11 @@
       filteredTasks() {
         const subjectId = typeof this.subjectId === 'undefined' ? this.plan.subjectId : this.subjectId;
         return this.tasks.filter(task => task.subjectId === subjectId);
+      },
+      filteredLectures() {
+        const subjectId = typeof this.subjectId === 'undefined' ? this.plan.subjectId : this.subjectId;
+        return this.lections.filter(lecture => lecture.subjectId === subjectId);
       }
-      // TODO ADD FILTER FOR LECTIONS
     },
     methods: {
       changeCountFieldsOfPlan(on) {

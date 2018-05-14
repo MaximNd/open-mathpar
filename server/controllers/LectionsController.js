@@ -12,12 +12,15 @@ module.exports = {
     },
 
     createLection(req, res) {
-        const { name, text } = req.body;
+        const { name, text, subjectId } = req.body;
 
         req.user.clients
             .then(clients => {
+                const client = clients.find(client => client.clientRole === 'teacher').client;
                 const lection = new Lection({
-                    teacherId: clients.find(client => client.clientRole === 'teacher').client.id,
+                    teacherId: client._id,
+                    schoolId: client.schoolId._id,
+                    subjectId,
                     name,
                     text
                 });
@@ -25,8 +28,10 @@ module.exports = {
                 lection.save(err => {
                     if (err) {
                         console.log(err);
+                        res.status(500, { message: 'error' }).end();
+                    } else {
+                        res.status(200, { message: 'ok' }).end();
                     }
-                    res.status(200, { message: 'ok' }).end();
                 });
             });
     },

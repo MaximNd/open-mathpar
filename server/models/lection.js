@@ -8,13 +8,22 @@ const LectionSchema = mongoose.Schema({
         required: true
     },
     text: {
-        type: String,
-        required: true
+        type: [String]
     },
     teacherId: {
         type: ObjectId,
         required: true,
         ref: 'Teacher'
+    },
+    subjectId: {
+        type: ObjectId,
+        required: true,
+        ref: 'Subject'
+    },
+    schoolId: {
+        type: ObjectId,
+        required: true,
+        ref: 'School'
     }
 });
 

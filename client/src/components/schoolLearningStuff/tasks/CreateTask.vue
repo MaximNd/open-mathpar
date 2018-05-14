@@ -70,8 +70,8 @@
                             item-text="text"
                             item-value="value"
                           ></v-select>
-                          <v-btn color="success" block @click="createExercise(index+1)">Add Exercise afeter {{ this.index + 1 }}</v-btn>
-                          <v-btn color="success" block @click="createExercise(index)">Add Exercise before {{ this.index + 1 }}</v-btn>
+                          <v-btn color="success" block @click="createExercise(index+1)">Add Exercise afeter {{ index + 1 }}</v-btn>
+                          <v-btn color="success" block @click="createExercise(index)">Add Exercise before {{ index + 1 }}</v-btn>
                         </template>
                         <template v-else>
                           <v-btn color="success" block @click="createExercise(0)">Add One Exercise Below</v-btn>

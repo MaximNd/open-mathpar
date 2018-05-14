@@ -1,138 +1,138 @@
 <template>
-    <v-layout wrap>
-        <v-flex xs12>
-            <v-flex xs12 class="text-xs-center"><h3 class="info--text">SR's</h3></v-flex>
-            <v-expansion-panel popout>
-                <v-expansion-panel-content v-for="(subject, i) in subjectsGrades" :key="i" class="elevation-1">
-                    <div slot="header" class="secondary--text">{{ subject.subject }}</div>
-                    <v-card>
-                        <v-card-title class="ml-1 title success--text">AVG values:</v-card-title>
-                        <v-card-text>
-                            <v-data-table :headers="[{text: 'Avarage marks', align: 'left', sortable: false, value: 'avg_marks'}, { text: 'Dispersion',align: 'left',sortable: false,value: 'dispersion'}]"
-                                :items="subject.avg"
-                                class="elevation-1"
-                                hide-actions
-                            >
-                                <template slot="items" slot-scope="props">
-                                    <td>
-                                        <v-data-table
-                                            hide-headers
-                                            :items="props.item.avgSrs"
-                                            hide-actions
-                                            >
-                                            <template slot="items" slot-scope="props">
-                                                <td class="text-xs-left title">{{ props.item.name }}</td>
-                                                <td class="text-xs-left text">{{ props.item.value }}</td>
-                                            </template>
-                                        </v-data-table>
-                                    </td>
-                                    <td>
-                                        <v-data-table
-                                            hide-headers
-                                            :items="props.item.dispersionSrs"
-                                            hide-actions
-                                            >
-                                            <template slot="items" slot-scope="props">
-                                                <td class="text-xs-left title">{{ props.item.name }}</td>
-                                                <td class="text-xs-left text">{{ props.item.value }}</td>
-                                            </template>
-                                        </v-data-table>
-                                    </td>
-                                </template>
-                            </v-data-table>
-                        </v-card-text>
-                    </v-card>
-                    <v-card>
-                        <v-card-title class="ml-1 title success--text">Marks:</v-card-title>
-                        <v-card-text>
-                            <v-data-table
-                                :headers="headers"
-                                :items="subject.srs"
-                                class="elevation-1"
-                                hide-actions
-                                >
-                                <template slot="items" slot-scope="props">
-                                    <td class="text-xs-left text"><h4>{{ props.item.name }}</h4></td>
-                                    <td>
-                                        <v-data-table
-                                            hide-headers
-                                            :items="props.item.results"
-                                            hide-actions
-                                            >
-                                            <template slot="items" slot-scope="props">
-                                                <td class="text-xs-left text">{{ props.item }}</td>
-                                            </template>
-                                        </v-data-table>
-                                    </td>
-                                    <td>
-                                        <v-data-table
-                                            hide-headers
-                                            :items="props.item.avgFirst"
-                                            hide-actions
-                                            >
-                                            <template slot="items" slot-scope="props">
-                                                <td class="text-xs-left title">{{ props.item.name }}</td>
-                                                <td class="text-xs-left text">{{ props.item.value }}</td>
-                                            </template>
-                                        </v-data-table>
-                                    </td>
-                                    <td>
-                                        <v-data-table
-                                            hide-headers
-                                            :items="props.item.avgLast"
-                                            hide-actions
-                                            >
-                                            <template slot="items" slot-scope="props">
-                                                <td class="text-xs-left title">{{ props.item.name }}</td>
-                                                <td class="text-xs-left text">{{ props.item.value }}</td>
-                                            </template>
-                                        </v-data-table>
-                                    </td>
-                                </template>
-                            </v-data-table>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-flex xs12 class="text-xs-center"><h3 class="info--text">KR's</h3></v-flex>
-            <v-expansion-panel popout>
-                <v-expansion-panel-content v-for="(subject, i) in subjectsGrades" :key="i" class="elevation-1">
-                    <div slot="header" class="secondary--text">{{ subject.subject }}</div>
-                    <v-card>
-                        <v-card-title class="ml-1 title success--text">AVG values:</v-card-title>
-                        <v-card-text>
-                            <v-data-table :headers="[{text: 'Avarage marks', align: 'left', sortable: false, value: 'avg_marks'}, { text: 'Dispersion',align: 'left',sortable: false,value: 'dispersion'}]"
-                                :items="subject.avg"
-                                class="elevation-1"
-                                hide-actions
-                            >
-                                <template slot="items" slot-scope="props">
-                                    <td class="text-xs-left text">{{ props.item.avgKrs }}</td>
-                                    <td class="text-xs-left text">{{ props.item.dispersionKrs }}</td>
-                                </template>
-                            </v-data-table>
-                        </v-card-text>
-                    </v-card>
-                    <v-card>
-                        <v-card-title class="ml-1 title success--text">Marks:</v-card-title>
-                        <v-card-text>
-                            <v-data-table
-                                :headers="[{text: 'Kr name', align: 'left', sortable: false, value: 'kr_name'}, {text: 'Mark', align: 'left', sortable: false, value: 'kr_mark'}]"
-                                :items="subject.krs"
-                                class="elevation-1"
-                                hide-actions
-                                >
-                                <template slot="items" slot-scope="props">
-                                    <td class="text-xs-left text">{{ props.item.name }}</td>
-                                    <td class="text-xs-left text">{{ props.item.result }}</td>
-                                </template>
-                            </v-data-table>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-        </v-flex>
-    </v-layout>
+  <v-layout wrap>
+    <v-flex xs12>
+      <v-flex xs12 class="text-xs-center"><h3 class="info--text">SR's</h3></v-flex>
+      <v-expansion-panel popout>
+        <v-expansion-panel-content v-for="(subject, i) in subjectsGrades" :key="i" class="elevation-1">
+          <div slot="header" class="secondary--text">{{ subject.subject }}</div>
+          <v-card>
+            <v-card-title class="ml-1 title success--text">AVG values:</v-card-title>
+            <v-card-text>
+              <v-data-table :headers="[{text: 'Avarage marks', align: 'left', sortable: false, value: 'avg_marks'}, { text: 'Dispersion',align: 'left',sortable: false,value: 'dispersion'}]"
+                :items="subject.avg"
+                class="elevation-1"
+                hide-actions
+              >
+                <template slot="items" slot-scope="props">
+                  <td>
+                    <v-data-table
+                      hide-headers
+                      :items="props.item.avgSrs"
+                      hide-actions
+                      >
+                      <template slot="items" slot-scope="props">
+                        <td class="text-xs-left title">{{ props.item.name }}</td>
+                        <td class="text-xs-left text">{{ props.item.value }}</td>
+                      </template>
+                    </v-data-table>
+                  </td>
+                  <td>
+                    <v-data-table
+                      hide-headers
+                      :items="props.item.dispersionSrs"
+                      hide-actions
+                      >
+                      <template slot="items" slot-scope="props">
+                          <td class="text-xs-left title">{{ props.item.name }}</td>
+                          <td class="text-xs-left text">{{ props.item.value }}</td>
+                      </template>
+                    </v-data-table>
+                  </td>
+                </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+          <v-card>
+            <v-card-title class="ml-1 title success--text">Marks:</v-card-title>
+            <v-card-text>
+              <v-data-table
+                :headers="headers"
+                :items="subject.srs"
+                class="elevation-1"
+                hide-actions
+                >
+                <template slot="items" slot-scope="props">
+                    <td class="text-xs-left text"><h4>{{ props.item.name }}</h4></td>
+                    <td>
+                      <v-data-table
+                        hide-headers
+                        :items="props.item.results"
+                        hide-actions
+                        >
+                        <template slot="items" slot-scope="props">
+                          <td class="text-xs-left text">{{ props.item }}</td>
+                        </template>
+                      </v-data-table>
+                    </td>
+                    <td>
+                      <v-data-table
+                        hide-headers
+                        :items="props.item.avgFirst"
+                        hide-actions
+                        >
+                        <template slot="items" slot-scope="props">
+                          <td class="text-xs-left title">{{ props.item.name }}</td>
+                          <td class="text-xs-left text">{{ props.item.value }}</td>
+                        </template>
+                      </v-data-table>
+                    </td>
+                    <td>
+                      <v-data-table
+                        hide-headers
+                        :items="props.item.avgLast"
+                        hide-actions
+                        >
+                        <template slot="items" slot-scope="props">
+                          <td class="text-xs-left title">{{ props.item.name }}</td>
+                          <td class="text-xs-left text">{{ props.item.value }}</td>
+                        </template>
+                      </v-data-table>
+                    </td>
+                </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-flex xs12 class="text-xs-center"><h3 class="info--text">KR's</h3></v-flex>
+      <v-expansion-panel popout>
+          <v-expansion-panel-content v-for="(subject, i) in subjectsGrades" :key="i" class="elevation-1">
+              <div slot="header" class="secondary--text">{{ subject.subject }}</div>
+              <v-card>
+                  <v-card-title class="ml-1 title success--text">AVG values:</v-card-title>
+                  <v-card-text>
+                      <v-data-table :headers="[{text: 'Avarage marks', align: 'left', sortable: false, value: 'avg_marks'}, { text: 'Dispersion',align: 'left',sortable: false,value: 'dispersion'}]"
+                          :items="subject.avg"
+                          class="elevation-1"
+                          hide-actions
+                      >
+                          <template slot="items" slot-scope="props">
+                              <td class="text-xs-left text">{{ props.item.avgKrs }}</td>
+                              <td class="text-xs-left text">{{ props.item.dispersionKrs }}</td>
+                          </template>
+                      </v-data-table>
+                  </v-card-text>
+              </v-card>
+              <v-card>
+                  <v-card-title class="ml-1 title success--text">Marks:</v-card-title>
+                  <v-card-text>
+                      <v-data-table
+                          :headers="[{text: 'Kr name', align: 'left', sortable: false, value: 'kr_name'}, {text: 'Mark', align: 'left', sortable: false, value: 'kr_mark'}]"
+                          :items="subject.krs"
+                          class="elevation-1"
+                          hide-actions
+                          >
+                          <template slot="items" slot-scope="props">
+                              <td class="text-xs-left text">{{ props.item.name }}</td>
+                              <td class="text-xs-left text">{{ props.item.result }}</td>
+                          </template>
+                      </v-data-table>
+                  </v-card-text>
+              </v-card>
+          </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-flex>
+  </v-layout>
 </template>
 
 

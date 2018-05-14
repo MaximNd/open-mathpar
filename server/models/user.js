@@ -67,7 +67,12 @@ UserSchema.virtual('clients').get(function() {
         return user.role.map(role =>  {
             let resClientsPromise = rolesMap[role].find({ userId: user.id });
             if (role === 'student') {
-                resClientsPromise.populate('gradeBook.taskId', 'isTest subjectId');
+                resClientsPromise
+                    .populate({
+                        path: 'gradeBook.taskId',
+                        select: 'isTest subjectId',
+                        populate: { path: 'subjectId', select: 'name' }
+                    });
             }
             if (role === 'teacher') {
                 resClientsPromise.populate('timetable.subjectId').populate('timetable.groupId');

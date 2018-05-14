@@ -21,11 +21,7 @@ const mutations = {
 
 const actions = {
     createLection({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            return Vue.http.post('lection', payload)
-                .then(data => resolve(data.body))
-                .catch(err => reject(err));
-        });
+      return Vue.http.post('lection', payload);
     },
     getLectionsByTeacherId({ commit }, payload) {
         Vue.http.get(`lection/teacher/${payload.teacherId}`)
