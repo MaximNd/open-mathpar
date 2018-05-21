@@ -29,25 +29,25 @@
       SRsubjectsData() {
         return this.studentSubjects.map(({ subject }) => ({
           subject: { name: subject.name, id: subject.id || subject._id },
-          tasks: subject.plan.timetable.reduce((tasksData, timetableRow) => timetableRow.taskId.isTest ? [...tasksData, {
+          tasks: subject.plan ? subject.plan.timetable.reduce((tasksData, timetableRow) => timetableRow.taskId.isTest ? [...tasksData, {
             taskName: timetableRow.taskId.name,
             taskId: timetableRow.taskId._id,
             studentMarks: this.studentGradebook.reduce((marks, gradebookRow) => (gradebookRow.taskId._id === timetableRow.taskId._id && gradebookRow.taskId.subjectId._id === subject.id) ? [...marks, {
               mark: gradebookRow.mark,
               fourNumbers: this.calculateFourNumbersBySRMark(gradebookRow.mark)
             }] : marks, [])
-          }] : tasksData, []),
+          }] : tasksData, []) : [],
           teacher: subject.teacher
         }));
       },
       KRsubgectsData() {
         return this.studentSubjects.map(({ subject }) => ({
           subject: { name: subject.name, id: subject.id || subject._id },
-          tasks: subject.plan.timetable.reduce((tasksData, timetableRow) => !timetableRow.taskId.isTest ? [...tasksData, {
+          tasks: subject.plan ? subject.plan.timetable.reduce((tasksData, timetableRow) => !timetableRow.taskId.isTest ? [...tasksData, {
             taskName: timetableRow.taskId.name,
             taskId: timetableRow.taskId._id,
             studentMarks: this.studentGradebook.reduce((marks, gradebookRow) => (gradebookRow.taskId._id === timetableRow.taskId._id && gradebookRow.taskId.subjectId._id === subject.id) ? [...marks, gradebookRow.mark] : marks, [])
-          }] : tasksData, []),
+          }] : tasksData, []) : [],
           teacher: subject.teacher
         }));
       }
