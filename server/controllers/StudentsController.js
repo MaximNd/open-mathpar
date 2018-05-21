@@ -16,6 +16,16 @@ module.exports = {
             .catch(err => console.log(err));
     },
 
+    getStudentGradebookById(req, res) {
+        Student.findById(req.params.id)
+            .select('gradeBook')
+            .populate({ path: 'gradeBook.taskId', select: 'name subjectId isTest', populate: { path: 'subjectId', select: 'name' } })
+            .then(gradeBookData => {
+                res.send(gradeBookData.gradeBook);
+            })
+            .catch(err => console.log(err));
+    },
+
     async createStudent(req, res) {
         try {
             const { user, groupId, classId }  = req.body;

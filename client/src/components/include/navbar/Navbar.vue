@@ -36,7 +36,7 @@
         <v-toolbar class="info" dark>
             <v-toolbar-side-icon class="hidden-lg-and-up" @click="sideNav = !sideNav"></v-toolbar-side-icon>
             <v-toolbar-title>
-                Ukraine Kiev
+                MathPartner
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-md-and-down">

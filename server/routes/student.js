@@ -22,6 +22,9 @@ router.get('/student/:id', isAuthenticated, StudentsController.getStudentByID);
 // Get student subjects by user ID
 router.get('/student/:id/subjects', isAuthenticated, StudentsController.getStudentsSubjectById);
 
+// Get student gradebook by student ID
+router.get('/student/:id/gradebook', isAuthenticated, StudentsController.getStudentGradebookById);
+
 // Create student
 router.post('/student', isAuthenticated, isHeadTeacher, StudentsController.createStudent);
 
