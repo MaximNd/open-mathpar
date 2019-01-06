@@ -15,19 +15,19 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      planName: {
-        type: String,
-        required: true
-      }
+export default {
+  props: {
+    planName: {
+      type: String,
+      required: true,
     },
-    data() {
-      return {
-        deleteTimetableDialog: false
-      };
-    }
-  }
+  },
+  data() {
+    return {
+      deleteTimetableDialog: false,
+    };
+  },
+};
 </script>
 
 <style>

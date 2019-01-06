@@ -10,15 +10,15 @@
 </template>
 
 <script>
-  import LecturesTable from './LecturesTable.vue';
-  import CreateLecture from './CreateLecture.vue';
+import LecturesTable from './LecturesTable.vue';
+import CreateLecture from './CreateLecture.vue';
 
-  export default {
-    components: {
-      appLecturesTable: LecturesTable,
-      appCreateLecture: CreateLecture
-    }
-  };
+export default {
+  components: {
+    appLecturesTable: LecturesTable,
+    appCreateLecture: CreateLecture,
+  },
+};
 </script>
 
 <style scoped>

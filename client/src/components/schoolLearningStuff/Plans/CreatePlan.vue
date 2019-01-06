@@ -11,41 +11,41 @@
 
 
 <script>
-  import CreatePlan from './../../teachers/TeacherTimetableAndPlan/CreatePlan.vue';
+import CreatePlan from '../../teachers/TeacherTimetableAndPlan/CreatePlan.vue';
 
-  export default {
-    data() {
-      return {
-        createPlanDialog: false,
-        lections: [],
-        tasks: [],
-        subjects: []
-      };
+export default {
+  data() {
+    return {
+      createPlanDialog: false,
+      lections: [],
+      tasks: [],
+      subjects: [],
+    };
+  },
+  methods: {
+    closePlanCreateDialog() {
+      this.createPlanDialog = false;
     },
-    methods: {
-      closePlanCreateDialog() {
-        this.createPlanDialog = false;
-      }
-    },
-    created() {
-      const teacherClient = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client;
-      const teacherId = teacherClient._id;
+  },
+  created() {
+    const teacherClient = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client;
+    const teacherId = teacherClient._id;
 
-      this.$http.get(`tasks/teacher/${teacherId}`)
-        .then(data => { this.tasks = data.body; })
-        .catch(err => console.log(err));
+    this.$http.get(`tasks/teacher/${teacherId}`)
+      .then((data) => { this.tasks = data.body; })
+      .catch(err => console.log(err));
 
-      this.$http.get(`lection/teacher/${teacherId}`)
-        .then(data => { this.lections = data.body; })
-        .catch(err => console.log(err));
+    this.$http.get(`lection/teacher/${teacherId}`)
+      .then((data) => { this.lections = data.body; })
+      .catch(err => console.log(err));
 
-      const teacherSubjects = teacherClient.timetable.map(timetableRow => timetableRow.subjectId);
-      this.subjects = teacherSubjects;
-    },
-    components: {
-      appCreatePlan: CreatePlan
-    }
-  }
+    const teacherSubjects = teacherClient.timetable.map(timetableRow => timetableRow.subjectId);
+    this.subjects = teacherSubjects;
+  },
+  components: {
+    appCreatePlan: CreatePlan,
+  },
+};
 </script>
 
 <style>

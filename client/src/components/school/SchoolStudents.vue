@@ -42,57 +42,57 @@
 
 
 <script>
-  export default {
-    data () {
-      return {
-        max25chars: (v) => v.length <= 25 || 'Input too long!',
-        tmp: '',
-        search: '',
-        pagination: {},
-        headers: [
-          { text: 'Avatar', align: 'left', value: 'avatar' },
-          { text: 'Full Name', value: 'fullName' },
-          { text: 'Group', value: 'group' },
-          { text: 'AVG SR Mark', value: 'avgSRMark' },
-          { text: 'AVG KR Mark', value: 'avgKRMark' },
-          { text: 'AVG SR Dispersion', value: 'avgSRD' },
-          { text: 'AVG KR Dispersion', value: 'avgKRD' }
-        ],
-        items: [
-          {
-            value: false,
-            avatar: 'https://randomuser.me/api/portraits/men/62.jpg',
-            fullName: 'Name1 LastName1 MidName1',
-            group: '1',
-            avgSRMark: '12 | 12 | 1 | 2',
-            avgKRMark: '12',
-            avgSRD: '12 | 12 | 1 | 2',
-            avgKRD: '45'
-          },
-          {
-            value: false,
-            avatar: 'https://randomuser.me/api/portraits/men/63.jpg',
-            fullName: 'Name1 LastName1 MidName1',
-            group: '2',
-            avgSRMark: '12 | 12 | 1 | 2',
-            avgKRMark: '78',
-            avgSRD: '12 | 12 | 1 | 2',
-            avgKRD: '12'
-          },
-          {
-            value: false,
-            avatar: 'https://randomuser.me/api/portraits/women/41.jpg',
-            fullName: 'Name1 LastName1 MidName1',
-            group: '3',
-            avgSRMark: '12 | 12 | 1 | 2',
-            avgKRMark: '98',
-            avgSRD: '12 | 12 | 1 | 2',
-            avgKRD: '100'
-          }
-        ]
-      }
-    }
-  }
+export default {
+  data() {
+    return {
+      max25chars: v => v.length <= 25 || 'Input too long!',
+      tmp: '',
+      search: '',
+      pagination: {},
+      headers: [
+        { text: 'Avatar', align: 'left', value: 'avatar' },
+        { text: 'Full Name', value: 'fullName' },
+        { text: 'Group', value: 'group' },
+        { text: 'AVG SR Mark', value: 'avgSRMark' },
+        { text: 'AVG KR Mark', value: 'avgKRMark' },
+        { text: 'AVG SR Dispersion', value: 'avgSRD' },
+        { text: 'AVG KR Dispersion', value: 'avgKRD' },
+      ],
+      items: [
+        {
+          value: false,
+          avatar: 'https://randomuser.me/api/portraits/men/62.jpg',
+          fullName: 'Name1 LastName1 MidName1',
+          group: '1',
+          avgSRMark: '12 | 12 | 1 | 2',
+          avgKRMark: '12',
+          avgSRD: '12 | 12 | 1 | 2',
+          avgKRD: '45',
+        },
+        {
+          value: false,
+          avatar: 'https://randomuser.me/api/portraits/men/63.jpg',
+          fullName: 'Name1 LastName1 MidName1',
+          group: '2',
+          avgSRMark: '12 | 12 | 1 | 2',
+          avgKRMark: '78',
+          avgSRD: '12 | 12 | 1 | 2',
+          avgKRD: '12',
+        },
+        {
+          value: false,
+          avatar: 'https://randomuser.me/api/portraits/women/41.jpg',
+          fullName: 'Name1 LastName1 MidName1',
+          group: '3',
+          avgSRMark: '12 | 12 | 1 | 2',
+          avgKRMark: '98',
+          avgSRD: '12 | 12 | 1 | 2',
+          avgKRD: '100',
+        },
+      ],
+    };
+  },
+};
 </script>
 
 

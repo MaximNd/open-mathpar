@@ -72,40 +72,40 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        user: {
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          gender: '',
-          birthday: null,
-          email: '',
-          password: '',
-          role: 'headTeacher'
-          // ,
-          // image: {
-          //     type: String,
-          //     required: false
-          // }
-        },
-        menu: false,
-        modal: false
-      };
+export default {
+  data() {
+    return {
+      user: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        gender: '',
+        birthday: null,
+        email: '',
+        password: '',
+        role: 'headTeacher',
+        // ,
+        // image: {
+        //     type: String,
+        //     required: false
+        // }
+      },
+      menu: false,
+      modal: false,
+    };
+  },
+  methods: {
+    createHeadTeacher() {
+      this.$store.dispatch('createHeadTeacher', { user: this.user })
+        .then(() => {
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
     },
-    methods: {
-      createHeadTeacher() {
-        this.$store.dispatch('createHeadTeacher', { user: this.user })
-          .then(() => {
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      }
-    }
-  };
+  },
+};
 </script>
 
 <style scoped>

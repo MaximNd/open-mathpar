@@ -121,7 +121,7 @@ module.exports = {
                         'Accept': 'application/json',
                         'Accept-Charset': 'utf-8',
                     },
-                    url: 'http://mathpar.ukma.edu.ua/api/check',
+                    url: 'http://localhost:8080/api-app/check',
                     json: true,
                     body: {
                         userAnswer: req.params.answer,

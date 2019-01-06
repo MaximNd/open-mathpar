@@ -87,53 +87,53 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        user: {
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          gender: '',
-          birthday: null,
-          email: '',
-          password: '',
-          role: 'student'
-          // ,
-          // image: {
-          //     type: String,
-          //     required: false
-          // }
-        },
-        student: {
-          groupId: '',
-          classId: ''
-        },
-        classes: [],
-        groups: [],
-        studentBirthday: null,
-        menu: false,
-        modal: false,
-        createStudentDialog: false
-      }
+export default {
+  data() {
+    return {
+      user: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        gender: '',
+        birthday: null,
+        email: '',
+        password: '',
+        role: 'student',
+        // ,
+        // image: {
+        //     type: String,
+        //     required: false
+        // }
+      },
+      student: {
+        groupId: '',
+        classId: '',
+      },
+      classes: [],
+      groups: [],
+      studentBirthday: null,
+      menu: false,
+      modal: false,
+      createStudentDialog: false,
+    };
+  },
+  methods: {
+    createStudent() {
+      this.$store.dispatch('createStudents', { user: this.user, groupId: this.student.groupId, classId: this.student.classId })
+        .then(() => {
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
     },
-    methods: {
-      createStudent() {
-        this.$store.dispatch('createStudents', { user: this.user, groupId: this.student.groupId, classId: this.student.classId })
-          .then(() => {
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      }
-    },
-    created() {
-      console.log('schoolID: ', this.$auth.user().clients[0].client.schoolId._id);
-      this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/classes`)
-        .then(data => { this.classes = data.body; });
-      this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/groups`)
-        .then(data => { this.groups = data.body.groups; });
-    }
-  }
+  },
+  created() {
+    console.log('schoolID: ', this.$auth.user().clients[0].client.schoolId._id);
+    this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/classes`)
+      .then((data) => { this.classes = data.body; });
+    this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/groups`)
+      .then((data) => { this.groups = data.body.groups; });
+  },
+};
 </script>

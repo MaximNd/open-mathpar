@@ -10,18 +10,18 @@ const getters = {};
 const mutations = {};
 
 const actions = {
-    createClass({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post('class', payload)
-                .then(data => resolve(data))
-                .catch(err => reject(err));
-        });
-    }
+  createClass({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('class', payload)
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  },
 };
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions,
 };

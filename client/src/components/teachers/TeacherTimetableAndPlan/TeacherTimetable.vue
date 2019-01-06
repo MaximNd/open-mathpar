@@ -53,77 +53,79 @@
 </template>
 
 <script>
-  import CreatePlan from './CreatePlan.vue';
-  import ChoosePlan from './ChoosePlan.vue';
+import CreatePlan from './CreatePlan.vue';
+import ChoosePlan from './ChoosePlan.vue';
 
-  export default {
-    data () {
-      return {
-        choosePlanDialog: [],
-        createPlanDialog: [],
-        date: null,
-        menu: false,
-        headers: [
-          { text: 'Subject', align: 'left', value: 'subject' },
-          { text: 'Grop', align: 'right', value: 'group' },
-          { text: 'Plan', align: 'right', value: 'plan' }
-        ]
-      }
+export default {
+  data() {
+    return {
+      choosePlanDialog: [],
+      createPlanDialog: [],
+      date: null,
+      menu: false,
+      headers: [
+        { text: 'Subject', align: 'left', value: 'subject' },
+        { text: 'Grop', align: 'right', value: 'group' },
+        { text: 'Plan', align: 'right', value: 'plan' },
+      ],
+    };
+  },
+  computed: {
+    timetable() {
+      return this.$store.getters.timetable.map(row => ({
+        plan: ((typeof row.planId === 'undefined') ? '' : row.planId), group: row.groupId, subject: row.subjectId, _id: row._id,
+      }));
     },
-    computed: {
-      timetable() {
-        return this.$store.getters.timetable.map(row => ({ plan: ((typeof row.planId === 'undefined') ? '' : row.planId), group: row.groupId, subject: row.subjectId, _id: row._id }));
-      },
-      lections() {
-        return this.$store.getters.lections;
-      },
-      tasks() {
-        return this.$store.getters.tasks;
-      }
+    lections() {
+      return this.$store.getters.lections;
     },
-    methods: {
-      closePlanCreateDialog(index) {
-        this.$set(this.createPlanDialog, index, false);
-      },
-      closePlanChooseDialog(index) {
-        this.$set(this.choosePlanDialog, index, false);
-      },
-      showPlan(plan) {
-        this.$store.commit('SET_PLAN', plan);
-      },
-      updateTeacherTimeTable() {
-        const teacherId = { teacherId: this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id };
-        this.$store.dispatch('getTeacherTimeTable', teacherId);
-      },
-      filter(index) {
-        this.$refs[`choosePlanRef${index}`].filter();
-      }
+    tasks() {
+      return this.$store.getters.tasks;
     },
-    created() {
-      // console.log(this.$refs);
-      // for (let i = 0; i < this.createPlanDialog; ++i) {
-      //   this.createPlanDialog.push(false);
-      //   this.choosePlanDialog.push(false);
-      // }
-
+  },
+  methods: {
+    closePlanCreateDialog(index) {
+      this.$set(this.createPlanDialog, index, false);
+    },
+    closePlanChooseDialog(index) {
+      this.$set(this.choosePlanDialog, index, false);
+    },
+    showPlan(plan) {
+      this.$store.commit('SET_PLAN', plan);
+    },
+    updateTeacherTimeTable() {
       const teacherId = { teacherId: this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id };
-
-      this.$store.dispatch('getLectionsByTeacherId', teacherId);
-      this.$store.dispatch('getTasksByTeacherId', teacherId);
       this.$store.dispatch('getTeacherTimeTable', teacherId);
-      // this.$http.get('lection/fetch-all-lections')
-      //   .then(data => { this.lections = data.body });
-      // this.$http.get('task/fetch-all-tasks')
-      //   .then(data => { this.tasks = data.body });
-      // this.$http.get(`teacher/timetable/${this.$auth.user().clients[0].client._id}`)
-      //   .then(timetable => { this.timetable = timetable.body.map(row => ({ plan: ((typeof row.planId === 'undefined') ? '' : row.planId), group: row.groupId, subject: row.subjectId, _id: row._id })) });
-        // .then(timetable => { this.timetable = timetable });
     },
-    components: {
-      appCreatePlan: CreatePlan,
-      appChoosePlan: ChoosePlan
-    }
-  }
+    filter(index) {
+      this.$refs[`choosePlanRef${index}`].filter();
+    },
+  },
+  created() {
+    // console.log(this.$refs);
+    // for (let i = 0; i < this.createPlanDialog; ++i) {
+    //   this.createPlanDialog.push(false);
+    //   this.choosePlanDialog.push(false);
+    // }
+
+    const teacherId = { teacherId: this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id };
+
+    this.$store.dispatch('getLectionsByTeacherId', teacherId);
+    this.$store.dispatch('getTasksByTeacherId', teacherId);
+    this.$store.dispatch('getTeacherTimeTable', teacherId);
+    // this.$http.get('lection/fetch-all-lections')
+    //   .then(data => { this.lections = data.body });
+    // this.$http.get('task/fetch-all-tasks')
+    //   .then(data => { this.tasks = data.body });
+    // this.$http.get(`teacher/timetable/${this.$auth.user().clients[0].client._id}`)
+    //   .then(timetable => { this.timetable = timetable.body.map(row => ({ plan: ((typeof row.planId === 'undefined') ? '' : row.planId), group: row.groupId, subject: row.subjectId, _id: row._id })) });
+    // .then(timetable => { this.timetable = timetable });
+  },
+  components: {
+    appCreatePlan: CreatePlan,
+    appChoosePlan: ChoosePlan,
+  },
+};
 </script>
 
 

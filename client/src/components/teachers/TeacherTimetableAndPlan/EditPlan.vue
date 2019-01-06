@@ -56,19 +56,19 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      planName: {
-        type: String,
-        required: true
-      }
+export default {
+  props: {
+    planName: {
+      type: String,
+      required: true,
     },
-    data() {
-      return {
-        editTimetableDialog: false
-      };
-    }
-  };
+  },
+  data() {
+    return {
+      editTimetableDialog: false,
+    };
+  },
+};
 </script>
 
 <style>

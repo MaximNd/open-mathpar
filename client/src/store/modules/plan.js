@@ -3,7 +3,7 @@ import Vue from 'vue';
 const state = {
   plan: undefined,
   planInTable: undefined,
-  plans: []
+  plans: [],
 };
 
 const getters = {
@@ -18,7 +18,7 @@ const getters = {
   },
   plans(state) {
     return state.plans;
-  }
+  },
 };
 
 const mutations = {
@@ -30,20 +30,22 @@ const mutations = {
   },
   SET_PLANS(state, payload) {
     state.plans = payload;
-  }
+  },
 };
 
 const actions = {
-  getFilteredPlans({ commit }, { schoolId, fetchType, teacherId, subjectId }) {
+  getFilteredPlans({ commit }, {
+    schoolId, fetchType, teacherId, subjectId,
+  }) {
     return Vue.http.get(`plans/${schoolId}/${fetchType}/${teacherId}/${subjectId}`)
-            .then(data => commit('SET_PLANS', data.body))
-            .catch(err => console.log(err));
-  }
+      .then(data => commit('SET_PLANS', data.body))
+      .catch(err => console.log(err));
+  },
 };
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions,
 };

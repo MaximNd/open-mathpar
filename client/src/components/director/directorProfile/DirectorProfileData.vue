@@ -32,26 +32,26 @@
 
 
 <script>
-  import DirectorProfileChangeData from './DirectorProfileChangeData.vue';
+import DirectorProfileChangeData from './DirectorProfileChangeData.vue';
 
-  export default {
-    data () {
-      return {
-        changeDirectorDataDialog: false,
-        items: [
-          { title: 'Full name', text: 'Nedashkivsky Maxim Valentinovich' },
-          { title: 'Role', text: 'Director' },
-          { title: 'Email', text: 'email@mail.com' },
-          { title: 'Birthday', text: '1977-05-06' },
-          { title: 'Age', text: '40' },
-          { title: 'School', text: 'School' }
-        ]
-      };
-    },
-    components: {
-      appDirectorProfileChangeData: DirectorProfileChangeData
-    }
-  }
+export default {
+  data() {
+    return {
+      changeDirectorDataDialog: false,
+      items: [
+        { title: 'Full name', text: 'Nedashkivsky Maxim Valentinovich' },
+        { title: 'Role', text: 'Director' },
+        { title: 'Email', text: 'email@mail.com' },
+        { title: 'Birthday', text: '1977-05-06' },
+        { title: 'Age', text: '40' },
+        { title: 'School', text: 'School' },
+      ],
+    };
+  },
+  components: {
+    appDirectorProfileChangeData: DirectorProfileChangeData,
+  },
+};
 </script>
 
 
@@ -64,4 +64,3 @@
     font-size: 18px;
   }
 </style>
-

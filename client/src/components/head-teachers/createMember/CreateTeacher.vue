@@ -97,68 +97,68 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        user: {
-          firstName: '',
-          middleName: '',
-          lastName: '',
-          gender: '',
-          birthday: null,
-          email: '',
-          password: '',
-          role: 'teacher'
-          // ,
-          // image: {
-          //     type: String,
-          //     required: false
-          // }
-        },
-        teacher: {
-          timetable: []
-        },
-        subjects: [],
-        groups: [],
-        countTeacherTimetableFields: 2,
-        teacherBirthday: null,
-        menu: false,
-        modal: false,
-        createTeacherDialog: false
-      }
-    },
-    watch: {
-      countTeacherTimetableFields(val, oldVal) {
-        if (val > oldVal) {
-          this.teacher.timetable.push({ subjectId: '', groupId: '' });
-        } else {
-          this.teacher.timetable.pop();
-        }
-      }
-    },
-    methods: {
-      changeTeacherTimetableFields(on) {
-        if (this.countTeacherTimetableFields <= 0 && on < 0) return;
-        this.countTeacherTimetableFields += on;
+export default {
+  data() {
+    return {
+      user: {
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        gender: '',
+        birthday: null,
+        email: '',
+        password: '',
+        role: 'teacher',
+        // ,
+        // image: {
+        //     type: String,
+        //     required: false
+        // }
       },
-      createTeacher() {
-        this.$store.dispatch('createTeacher', { user: this.user, teacher: this.teacher })
-          .then(() => {
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
+      teacher: {
+        timetable: [],
+      },
+      subjects: [],
+      groups: [],
+      countTeacherTimetableFields: 2,
+      teacherBirthday: null,
+      menu: false,
+      modal: false,
+      createTeacherDialog: false,
+    };
+  },
+  watch: {
+    countTeacherTimetableFields(val, oldVal) {
+      if (val > oldVal) {
+        this.teacher.timetable.push({ subjectId: '', groupId: '' });
+      } else {
+        this.teacher.timetable.pop();
       }
     },
-    created() {
-      this.$http.get(`subjects`)
-        .then(data => { this.subjects = data.body; });
-      this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/groups`)
-        .then(data => { this.groups = data.body.groups; });
-      for (let i = 0; i < this.countTeacherTimetableFields; ++i) {
-        this.teacher.timetable.push({ subjectId: '', groupId: '' });
-      }
+  },
+  methods: {
+    changeTeacherTimetableFields(on) {
+      if (this.countTeacherTimetableFields <= 0 && on < 0) return;
+      this.countTeacherTimetableFields += on;
+    },
+    createTeacher() {
+      this.$store.dispatch('createTeacher', { user: this.user, teacher: this.teacher })
+        .then(() => {
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
+    },
+  },
+  created() {
+    this.$http.get('subjects')
+      .then((data) => { this.subjects = data.body; });
+    this.$http.get(`school/${this.$auth.user().clients[0].client.schoolId._id}/groups`)
+      .then((data) => { this.groups = data.body.groups; });
+    for (let i = 0; i < this.countTeacherTimetableFields; ++i) {
+      this.teacher.timetable.push({ subjectId: '', groupId: '' });
     }
-  }
+  },
+};
 </script>

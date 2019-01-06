@@ -52,84 +52,84 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        lec: false,
-        max25chars: (v) => v.length <= 25 || 'Input too long!',
-        tmp: '',
-        search: '',
-        pagination: {},
-        headers: [
-          { text: 'Lection', align: 'left', value: 'lectionName' },
-          { text: 'Subject', value: 'subject' },
-          { text: 'Teacher', value: 'teacher' }
-        ],
-        items: [
-          {
-            value: false,
-            lectionName: 'Lection1',
-            subject: 'Subject 1',
-            teacher: 'Teacher 1'
-          },
-          {
-            value: false,
-            lectionName: 'Lection2',
-            subject: 'Subject 2',
-            teacher: 'Teacher 2'
-          },
-          {
-            value: false,
-            lectionName: 'Lection3',
-            subject: 'Subject 3',
-            teacher: 'Teacher 3'
-          },
-          {
-            value: false,
-            lectionName: 'Lection4',
-            subject: 'Subject 4',
-            teacher: 'Teacher 4'
-          },
-          {
-            value: false,
-            lectionName: 'Lection5',
-            subject: 'Subject 5',
-            teacher: 'Teacher 5'
-          },
-          {
-            value: false,
-            lectionName: 'Lection6',
-            subject: 'Subject 4',
-            teacher: 'Teacher 2'
-          },
-          {
-            value: false,
-            lectionName: 'Lection7',
-            subject: 'Subject 1',
-            teacher: 'Teacher 2'
-          },
-          {
-            value: false,
-            lectionName: 'Lection8',
-            subject: 'Subject 2',
-            teacher: 'Teacher 3'
-          },
-          {
-            value: false,
-            lectionName: 'Lection9',
-            subject: 'Subject 2',
-            teacher: 'Teacher 6'
-          },
-          {
-            value: false,
-            lectionName: 'Lection10',
-            subject: 'Subject 1',
-            teacher: 'Teacher 1'
-          }
-        ]
-      }
-    }
-  }
+export default {
+  data() {
+    return {
+      lec: false,
+      max25chars: v => v.length <= 25 || 'Input too long!',
+      tmp: '',
+      search: '',
+      pagination: {},
+      headers: [
+        { text: 'Lection', align: 'left', value: 'lectionName' },
+        { text: 'Subject', value: 'subject' },
+        { text: 'Teacher', value: 'teacher' },
+      ],
+      items: [
+        {
+          value: false,
+          lectionName: 'Lection1',
+          subject: 'Subject 1',
+          teacher: 'Teacher 1',
+        },
+        {
+          value: false,
+          lectionName: 'Lection2',
+          subject: 'Subject 2',
+          teacher: 'Teacher 2',
+        },
+        {
+          value: false,
+          lectionName: 'Lection3',
+          subject: 'Subject 3',
+          teacher: 'Teacher 3',
+        },
+        {
+          value: false,
+          lectionName: 'Lection4',
+          subject: 'Subject 4',
+          teacher: 'Teacher 4',
+        },
+        {
+          value: false,
+          lectionName: 'Lection5',
+          subject: 'Subject 5',
+          teacher: 'Teacher 5',
+        },
+        {
+          value: false,
+          lectionName: 'Lection6',
+          subject: 'Subject 4',
+          teacher: 'Teacher 2',
+        },
+        {
+          value: false,
+          lectionName: 'Lection7',
+          subject: 'Subject 1',
+          teacher: 'Teacher 2',
+        },
+        {
+          value: false,
+          lectionName: 'Lection8',
+          subject: 'Subject 2',
+          teacher: 'Teacher 3',
+        },
+        {
+          value: false,
+          lectionName: 'Lection9',
+          subject: 'Subject 2',
+          teacher: 'Teacher 6',
+        },
+        {
+          value: false,
+          lectionName: 'Lection10',
+          subject: 'Subject 1',
+          teacher: 'Teacher 1',
+        },
+      ],
+    };
+  },
+};
 </script>
 
 

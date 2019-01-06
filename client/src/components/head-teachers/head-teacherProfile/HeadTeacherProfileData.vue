@@ -32,26 +32,26 @@
 
 
 <script>
-  import HeadTeacherProfileChangeData from './HeadTeacherProfileChangeData.vue';
+import HeadTeacherProfileChangeData from './HeadTeacherProfileChangeData.vue';
 
-  export default {
-    data () {
-      return {
-        changeHeadTeacherDataDialog: false,
-        items: [
-          { title: 'Full name', text: 'Name LastName MidName' },
-          { title: 'Role', text: 'Student' },
-          { title: 'Email', text: 'email@mail.com' },
-          { title: 'Birthday', text: '1995-10-01' },
-          { title: 'Age', text: '22' },
-          { title: 'School', text: 'School' }
-        ]
-      };
-    },
-    components: {
-      appHeadTeacherProfileChangeData: HeadTeacherProfileChangeData
-    }
-  }
+export default {
+  data() {
+    return {
+      changeHeadTeacherDataDialog: false,
+      items: [
+        { title: 'Full name', text: 'Name LastName MidName' },
+        { title: 'Role', text: 'Student' },
+        { title: 'Email', text: 'email@mail.com' },
+        { title: 'Birthday', text: '1995-10-01' },
+        { title: 'Age', text: '22' },
+        { title: 'School', text: 'School' },
+      ],
+    };
+  },
+  components: {
+    appHeadTeacherProfileChangeData: HeadTeacherProfileChangeData,
+  },
+};
 </script>
 
 
@@ -64,4 +64,3 @@
     font-size: 18px;
   }
 </style>
-

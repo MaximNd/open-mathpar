@@ -38,41 +38,41 @@
 
 
 <script>
-  export default {
-    data () {
-      return {
-        max25chars: (v) => v.length <= 25 || 'Input too long!',
-        tmp: '',
-        search: '',
-        pagination: {},
-        headers: [
-          { text: 'Avatar', align: 'left', value: 'avatar' },
-          { text: 'Full Name', value: 'fullName' },
-          { text: 'Subjects', value: 'subjects' }
-        ],
-        items: [
-          {
-            value: false,
-            avatar: 'https://randomuser.me/api/portraits/women/83.jpg',
-            fullName: 'Name1 LastName1 MidName1',
-            subjects: 'Subject1'
-          },
-          {
-            value: false,
-            avatar: 'https://randomuser.me/api/portraits/men/82.jpg',
-            fullName: 'Name2 LastName2 MidName2',
-            subjects: 'Subject1, Subject2, Subject3'
-          },
-          {
-            value: false,
-            avatar: 'https://randomuser.me/api/portraits/women/81.jpg',
-            fullName: 'Name3 LastName3 MidName3',
-            subjects: 'Subject1, Subject2'
-          }
-        ]
-      }
-    }
-  }
+export default {
+  data() {
+    return {
+      max25chars: v => v.length <= 25 || 'Input too long!',
+      tmp: '',
+      search: '',
+      pagination: {},
+      headers: [
+        { text: 'Avatar', align: 'left', value: 'avatar' },
+        { text: 'Full Name', value: 'fullName' },
+        { text: 'Subjects', value: 'subjects' },
+      ],
+      items: [
+        {
+          value: false,
+          avatar: 'https://randomuser.me/api/portraits/women/83.jpg',
+          fullName: 'Name1 LastName1 MidName1',
+          subjects: 'Subject1',
+        },
+        {
+          value: false,
+          avatar: 'https://randomuser.me/api/portraits/men/82.jpg',
+          fullName: 'Name2 LastName2 MidName2',
+          subjects: 'Subject1, Subject2, Subject3',
+        },
+        {
+          value: false,
+          avatar: 'https://randomuser.me/api/portraits/women/81.jpg',
+          fullName: 'Name3 LastName3 MidName3',
+          subjects: 'Subject1, Subject2',
+        },
+      ],
+    };
+  },
+};
 </script>
 
 

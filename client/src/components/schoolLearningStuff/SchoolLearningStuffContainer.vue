@@ -26,24 +26,22 @@
 </template>
 
 <script>
-  import TasksContainer from './tasks/TasksContainer.vue';
-  import LecturesContainer from './Lectures/LecturesContainer.vue';
-  import SubjectsContainer from './Subjects/SubjectsContainer.vue';
-  import PlansContainer from './Plans/PlansContainer.vue';
+import TasksContainer from './tasks/TasksContainer.vue';
+import LecturesContainer from './Lectures/LecturesContainer.vue';
+import SubjectsContainer from './Subjects/SubjectsContainer.vue';
+import PlansContainer from './Plans/PlansContainer.vue';
 
-  export default {
-    beforeRouteLeave(to, from, next) {
-      this.$store.commit('SET_PLAN', undefined);
-      this.$store.commit('SET_PLAN_IN_TABLE', undefined);
-      next();
-    },
-    components: {
-      appTasksContainer: TasksContainer,
-      appLecturesContainer: LecturesContainer,
-      appSubjectsContainer: SubjectsContainer,
-      appPlansContainer: PlansContainer
-    }
-  };
+export default {
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit('SET_PLAN', undefined);
+    this.$store.commit('SET_PLAN_IN_TABLE', undefined);
+    next();
+  },
+  components: {
+    appTasksContainer: TasksContainer,
+    appLecturesContainer: LecturesContainer,
+    appSubjectsContainer: SubjectsContainer,
+    appPlansContainer: PlansContainer,
+  },
+};
 </script>
-
-

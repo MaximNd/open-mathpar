@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>client</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <link href="static/css/vivify.min.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_HTML-full"></script>
+    <script>
+      window.MathJax.Hub.Config({
+        jax: ["input/TeX", "output/HTML-CSS"],
+        "HTML-CSS": { linebreaks: { automatic: true, width: '72% container' } },
+        extensions: ["tex2jax.js"],
+        tex2jax: {
+        inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
+        displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
+        processEscapes: true
+        },
+        TeX: { extensions: ["AMSmath.js", "AMSsymbols.js"] }
+      });
+    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but client doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

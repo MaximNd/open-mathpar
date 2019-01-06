@@ -36,41 +36,41 @@
 
 
 <script>
-  export default {
-    data () {
-      return {
-        max25chars: (v) => v.length <= 25 || 'Input too long!',
-        tmp: '',
-        search: '',
-        pagination: {},
-        headers: [
-          { text: 'School', align: 'left', value: 'schoolName' },
-          { text: 'Director', value: 'director' },
-          { text: 'Address', value: 'address' }
-        ],
-        items: [
-          {
-            value: false,
-            schoolName: 'School 1',
-            director: 'Director 1',
-            address: 'Address 1 afrarfd.12,fc'
-          },
-          {
-            value: false,
-            schoolName: 'School 2',
-            director: 'Director 2',
-            address: 'Address 2 afrarfd.12,fc'
-          },
-          {
-            value: false,
-            schoolName: 'School 3',
-            director: 'Director 3',
-            address: 'Address 3 afrarfd.12,fc'
-          }
-        ]
-      }
-    }
-  }
+export default {
+  data() {
+    return {
+      max25chars: v => v.length <= 25 || 'Input too long!',
+      tmp: '',
+      search: '',
+      pagination: {},
+      headers: [
+        { text: 'School', align: 'left', value: 'schoolName' },
+        { text: 'Director', value: 'director' },
+        { text: 'Address', value: 'address' },
+      ],
+      items: [
+        {
+          value: false,
+          schoolName: 'School 1',
+          director: 'Director 1',
+          address: 'Address 1 afrarfd.12,fc',
+        },
+        {
+          value: false,
+          schoolName: 'School 2',
+          director: 'Director 2',
+          address: 'Address 2 afrarfd.12,fc',
+        },
+        {
+          value: false,
+          schoolName: 'School 3',
+          director: 'Director 3',
+          address: 'Address 3 afrarfd.12,fc',
+        },
+      ],
+    };
+  },
+};
 </script>
 
 

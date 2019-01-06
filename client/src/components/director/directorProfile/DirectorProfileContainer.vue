@@ -6,14 +6,11 @@
 
 
 <script>
-  import DirectorProfileData from './DirectorProfileData.vue';
+import DirectorProfileData from './DirectorProfileData.vue';
 
-  export default {
-    components: {
-      appDirectorProfileData: DirectorProfileData
-    }
-  };
+export default {
+  components: {
+    appDirectorProfileData: DirectorProfileData,
+  },
+};
 </script>
-
-
-

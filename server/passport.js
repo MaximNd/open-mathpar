@@ -1,4 +1,3 @@
-
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const User = require('./models/user');

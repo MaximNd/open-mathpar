@@ -32,32 +32,32 @@
 
 
 <script>
-    import StudentProfileChangeData from './StudentProfileChangeData.vue';
+import StudentProfileChangeData from './StudentProfileChangeData.vue';
 
-    export default {
-        data () {
-            return {
-                changeStudentDataDialog: false,
-                items: [
-                    { title: 'Full name', text: 'Nedashkivsky Maxim Valentinovich' },
-                    { title: 'Role', text: 'Student' },
-                    { title: 'Email', text: 'email@mail.com' },
-                    { title: 'AVG SR Mark', text: '50 | 50 | 1 | 2' },
-                    { title: 'AVG KR Mark', text: '70' },
-                    { title: 'AVG SR Dispersion', text: '10 | 12 | 1 | 1' },
-                    { title: 'AVG KR Dispersion', text: '12' },
-                    { title: 'Birthday', text: '1997-11-18' },
-                    { title: 'Age', text: '22' },
-                    { title: 'School', text: 'School' },
-                    { title: 'Group', text: 'Group' },
-                    { title: 'Subjects', text: 'Subjects' }
-                ]
-            };
-        },
-        components: {
-            appStudentProfileChangeData: StudentProfileChangeData
-        }
-    }
+export default {
+  data() {
+    return {
+      changeStudentDataDialog: false,
+      items: [
+        { title: 'Full name', text: 'Nedashkivsky Maxim Valentinovich' },
+        { title: 'Role', text: 'Student' },
+        { title: 'Email', text: 'email@mail.com' },
+        { title: 'AVG SR Mark', text: '50 | 50 | 1 | 2' },
+        { title: 'AVG KR Mark', text: '70' },
+        { title: 'AVG SR Dispersion', text: '10 | 12 | 1 | 1' },
+        { title: 'AVG KR Dispersion', text: '12' },
+        { title: 'Birthday', text: '1997-11-18' },
+        { title: 'Age', text: '22' },
+        { title: 'School', text: 'School' },
+        { title: 'Group', text: 'Group' },
+        { title: 'Subjects', text: 'Subjects' },
+      ],
+    };
+  },
+  components: {
+    appStudentProfileChangeData: StudentProfileChangeData,
+  },
+};
 </script>
 
 
@@ -70,4 +70,3 @@
         font-size: 18px;
     }
 </style>
-

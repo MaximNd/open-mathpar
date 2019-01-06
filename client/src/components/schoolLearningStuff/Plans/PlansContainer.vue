@@ -9,13 +9,13 @@
 
 
 <script>
-  import CreatePlan from './CreatePlan.vue';
-  import PlansTable from './PlansTable.vue';
+import CreatePlan from './CreatePlan.vue';
+import PlansTable from './PlansTable.vue';
 
-  export default {
-    components: {
-      appCreatePlan: CreatePlan,
-      appPlansTable: PlansTable
-    }
-  }
+export default {
+  components: {
+    appCreatePlan: CreatePlan,
+    appPlansTable: PlansTable,
+  },
+};
 </script>

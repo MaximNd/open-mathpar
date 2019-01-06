@@ -1,7 +1,7 @@
 <template>
     <v-layout wrap>
         <v-flex xs12>
-            <full-calendar v-if="false" class="test-fc" :events="fcEvents" 
+            <full-calendar v-if="false" class="test-fc" :events="fcEvents"
             first-day='1' locale="en">
                 <template slot="fc-event-card" slot-scope="p">
                     <p><i class="fa">sadfsd</i> {{ p.event.title }} test</p>
@@ -24,7 +24,7 @@
                     </v-data-table>
                 </v-card-text>
             </v-card>
-            
+
         </v-flex>
         <v-dialog v-model="lec" width="1500px">
             <v-card>
@@ -54,92 +54,92 @@
 
 
 <script>
-    import FullCalendar from 'vue-fullcalendar';
+import FullCalendar from 'vue-fullcalendar';
 
-    export default {
-        data() {
-            return {
-                fcEvents: [{
-                        title: 'Sunny 725-727',
-                        start: '2017-02-25',
-                        end: '2017-02-27',
-                        cssClass: 'family'
-                    },
-                    {
-                        title: 'Lunfel 726-727',
-                        start: '2017-02-26',
-                        end: '2017-02-27',
-                        cssClass: ['home', 'work']
-                    },
-                    {
-                        title: 'Lunfel 2/27-2/28',
-                        start: '2017-02-27',
-                        end: '2017-02-28'
-                    },
-                    {
-                        title: 'Lunfel 2/27-2/28',
-                        start: '2017-02-27',
-                        end: '2017-02-28'
-                    },
-                    {
-                        title: 'Lunfel 2/27-2/28',
-                        start: '2017-02-27',
-                        end: '2017-02-28'
-                    },
-                    {
-                        title: 'Lunfel 2/26-3/05',
-                        start: '2017-02-26',
-                        end: '2017-03-05'
-                    },
-                    {
-                        title: 'Lunfel 1/27-1/28',
-                        start: '2017-01-27',
-                        end: '2017-01-28'
-                    },
-                    {
-                        title: 'Lunfel 1/27-2/2',
-                        start: '2017-01-27',
-                        end: '2017-02-02'
-                    },
-                    {
-                        title: 'Lunfel 3/27-3/28',
-                        start: '2017-03-27',
-                        end: '2017-03-28'
-                    }
-                ],
-                lec: false,
-                plan: [
-                    ['Lec', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-                    ['Prac', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-                    ['Date', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds']
-                ]
-            };
-        },
-        computed: {
-            planName() {
-                return this.$store.getters.plan.name;
-            },
-            isShow() {
-                return this.$store.getters.isShow;
-            },
-            timetable() {
-                return this.$store.getters.plan.timetable.reduce((resultTimetable, lesson) => {
-                    resultTimetable[0].push(lesson.lectionId);
-                    resultTimetable[1].push(lesson.taskId);
-                    resultTimetable[2].push(new Date(lesson.date).toDateString());
-                    return resultTimetable;
-                }, [['Lections'], ['Tasks'], ['Date']]);
-            }
-        },
-        methods: {
-            redirectToTask(task) {
-                this.$router.push(`/task/${task._id}`);
-            }
-        },
-        components: {
-            'full-calendar': FullCalendar
-        }
-    }
+export default {
+  data() {
+    return {
+      fcEvents: [{
+        title: 'Sunny 725-727',
+        start: '2017-02-25',
+        end: '2017-02-27',
+        cssClass: 'family',
+      },
+      {
+        title: 'Lunfel 726-727',
+        start: '2017-02-26',
+        end: '2017-02-27',
+        cssClass: ['home', 'work'],
+      },
+      {
+        title: 'Lunfel 2/27-2/28',
+        start: '2017-02-27',
+        end: '2017-02-28',
+      },
+      {
+        title: 'Lunfel 2/27-2/28',
+        start: '2017-02-27',
+        end: '2017-02-28',
+      },
+      {
+        title: 'Lunfel 2/27-2/28',
+        start: '2017-02-27',
+        end: '2017-02-28',
+      },
+      {
+        title: 'Lunfel 2/26-3/05',
+        start: '2017-02-26',
+        end: '2017-03-05',
+      },
+      {
+        title: 'Lunfel 1/27-1/28',
+        start: '2017-01-27',
+        end: '2017-01-28',
+      },
+      {
+        title: 'Lunfel 1/27-2/2',
+        start: '2017-01-27',
+        end: '2017-02-02',
+      },
+      {
+        title: 'Lunfel 3/27-3/28',
+        start: '2017-03-27',
+        end: '2017-03-28',
+      },
+      ],
+      lec: false,
+      plan: [
+        ['Lec', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
+        ['Prac', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
+        ['Date', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
+      ],
+    };
+  },
+  computed: {
+    planName() {
+      return this.$store.getters.plan.name;
+    },
+    isShow() {
+      return this.$store.getters.isShow;
+    },
+    timetable() {
+      return this.$store.getters.plan.timetable.reduce((resultTimetable, lesson) => {
+        resultTimetable[0].push(lesson.lectionId);
+        resultTimetable[1].push(lesson.taskId);
+        resultTimetable[2].push(new Date(lesson.date).toDateString());
+        return resultTimetable;
+      }, [['Lections'], ['Tasks'], ['Date']]);
+    },
+  },
+  methods: {
+    redirectToTask(task) {
+      this.$router.push(`/task/${task._id}`);
+    },
+  },
+  components: {
+    'full-calendar': FullCalendar,
+  },
+};
 </script>
 
 

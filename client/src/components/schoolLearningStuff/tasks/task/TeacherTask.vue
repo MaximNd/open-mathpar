@@ -85,7 +85,7 @@
                             </v-container>
                           </v-card-actions>
                           <v-card-text class="original-input" v-show="!task.exercises[index].task.isLatex">
-                            <v-text-field v-model="task.exercises[index].task.task" label="Exercise" multi-line auto-grow ></v-text-field>
+                            <v-textarea v-model="task.exercises[index].task.task" label="Exercise" auto-grow ></v-textarea>
                           </v-card-text>
                           <v-card-text class="original-output" v-show="!task.exercises[index].task.isLatex">
                             <h3>Output: </h3>
@@ -115,7 +115,7 @@
                             </v-container>
                           </v-card-actions>
                           <v-card-text class="original-input" v-show="!task.exercises[index].fullSolution.isLatex">
-                            <v-text-field v-model="task.exercises[index].fullSolution.task" label="Full Solution" multi-line auto-grow ></v-text-field>
+                            <v-textarea v-model="task.exercises[index].fullSolution.task" label="Full Solution" auto-grow ></v-textarea>
                           </v-card-text>
                           <v-card-text class="original-output" v-show="!task.exercises[index].fullSolution.isLatex">
                             <h3>Output: </h3>
@@ -143,71 +143,71 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        exercise: 1,
-        task: null
-      };
+export default {
+  data() {
+    return {
+      exercise: 1,
+      task: null,
+    };
+  },
+  computed: {
+    steps() {
+      return this.task ? this.task.exercises.length : 10;
     },
-    computed: {
-      steps() {
-        return this.task ? this.task.exercises.length : 10;
-      }
-    },
-    methods: {
-      execute(index, field) {
-        this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.task.exercises[index][field].task })
-          .then(({ body }) => {
-            if (body.status === 'OK') {
-              let latexArr = body.latex.split('\n');
-              const latex = latexArr.reduce((latex, latexArrEl) => {
-                if (latexArrEl !== '') {
-                  latex += `<div>${latexArrEl}</div>`;
-                }
-                return latex;
-              }, '');
-              this.task.exercises[index][field].latex = latex;
-              this.task.exercises[index][field].result = body.result;
-              setTimeout(() => {
-                this.$nextTick(() => {
-                  window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
-                });
-              }, 0);
-              if (!this.task.exercises[index][field].isLatex) {
-                this.swap(index, field);
-              }
-            }
-          })
-      },
-      swap(index, field) {
-        this.task.exercises[index][field].isLatex = !this.task.exercises[index][field].isLatex;
-      },
-      update() {
-        const exercises = this.task.exercises.map(exercise => ({ text: exercise.task.task, fullSolution: exercise.fullSolution.task, answer: exercise.fullSolution.result }));
-        this.$http.put(`task/${this.$route.params.id}`, Object.assign({}, this.task, { exercises, class: this.task.classNumber }));
-      }
-    },
-    created() {
-      this.$http.get(`task/${this.$route.params.id}`)
+  },
+  methods: {
+    execute(index, field) {
+      this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.task.exercises[index][field].task })
         .then(({ body }) => {
-          const exercises = body.exercises.map(exercise => ({
-            task: {
-              task: exercise.text,
-              result: '',
-              latex: '<p>No result yet</p>',
-              isLatex: false
-            },
-            fullSolution: {
-              task: exercise.fullSolution,
-              result: exercise.answer,
-              latex: '<p>No result yet</p>',
-              isLatex: false
+          if (body.status === 'OK') {
+            const latexArr = body.latex.split('\n');
+            const latex = latexArr.reduce((latex, latexArrEl) => {
+              if (latexArrEl !== '') {
+                latex += `<div>${latexArrEl}</div>`;
+              }
+              return latex;
+            }, '');
+            this.task.exercises[index][field].latex = latex;
+            this.task.exercises[index][field].result = body.result;
+            setTimeout(() => {
+              this.$nextTick(() => {
+                window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
+              });
+            }, 0);
+            if (!this.task.exercises[index][field].isLatex) {
+              this.swap(index, field);
             }
-          }));
-          this.task = body;
-          this.task.exercises = exercises;
+          }
         });
-    }
-  }
+    },
+    swap(index, field) {
+      this.task.exercises[index][field].isLatex = !this.task.exercises[index][field].isLatex;
+    },
+    update() {
+      const exercises = this.task.exercises.map(exercise => ({ text: exercise.task.task, fullSolution: exercise.fullSolution.task, answer: exercise.fullSolution.result }));
+      this.$http.put(`task/${this.$route.params.id}`, Object.assign({}, this.task, { exercises, class: this.task.classNumber }));
+    },
+  },
+  created() {
+    this.$http.get(`task/${this.$route.params.id}`)
+      .then(({ body }) => {
+        const exercises = body.exercises.map(exercise => ({
+          task: {
+            task: exercise.text,
+            result: '',
+            latex: '<p>No result yet</p>',
+            isLatex: false,
+          },
+          fullSolution: {
+            task: exercise.fullSolution,
+            result: exercise.answer,
+            latex: '<p>No result yet</p>',
+            isLatex: false,
+          },
+        }));
+        this.task = body;
+        this.task.exercises = exercises;
+      });
+  },
+};
 </script>

@@ -5,13 +5,13 @@
 </template>
 
 <script>
-  import SchoolGroups from './../groups/GroupsTable.vue';
+import SchoolGroups from '../groups/GroupsTable.vue';
 
-  export default {
-    components: {
-      appSchoolGroups: SchoolGroups
-    }
-  };
+export default {
+  components: {
+    appSchoolGroups: SchoolGroups,
+  },
+};
 </script>
 
 <style scoped>

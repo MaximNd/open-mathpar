@@ -87,109 +87,109 @@
 
 
 <script>
-  export default {
-    props: {
-      index: {
-        type: Number,
-        required: false
-      },
-      groupsAndSubjects: {
-        type: Array,
-        required: false
-      },
-      subjectId: {
-        type: String,
-        required: false
-      },
-      groupId: {
-        type: String,
-        required: false
-      },
-      recordId: {
-        type: String,
-        required: false
-      },
-      lections: {
-        type: Array,
-        required: true
-      },
-      tasks: {
-        type: Array,
-        required: true
-      },
-      subjects: {
-        type: Array,
-        required: false
-      }
+export default {
+  props: {
+    index: {
+      type: Number,
+      required: false,
     },
-    data() {
-      return {
-        plan: {
-          name: '',
-          groupId: undefined,
-          subjectId: '',
-          timetable: []
-        },
-        modals: [],
-        countPlanCols: 5
-      };
+    groupsAndSubjects: {
+      type: Array,
+      required: false,
     },
-    watch: {
-      countPlanCols(val, oldVal) {
-        if (val > oldVal) {
-          this.plan.timetable.push({ lectionId: '', taskId: '', date: null });
-          this.modals.push(false);
-        } else {
-          this.plan.timetable.pop();
-          this.modals.pop();
-        }
-      }
+    subjectId: {
+      type: String,
+      required: false,
     },
-    computed: {
-      filteredTasks() {
-        const subjectId = typeof this.subjectId === 'undefined' ? this.plan.subjectId : this.subjectId;
-        return this.tasks.filter(task => task.subjectId === subjectId);
+    groupId: {
+      type: String,
+      required: false,
+    },
+    recordId: {
+      type: String,
+      required: false,
+    },
+    lections: {
+      type: Array,
+      required: true,
+    },
+    tasks: {
+      type: Array,
+      required: true,
+    },
+    subjects: {
+      type: Array,
+      required: false,
+    },
+  },
+  data() {
+    return {
+      plan: {
+        name: '',
+        groupId: undefined,
+        subjectId: '',
+        timetable: [],
       },
-      filteredLectures() {
-        const subjectId = typeof this.subjectId === 'undefined' ? this.plan.subjectId : this.subjectId;
-        return this.lections.filter(lecture => lecture.subjectId === subjectId);
-      }
-    },
-    methods: {
-      changeCountFieldsOfPlan(on) {
-        if (this.countPlanCols <= 0 && on < 0) return;
-        this.countPlanCols += on;
-      },
-      createPlan(subjectId, groupId, recordId) {
-        if (typeof subjectId !== 'undefined') {
-          this.plan.subjectId = subjectId;
-        }
-        if (typeof groupId !== 'undefined') {
-          this.plan.groupId = groupId;
-        }
-
-        this.plan.schoolId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client.schoolId._id;
-
-        this.$http.post('plan', Object.assign({}, this.plan, { recordId }))
-          .then(() => {
-            this.$alertify.success('Success');
-            this.$emit('plan-added');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      },
-      closePlanDialog(index) {
-        this.$emit('closed-create-plan-dialog', this.index);
-      }
-    },
-    created() {
-      for (let i = 0; i < this.countPlanCols; ++i) {
+      modals: [],
+      countPlanCols: 5,
+    };
+  },
+  watch: {
+    countPlanCols(val, oldVal) {
+      if (val > oldVal) {
         this.plan.timetable.push({ lectionId: '', taskId: '', date: null });
         this.modals.push(false);
+      } else {
+        this.plan.timetable.pop();
+        this.modals.pop();
       }
+    },
+  },
+  computed: {
+    filteredTasks() {
+      const subjectId = typeof this.subjectId === 'undefined' ? this.plan.subjectId : this.subjectId;
+      return this.tasks.filter(task => task.subjectId === subjectId);
+    },
+    filteredLectures() {
+      const subjectId = typeof this.subjectId === 'undefined' ? this.plan.subjectId : this.subjectId;
+      return this.lections.filter(lecture => lecture.subjectId === subjectId);
+    },
+  },
+  methods: {
+    changeCountFieldsOfPlan(on) {
+      if (this.countPlanCols <= 0 && on < 0) return;
+      this.countPlanCols += on;
+    },
+    createPlan(subjectId, groupId, recordId) {
+      if (typeof subjectId !== 'undefined') {
+        this.plan.subjectId = subjectId;
+      }
+      if (typeof groupId !== 'undefined') {
+        this.plan.groupId = groupId;
+      }
+
+      this.plan.schoolId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client.schoolId._id;
+
+      this.$http.post('plan', Object.assign({}, this.plan, { recordId }))
+        .then(() => {
+          this.$alertify.success('Success');
+          this.$emit('plan-added');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
+    },
+    closePlanDialog(index) {
+      this.$emit('closed-create-plan-dialog', this.index);
+    },
+  },
+  created() {
+    for (let i = 0; i < this.countPlanCols; ++i) {
+      this.plan.timetable.push({ lectionId: '', taskId: '', date: null });
+      this.modals.push(false);
     }
-  }
+  },
+};
 </script>
 
 <style>

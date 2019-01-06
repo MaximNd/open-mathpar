@@ -7,15 +7,15 @@
 
 
 <script>
-    import GroupsTable from './GroupsTable.vue';
-    import CreateGroup from './CreateGroup.vue';
+import GroupsTable from './GroupsTable.vue';
+import CreateGroup from './CreateGroup.vue';
 
-    export default {
-        components: {
-            appGroupsTable: GroupsTable,
-            appCreateGroup: CreateGroup
-        }
-    }
+export default {
+  components: {
+    appGroupsTable: GroupsTable,
+    appCreateGroup: CreateGroup,
+  },
+};
 </script>
 
 

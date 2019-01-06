@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import Student from '../components/student/StudentContainer.vue';
 import Profile from '../components/profile/ProfileContainer.vue';
 // import StudentProfile from '../components/student/studentProfile/StudentProfileContainer.vue';
@@ -30,7 +30,7 @@ export default new Router({
     {
       path: '/profile/:id',
       name: 'profile',
-      component: Profile
+      component: Profile,
     },
     {
       path: '/student/:id',
@@ -39,8 +39,8 @@ export default new Router({
       children: [
         // { path: 'profile', name: 'student-profile', component: StudentProfile },
         { path: 'subjects', name: 'student-subjects', component: StudentSubjects },
-        { path: 'gradebook', name: 'student-gradebook', component: StudentGradeBook }
-      ]
+        { path: 'gradebook', name: 'student-gradebook', component: StudentGradeBook },
+      ],
     },
     {
       path: '/teacher/:id',
@@ -48,9 +48,9 @@ export default new Router({
       component: Teacher,
       children: [
         // { path: 'profile', name: 'teacher-profile', component: TeacherProfile },
-        { path: 'timetable_plan', name: 'teacher-timetable_plan', component: TeacherTimetableAndPlan }
+        { path: 'timetable_plan', name: 'teacher-timetable_plan', component: TeacherTimetableAndPlan },
         // { path: 'create-member', name: 'teacher-create-member', component: TeacherCreateMember } // TODO delete in teacher and add in headteacher
-      ]
+      ],
     },
     {
       path: '/head-teacher/:id',
@@ -58,8 +58,8 @@ export default new Router({
       component: HeadTeacher,
       children: [
         // { path: 'profile', name: 'head-teacher-profile', component: HeadTeacherProfile },
-        { path: 'create-member', name: 'head-teacher-create-member', component: HeadTeacherCreateMember }
-      ]
+        { path: 'create-member', name: 'head-teacher-create-member', component: HeadTeacherCreateMember },
+      ],
     },
     {
       path: '/director/:id',
@@ -68,54 +68,54 @@ export default new Router({
       children: [
         // { path: 'profile', name: 'director-profile', component: DirectorProfile },
         { path: 'create-head-teacher', name: 'director-create-head-teacher', component: DirectorCreateHeadTeacher },
-        { path: 'create-class', name: 'director-create-class', component: DirectorCreateClass }
-      ]
+        { path: 'create-class', name: 'director-create-class', component: DirectorCreateClass },
+      ],
     },
     {
       path: '/groups',
       name: 'groups',
-      component: Groups
+      component: Groups,
     },
     {
       path: '/group/:id',
       name: 'group',
-      component: Group
+      component: Group,
     },
     {
       path: '/school/:id',
       name: 'school',
-      component: School
+      component: School,
     },
     {
       path: '/school_learning_stuff',
       name: 'school_learning_stuff',
-      component: SchoolLearningStuff
+      component: SchoolLearningStuff,
     },
     {
       path: '/task/:id',
       name: 'task',
-      component: Task
+      component: Task,
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
     },
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
     },
     {
       path: '',
       name: 'home',
-      beforeEnter: function() {
+      beforeEnter() {
         if (typeof Vue.auth.user().role === 'undefined') {
-          Vue.router.push('/login'); return;
+          Vue.router.push('/login');
         } else {
-          Vue.router.push(`/profile/${Vue.auth.user()._id}`); return;
+          Vue.router.push(`/profile/${Vue.auth.user()._id}`);
         }
-      }
-    }
-  ]
+      },
+    },
+  ],
 });

@@ -4,13 +4,13 @@ import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 const state = {
-    headTeachers: []
+  headTeachers: [],
 };
 
 const getters = {
-    headTeachers(state) {
-        return state.headTeachers;
-    }
+  headTeachers(state) {
+    return state.headTeachers;
+  },
 };
 
 const mutations = {
@@ -18,18 +18,18 @@ const mutations = {
 };
 
 const actions = {
-    createHeadTeacher({ commit }, payload) {
-        return new Promise((resolve, reject) => {
-            Vue.http.post('head-teacher', payload)
-                .then(data => resolve(data))
-                .catch(err => reject(err));
-        });
-    }
+  createHeadTeacher({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('head-teacher', payload)
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  },
 };
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions,
 };

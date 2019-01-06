@@ -25,27 +25,27 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        snackbar: true,
-        newClass: {
-          name: ''
-        }
-      };
+export default {
+  data() {
+    return {
+      snackbar: true,
+      newClass: {
+        name: '',
+      },
+    };
+  },
+  methods: {
+    creteClass() {
+      this.$store.dispatch('createClass', { class: this.newClass })
+        .then(() => {
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
     },
-    methods: {
-      creteClass() {
-        this.$store.dispatch('createClass', { class: this.newClass })
-          .then(() => {
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      }
-    }
-  };
+  },
+};
 </script>
 
 <style scoped>

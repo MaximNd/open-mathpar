@@ -137,130 +137,130 @@
 
 
 <script>
-    export default {
-        data() {
-            return {
-                headers: [
-                    {
-                        text: 'Sr name',
-                        align: 'left',
-                        sortable: false,
-                        value: 'sr_name'
-                    },
-                    {
-                        text: 'marks',
-                        align: 'left',
-                        sortable: false,
-                        value: 'marks'
-                    },
-                    {
-                        text: 'First AVG result',
-                        align: 'left',
-                        sortable: false,
-                        value: 'name'
-                    },
-                    {
-                        text: 'Last AVG result',
-                        align: 'left',
-                        sortable: false,
-                        value: 'name'
-                    }
-                ],
-                subjectsGrades: [
-                    {
-                        subject: 'Subject 1',
-                        srs: [
-                            {
-                                name: 'sr1',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            },
-                            {
-                                name: 'sr2',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            },
-                            {
-                                name: 'sr3',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            },
-                            {
-                                name: 'sr4',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            }
-                        ],
-                        krs: [
-                            {
-                                name: 'kr1',
-                                result: 100
-                            },
-                            {
-                                name: 'kr2',
-                                result: 90
-                            }
-                        ],
-                        avg: [{
-                            avgSrs: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
-                            dispersionSrs: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
-                            avgKrs: 90,
-                            dispersionKrs: 12
-                        }]
-                    },
-                    {
-                        subject: 'Subject 2',
-                        srs: [
-                            {
-                                name: 'sr1',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            },
-                            {
-                                name: 'sr2',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            },
-                            {
-                                name: 'sr3',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            },
-                            {
-                                name: 'sr4',
-                                results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
-                                avgFirst: [{name: 'a', value: 60}, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
-                                avgLast: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }]
-                            }
-                        ],
-                        krs: [
-                            {
-                                name: 'kr1',
-                                result: 100
-                            },
-                            {
-                                name: 'kr2',
-                                result: 90
-                            }
-                        ],
-                        avg: [{
-                            avgSrs: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
-                            dispersionSrs: [{name: 'a', value: 100}, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
-                            avgKrs: 80,
-                            dispersionKrs: 10
-                        }]
-                    }
-                ]
-            };
-        }
+export default {
+  data() {
+    return {
+      headers: [
+        {
+          text: 'Sr name',
+          align: 'left',
+          sortable: false,
+          value: 'sr_name',
+        },
+        {
+          text: 'marks',
+          align: 'left',
+          sortable: false,
+          value: 'marks',
+        },
+        {
+          text: 'First AVG result',
+          align: 'left',
+          sortable: false,
+          value: 'name',
+        },
+        {
+          text: 'Last AVG result',
+          align: 'left',
+          sortable: false,
+          value: 'name',
+        },
+      ],
+      subjectsGrades: [
+        {
+          subject: 'Subject 1',
+          srs: [
+            {
+              name: 'sr1',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+            {
+              name: 'sr2',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+            {
+              name: 'sr3',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+            {
+              name: 'sr4',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+          ],
+          krs: [
+            {
+              name: 'kr1',
+              result: 100,
+            },
+            {
+              name: 'kr2',
+              result: 90,
+            },
+          ],
+          avg: [{
+            avgSrs: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            dispersionSrs: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            avgKrs: 90,
+            dispersionKrs: 12,
+          }],
+        },
+        {
+          subject: 'Subject 2',
+          srs: [
+            {
+              name: 'sr1',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+            {
+              name: 'sr2',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+            {
+              name: 'sr3',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+            {
+              name: 'sr4',
+              results: ['AAAAAAAAAA', '11111A1111', '123A4C4221'],
+              avgFirst: [{ name: 'a', value: 60 }, { name: 'b', value: 40 }, { name: 'b', value: 1 }, { name: 'b', value: 2 }],
+              avgLast: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            },
+          ],
+          krs: [
+            {
+              name: 'kr1',
+              result: 100,
+            },
+            {
+              name: 'kr2',
+              result: 90,
+            },
+          ],
+          avg: [{
+            avgSrs: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            dispersionSrs: [{ name: 'a', value: 100 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }, { name: 'b', value: 0 }],
+            avgKrs: 80,
+            dispersionKrs: 10,
+          }],
+        },
+      ],
     };
+  },
+};
 </script>
 
 

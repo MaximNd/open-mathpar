@@ -79,7 +79,7 @@
                             </v-container>
                           </v-card-actions>
                           <v-card-text class="original-input" v-show="!lecture.text[index].isLatex">
-                            <v-text-field v-model="lecture.text[index].task" label="TextField" multi-line auto-grow ></v-text-field>
+                            <v-textarea v-model="lecture.text[index].task" label="TextField" auto-grow ></v-textarea>
                           </v-card-text>
                           <v-card-text class="original-output" v-show="!lecture.text[index].isLatex">
                             <h3>Output: </h3>
@@ -110,88 +110,88 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        lecture: {
-          name: '',
-          text: [],
-          subjectId: undefined
-        },
-        subjects: [],
-        index: 0,
-        textCount: 2,
-        createLectureDialog: false
-      }
-    },
-    computed: {
-      textFieldsIndexes() {
-        return Array.apply(null, { length: this.lecture.text.length }).map((_, index) => ({ value: Number(index), text: Number(index + 1) }));
-      }
-    },
-    methods: {
-      createLecture() {
-        this.lecture.text = this.lecture.text.map(text => text.task);
-        this.$store.dispatch('createLection', this.lecture)
-          .then(() => {
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
+export default {
+  data() {
+    return {
+      lecture: {
+        name: '',
+        text: [],
+        subjectId: undefined,
       },
-      execute(index) {
-        this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.lecture.text[index].task })
-          .then(({ body }) => {
-            if (body.status === 'OK') {
-              let latexArr = body.latex.split('\n');
-              const latex = latexArr.reduce((latex, latexArrEl) => {
-                if (latexArrEl !== '') {
-                  latex += `<div>${latexArrEl}</div>`;
-                }
-                return latex;
-              }, '');
-              this.lecture.text[index].latex = latex;
-              this.lecture.text[index].result = body.result;
-              setTimeout(() => {
-                this.$nextTick(() => {
-                  window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
-                });
-              }, 0);
-              if (!this.lecture.text[index].isLatex) {
-                this.swap(index);
+      subjects: [],
+      index: 0,
+      textCount: 2,
+      createLectureDialog: false,
+    };
+  },
+  computed: {
+    textFieldsIndexes() {
+      return Array(...{ length: this.lecture.text.length }).map((_, index) => ({ value: Number(index), text: Number(index + 1) }));
+    },
+  },
+  methods: {
+    createLecture() {
+      this.lecture.text = this.lecture.text.map(text => text.task);
+      this.$store.dispatch('createLection', this.lecture)
+        .then(() => {
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
+    },
+    execute(index) {
+      this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.lecture.text[index].task })
+        .then(({ body }) => {
+          if (body.status === 'OK') {
+            const latexArr = body.latex.split('\n');
+            const latex = latexArr.reduce((latex, latexArrEl) => {
+              if (latexArrEl !== '') {
+                latex += `<div>${latexArrEl}</div>`;
               }
+              return latex;
+            }, '');
+            this.lecture.text[index].latex = latex;
+            this.lecture.text[index].result = body.result;
+            setTimeout(() => {
+              this.$nextTick(() => {
+                window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
+              });
+            }, 0);
+            if (!this.lecture.text[index].isLatex) {
+              this.swap(index);
             }
-          })
-      },
-      swap(index) {
-        this.lecture.text[index].isLatex = !this.lecture.text[index].isLatex;
-      },
-      addTextField(index) {
-        this.lecture.text.splice(index, 0, {
-          task: '',
-          result: '',
-          latex: '<p>No result yet</p>',
-          isLatex: false
+          }
         });
-      },
-      deleteTextField(index) {
-        this.lecture.text.splice(index, 1);
-      }
     },
-    created() {
-      this.$http.get(`subjects`)
-        .then(data => { this.subjects = data.body; });
-      for (let i = 0; i < this.textCount; ++i) {
-        this.lecture.text.push({
-          task: '',
-          result: '',
-          latex: '<p>No result yet</p>',
-          isLatex: false
-        });
-      }
+    swap(index) {
+      this.lecture.text[index].isLatex = !this.lecture.text[index].isLatex;
+    },
+    addTextField(index) {
+      this.lecture.text.splice(index, 0, {
+        task: '',
+        result: '',
+        latex: '<p>No result yet</p>',
+        isLatex: false,
+      });
+    },
+    deleteTextField(index) {
+      this.lecture.text.splice(index, 1);
+    },
+  },
+  created() {
+    this.$http.get('subjects')
+      .then((data) => { this.subjects = data.body; });
+    for (let i = 0; i < this.textCount; ++i) {
+      this.lecture.text.push({
+        task: '',
+        result: '',
+        latex: '<p>No result yet</p>',
+        isLatex: false,
+      });
     }
-  }
+  },
+};
 </script>
 
 <style>

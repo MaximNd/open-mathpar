@@ -8,12 +8,11 @@
 
 
 <script>
-  import SubjectsTable from './SubjectsTable.vue';
+import SubjectsTable from './SubjectsTable.vue';
 
-  export default {
-    components: {
-      appSubjectsTable: SubjectsTable
-    }
-  }
+export default {
+  components: {
+    appSubjectsTable: SubjectsTable,
+  },
+};
 </script>
-

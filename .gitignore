@@ -2,3 +2,4 @@ server/node_modules/
 server/config/*
 server/public/images/*
 client/node_modules/
+client_old/**

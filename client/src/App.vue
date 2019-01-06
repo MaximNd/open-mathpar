@@ -16,36 +16,31 @@
 </template>
 
 <script>
-  import Navbar from './components/include/navbar/Navbar.vue';
-  import Footer from './components/include/footer/Footer.vue';
+import Navbar from './components/include/navbar/Navbar.vue';
+import Footer from './components/include/footer/Footer.vue';
 
-  export default {
-    data() {
-      return {
-        loaded: false
-      };
-    },
-    created() {
-        this.$auth.ready(() => {
-          this.$store.dispatch('fetchUser')
-            .then(() => {
-              this.loaded = true;
-            })
-            .catch(() => {
-              this.$router.push({ name: 'login' })
-              this.loaded = true;
-            });
+export default {
+  data() {
+    return {
+      loaded: false,
+    };
+  },
+  created() {
+    this.$auth.ready(() => {
+      this.$store.dispatch('fetchUser')
+        .then(() => {
+          this.loaded = true;
+        })
+        .catch(() => {
+          this.$router.push({ name: 'login' });
+          this.loaded = true;
         });
-    },
-    components: {
-      appNavbar: Navbar,
-      appFooter: Footer
-    }
-  }
+    });
+  },
+  components: {
+    appNavbar: Navbar,
+    appFooter: Footer,
+  },
+};
 
 </script>
-
-<style lang="stylus">
-  @import './stylus/main'
-  @import './stylus/theme'
-</style>

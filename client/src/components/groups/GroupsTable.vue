@@ -50,35 +50,34 @@
 
 
 <script>
-  export default {
-    data () {
-      return {
-        max25chars: (v) => v.length <= 25 || 'Input too long!',
-        tmp: '',
-        search: '',
-        pagination: {},
-        headers: [
-          { text: 'Group name', align: 'left' },
-          { text: 'Number of students\n', value: 'studentsCount' },
-          { text: 'Number of teachers\n', value: 'teachersCount' },
-          { text: 'AVG SR Mark', value: 'groupAVGMarks.avgSR' },
-          { text: 'AVG KR Mark', value: 'groupAVGMarks.avgKR' },
-          { text: 'AVG SR Dispersion', value: 'groupAVGDispersion.avgSR' },
-          { text: 'AVG KR Dispersion', value: 'groupAVGDispersion.avgKR' }
-        ]
-      }
+export default {
+  data() {
+    return {
+      max25chars: v => v.length <= 25 || 'Input too long!',
+      tmp: '',
+      search: '',
+      pagination: {},
+      headers: [
+        { text: 'Group name', align: 'left' },
+        { text: 'Number of students\n', value: 'studentsCount' },
+        { text: 'Number of teachers\n', value: 'teachersCount' },
+        { text: 'AVG SR Mark', value: 'groupAVGMarks.avgSR' },
+        { text: 'AVG KR Mark', value: 'groupAVGMarks.avgKR' },
+        { text: 'AVG SR Dispersion', value: 'groupAVGDispersion.avgSR' },
+        { text: 'AVG KR Dispersion', value: 'groupAVGDispersion.avgKR' },
+      ],
+    };
+  },
+  computed: {
+    groups() {
+      return this.$store.getters.groups;
     },
-    computed: {
-      groups() {
-        return this.$store.getters.groups;
-      }
-    },
-    created() {
-      this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
-    }
-  }
+  },
+  created() {
+    this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
+  },
+};
 </script>
-
 
 
 <style scoped>

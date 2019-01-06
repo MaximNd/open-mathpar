@@ -91,91 +91,99 @@
 
 
 <script>
-  import Plan from './../../teachers/TeacherTimetableAndPlan/TeacherPlan.vue';
+import Plan from '../../teachers/TeacherTimetableAndPlan/TeacherPlan.vue';
 
-  export default {
-    props: {
-      chooseMode: {
-        type: Boolean,
-        required: true
-      },
-      subjectId: {
-        type: String,
-        required: false
-      }
+export default {
+  props: {
+    chooseMode: {
+      type: Boolean,
+      required: true,
     },
-    data() {
-      return {
-        plansLoading: true,
-        plansNoDataText: 'Loading...',
-        filterData: {
-          thisSchool: true,
-          fetchTypes: ['allPlans', 'allYourPlans'],
-          fetchType: undefined,
-          subjects: [],
-          subjectId: undefined
+    subjectId: {
+      type: String,
+      required: false,
+    },
+  },
+  data() {
+    return {
+      plansLoading: true,
+      plansNoDataText: 'Loading...',
+      filterData: {
+        thisSchool: true,
+        fetchTypes: ['allPlans', 'allYourPlans'],
+        fetchType: undefined,
+        subjects: [],
+        subjectId: undefined,
+      },
+      search: '',
+      pagination: {},
+      headers: [
+        {
+          text: 'Plan', align: 'left', value: 'name', sortable: false, width: '20px',
         },
-        search: '',
-        pagination: {},
-        headers: [
-          { text: 'Plan', align: 'left', value: 'name', sortable: false, width: '20px' },
-          { text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false, width: '20px' },
-          { text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false, width: '20px' },
-          { text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false, width: '20px' }
-        ]
-      };
+        {
+          text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false, width: '20px',
+        },
+        {
+          text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false, width: '20px',
+        },
+        {
+          text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false, width: '20px',
+        },
+      ],
+    };
+  },
+  computed: {
+    plans() {
+      return this.$store.getters.plans;
     },
-    computed: {
-      plans() {
-        return this.$store.getters.plans;
+  },
+  methods: {
+    filterPlans() {
+      console.log('filter2');
+      this.plansLoading = true;
+      this.plansNoDataText = 'Loading...';
+      this.$store.commit('SET_PLANS', undefined);
+      const filter = {};
+      if (this.filterData.thisSchool) {
+        filter.schoolId = this.$auth.user().clients.find(client => client.clientRole !== 'admin').client.schoolId._id;
+      } else {
+        filter.schoolId = undefined;
       }
-    },
-    methods: {
-      filterPlans() {
-        console.log('filter2');
-        this.plansLoading = true;
-        this.plansNoDataText = 'Loading...';
-        this.$store.commit('SET_PLANS', undefined);
-        let filter = {};
-        if (this.filterData.thisSchool) {
-          filter.schoolId = this.$auth.user().clients.find(client => client.clientRole !== 'admin').client.schoolId._id;
-        } else {
-          filter.schoolId = undefined;
-        }
-        if (this.filterData.fetchType && this.filterData.fetchType === 'allYourPlans') {
-          filter.teacherId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
-        }
-        filter.fetchType = this.filterData.fetchType;
-        if (this.subjectId) {
-          filter.subjectId = this.subjectId;
-        } else {
-          filter.subjectId = this.filterData.subjectId;
-        }
-        this.$store.dispatch('getFilteredPlans', filter)
-          .then(() => {
-            this.plansLoading = false;
-            this.plansNoDataText = 'No data available';
-          });
-      },
-      setExpandedPlan(props, plan) {
-        props.expanded = !props.expanded;
-        this.$store.commit('SET_PLAN_IN_TABLE', plan);
-      },
-      emitPlanChoosed(planId) {
-        this.$emit('plan-choosed', planId);
+      if (this.filterData.fetchType && this.filterData.fetchType === 'allYourPlans') {
+        filter.teacherId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
       }
-    },
-    components: {
-      appPlan: Plan
-    },
-    created() {
-      this.$http.get('subjects')
-        .then(({ body }) => {
-          this.filterData.subjects = body;
-          this.filterPlans();
+      filter.fetchType = this.filterData.fetchType;
+      if (this.subjectId) {
+        filter.subjectId = this.subjectId;
+      } else {
+        filter.subjectId = this.filterData.subjectId;
+      }
+      this.$store.dispatch('getFilteredPlans', filter)
+        .then(() => {
+          this.plansLoading = false;
+          this.plansNoDataText = 'No data available';
         });
-    }
-  }
+    },
+    setExpandedPlan(props, plan) {
+      props.expanded = !props.expanded;
+      this.$store.commit('SET_PLAN_IN_TABLE', plan);
+    },
+    emitPlanChoosed(planId) {
+      this.$emit('plan-choosed', planId);
+    },
+  },
+  components: {
+    appPlan: Plan,
+  },
+  created() {
+    this.$http.get('subjects')
+      .then(({ body }) => {
+        this.filterData.subjects = body;
+        this.filterPlans();
+      });
+  },
+};
 </script>
 
 

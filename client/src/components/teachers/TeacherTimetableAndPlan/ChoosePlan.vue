@@ -17,46 +17,46 @@
 </template>
 
 <script>
-  import PlansTable from './../../schoolLearningStuff/Plans/PlansTable.vue';
+import PlansTable from '../../schoolLearningStuff/Plans/PlansTable.vue';
 
-  export default {
-    props: {
-      index: {
-        type: Number,
-        required: true
-      },
-      groupId: {
-        type: String,
-        required: true
-      },
-      recordId: {
-        type: String,
-        required: true
-      },
-      subjectId: {
-        type: String,
-        required: true
-      }
+export default {
+  props: {
+    index: {
+      type: Number,
+      required: true,
     },
-    methods: {
-      closePlanDialog() {
-        this.$emit('closed-choose-plan-dialog', this.index);
-      },
-      choosePlan(planId) {
-        this.$http.put(`plan/${planId}/set`, { planId, recordId: this.recordId, groupId: this.groupId })
-          .then(() => {
-            this.$emit('plan-choosed');
-          });
-      },
-      filter() {
-        console.log('filter1', this.subjectId);
-        this.$refs.plansTableRef.filterPlans();
-      }
+    groupId: {
+      type: String,
+      required: true,
     },
-    components: {
-      appPlansTable: PlansTable
-    }
-  }
+    recordId: {
+      type: String,
+      required: true,
+    },
+    subjectId: {
+      type: String,
+      required: true,
+    },
+  },
+  methods: {
+    closePlanDialog() {
+      this.$emit('closed-choose-plan-dialog', this.index);
+    },
+    choosePlan(planId) {
+      this.$http.put(`plan/${planId}/set`, { planId, recordId: this.recordId, groupId: this.groupId })
+        .then(() => {
+          this.$emit('plan-choosed');
+        });
+    },
+    filter() {
+      console.log('filter1', this.subjectId);
+      this.$refs.plansTableRef.filterPlans();
+    },
+  },
+  components: {
+    appPlansTable: PlansTable,
+  },
+};
 </script>
 
 <style>

@@ -13,13 +13,13 @@
 
 
 <script>
-  import CreateStudent from './CreateStudent.vue';
-  import CreateTeacher from './CreateTeacher.vue';
+import CreateStudent from './CreateStudent.vue';
+import CreateTeacher from './CreateTeacher.vue';
 
-  export default {
-    components: {
-      appCreateStudent: CreateStudent,
-      appCreateTeacher: CreateTeacher
-    }
-  };
+export default {
+  components: {
+    appCreateStudent: CreateStudent,
+    appCreateTeacher: CreateTeacher,
+  },
+};
 </script>

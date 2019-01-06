@@ -111,84 +111,104 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        filterData: {
-          thisSchool: true,
-          fetchTypes: ['allTasks', 'allSR', 'allKR', 'allYourTasks', 'allYourSR', 'allYourKR'],
-          fetchType: undefined,
-          classNumber: undefined,
-          subjects: [],
-          subjectId: undefined,
-          themes: [],
-          themeId: undefined,
-          difficultyLevel: undefined
-        },
-        max25chars: (v) => v.length <= 25 || 'Input too long!',
-        tmp: '',
-        search: '',
-        pagination: {},
-        headers: [
-          { text: '№ Task', align: 'left', value: 'order', sortable: false, width: '20px' },
-          { text: 'Task', align: 'left', value: 'name', sortable: false },
-          { text: 'Class', align: 'right', value: 'class', sortable: false },
-          { text: 'Difficulty level', align: 'right', value: 'difficultyLevel', sortable: false },
-          { text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false },
-          { text: '№ Theme', align: 'left', value: 'theme.order', sortable: false, width: '20px' },
-          { text: 'Theme', align: 'left', value: 'theme.name', sortable: false },
-          { text: 'Type', align: 'right', value: 'isTest', sortable: false },
-          { text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false },
-          { text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false }
-        ]
-      }
-    },
-    computed: {
-      tasks() {
-        return this.$store.getters.tasks;
-      }
-    },
-    watch: {
-      'filterData.subjectId'(newSubjectId) {
-        let allThemes = this.filterData.subjects.find(subject => subject._id === newSubjectId).themes;
-        if (typeof this.filterData.classNumber !== 'undefined') {
-          allThemes = allThemes.filter(theme => theme.class === this.filterData.classNumber);
-        }
-        this.filterData.themes = allThemes;
+export default {
+  data() {
+    return {
+      filterData: {
+        thisSchool: true,
+        fetchTypes: ['allTasks', 'allSR', 'allKR', 'allYourTasks', 'allYourSR', 'allYourKR'],
+        fetchType: undefined,
+        classNumber: undefined,
+        subjects: [],
+        subjectId: undefined,
+        themes: [],
+        themeId: undefined,
+        difficultyLevel: undefined,
       },
-      'filterData.classNumber'(newClassNumber) {
-        if (typeof this.filterData.subjectId !== 'undefined') {
-          this.filterData.themes = this.filterData.subjects.find(subject => subject._id === this.filterData.subjectId).themes.filter(theme => theme.class === newClassNumber);
-        }
+      max25chars: v => v.length <= 25 || 'Input too long!',
+      tmp: '',
+      search: '',
+      pagination: {},
+      headers: [
+        {
+          text: '№ Task', align: 'left', value: 'order', sortable: false, width: '20px',
+        },
+        {
+          text: 'Task', align: 'left', value: 'name', sortable: false,
+        },
+        {
+          text: 'Class', align: 'right', value: 'class', sortable: false,
+        },
+        {
+          text: 'Difficulty level', align: 'right', value: 'difficultyLevel', sortable: false,
+        },
+        {
+          text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false,
+        },
+        {
+          text: '№ Theme', align: 'left', value: 'theme.order', sortable: false, width: '20px',
+        },
+        {
+          text: 'Theme', align: 'left', value: 'theme.name', sortable: false,
+        },
+        {
+          text: 'Type', align: 'right', value: 'isTest', sortable: false,
+        },
+        {
+          text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false,
+        },
+        {
+          text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false,
+        },
+      ],
+    };
+  },
+  computed: {
+    tasks() {
+      return this.$store.getters.tasks;
+    },
+  },
+  watch: {
+    'filterData.subjectId': function (newSubjectId) {
+      let allThemes = this.filterData.subjects.find(subject => subject._id === newSubjectId).themes;
+      if (typeof this.filterData.classNumber !== 'undefined') {
+        allThemes = allThemes.filter(theme => theme.class === this.filterData.classNumber);
+      }
+      this.filterData.themes = allThemes;
+    },
+    'filterData.classNumber': function (newClassNumber) {
+      if (typeof this.filterData.subjectId !== 'undefined') {
+        this.filterData.themes = this.filterData.subjects.find(subject => subject._id === this.filterData.subjectId).themes.filter(theme => theme.class === newClassNumber);
       }
     },
-    methods: {
-      filter() {
-        let filter = {};
-        if (this.filterData.thisSchool) {
-          filter.schoolId = this.$auth.user().clients.find(client => client.clientRole !== 'admin').client.schoolId._id;
-        } else {
-          filter.schoolId = undefined;
-        }
-        if (this.filterData.fetchType && (this.filterData.fetchType === 'allYourTasks' || this.filterData.fetchType === 'allYourSR' || this.filterData.fetchType === 'allYourKR')) {
-          filter.teacherId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
-        }
-        filter.fetchType = this.filterData.fetchType;
-        filter.classNumber = this.filterData.classNumber;
-        filter.subjectId = this.filterData.subjectId;
-        filter.themeId = this.filterData.themeId;
-        filter.difficultyLevel = this.filterData.difficultyLevel;
-        this.$store.dispatch('getFilteredTasks', filter);
+  },
+  methods: {
+    filter() {
+      const filter = {};
+      if (this.filterData.thisSchool) {
+        filter.schoolId = this.$auth.user().clients.find(client => client.clientRole !== 'admin').client.schoolId._id;
+      } else {
+        filter.schoolId = undefined;
       }
+      if (this.filterData.fetchType && (this.filterData.fetchType === 'allYourTasks' || this.filterData.fetchType === 'allYourSR' || this.filterData.fetchType === 'allYourKR')) {
+        filter.teacherId = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
+      }
+      filter.fetchType = this.filterData.fetchType;
+      filter.classNumber = this.filterData.classNumber;
+      filter.subjectId = this.filterData.subjectId;
+      filter.themeId = this.filterData.themeId;
+      filter.difficultyLevel = this.filterData.difficultyLevel;
+      this.$store.dispatch('getFilteredTasks', filter);
     },
-    created() {
-      this.$http.get('subjects')
-        .then(({ body }) => {
-          this.filterData.subjects = body;
-          this.filter();
-        });
-    }
-  }
+  },
+  created() {
+    this.$http.get('subjects')
+      .then(({ body }) => {
+        this.filterData.subjects = body;
+        this.filter();
+      });
+  },
+};
 </script>
 
 

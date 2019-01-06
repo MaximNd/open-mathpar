@@ -58,6 +58,14 @@
                 <v-text-field v-model="task.order" label="Task order" required></v-text-field>
               </v-flex>
               <v-flex xs12>
+                <v-btn color="info" @click="triggerFileInput">
+                  Upload text
+                </v-btn>
+                <input @change="uploadText" type="file" ref="text_file" hidden>
+                <v-btn color="info" @click="saveText">Save text</v-btn>
+                <v-btn color="info" @click="savePDFAndTex">Save PDF</v-btn>
+              </v-flex>
+              <v-flex xs12>
                 <v-layout wrap>
                   <v-flex xs12>
                     <v-card>
@@ -114,7 +122,7 @@
                             </v-container>
                           </v-card-actions>
                           <v-card-text class="original-input" v-show="!task.exercises[index].task.isLatex">
-                            <v-text-field v-model="task.exercises[index].task.task" label="Exercise" multi-line auto-grow ></v-text-field>
+                            <v-textarea v-model="task.exercises[index].task.task" label="Exercise" auto-grow ></v-textarea>
                           </v-card-text>
                           <v-card-text class="original-output" v-show="!task.exercises[index].task.isLatex">
                             <h3>Output: </h3>
@@ -144,7 +152,7 @@
                             </v-container>
                           </v-card-actions>
                           <v-card-text class="original-input" v-show="!task.exercises[index].fullSolution.isLatex">
-                            <v-text-field v-model="task.exercises[index].fullSolution.task" label="Full Solution" multi-line auto-grow ></v-text-field>
+                            <v-textarea v-model="task.exercises[index].fullSolution.task" label="Full Solution" auto-grow ></v-textarea>
                           </v-card-text>
                           <v-card-text class="original-output" v-show="!task.exercises[index].fullSolution.isLatex">
                             <h3>Output: </h3>
@@ -162,8 +170,8 @@
                         <span class="headline primary--text">Exercise №{{ n }}</span>
                       </v-card-title>
                       <v-card-text>
-                        <v-text-field v-model="task.exercises[index].text" multi-line label="Task Text" required></v-text-field>
-                        <v-text-field v-model="task.exercises[index].fullSolution" multi-line label="Full Solution" required></v-text-field>
+                        <v-textarea v-model="task.exercises[index].text" label="Task Text" required></v-textarea>
+                        <v-textarea v-model="task.exercises[index].fullSolution" label="Full Solution" required></v-textarea>
                         <v-text-field v-model="task.exercises[index].answer" label="Answer" required></v-text-field>
                       </v-card-text>
                     </v-card> -->
@@ -185,140 +193,259 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        task: {
-          schoolId: '',
-          teacherId: '',
-          name: '',
-          difficultyLevel: undefined,
-          subjectId: undefined,
-          classNumber: undefined,
-          theme: undefined,
-          isTest: true,
-          isAllow: undefined,
-          order: undefined,
-          exercises: []
-        },
-        index: 0,
-        subjects: [],
-        classes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        themes: [],
-        exercisesCount: 2,
-        createTaskDialog: false
-      };
+export default {
+  data() {
+    return {
+      task: {
+        schoolId: '',
+        teacherId: '',
+        name: '',
+        difficultyLevel: undefined,
+        subjectId: undefined,
+        classNumber: undefined,
+        theme: undefined,
+        isTest: true,
+        isAllow: undefined,
+        order: undefined,
+        exercises: [],
+      },
+      index: 0,
+      subjects: [],
+      classes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      themes: [],
+      exercisesCount: 2,
+      createTaskDialog: false,
+    };
+  },
+  computed: {
+    exercisesIndexes() {
+      return Array(...{ length: this.task.exercises.length }).map((_, index) => ({ value: Number(index), text: Number(index + 1) }));
     },
-    computed: {
-      exercisesIndexes() {
-        return Array.apply(null, { length: this.task.exercises.length }).map((_, index) => ({value: Number(index), text: Number(index + 1)}));
+  },
+  watch: {
+    'task.subjectId': function (newSubjectId) {
+      let allThemes = this.subjects.find(subject => subject._id === newSubjectId).themes;
+      if (typeof this.task.classNumber !== 'undefined') {
+        allThemes = allThemes.filter(theme => theme.class === this.task.classNumber);
+      }
+      this.themes = allThemes;
+    },
+    'task.classNumber': function (newClassNumber) {
+      if (typeof this.task.subjectId !== 'undefined') {
+        this.themes = this.subjects.find(subject => subject._id === this.task.subjectId).themes.filter(theme => theme.class === newClassNumber);
       }
     },
-    watch: {
-      'task.subjectId'(newSubjectId) {
-        let allThemes = this.subjects.find(subject => subject._id === newSubjectId).themes;
-        if (typeof this.task.classNumber !== 'undefined') {
-          allThemes = allThemes.filter(theme => theme.class === this.task.classNumber);
-        }
-        this.themes = allThemes;
-      },
-      'task.classNumber'(newClassNumber) {
-        if (typeof this.task.subjectId !== 'undefined') {
-          this.themes = this.subjects.find(subject => subject._id === this.task.subjectId).themes.filter(theme => theme.class === newClassNumber);
-        }
-      }
+  },
+  methods: {
+    triggerFileInput() {
+      this.$refs.text_file.click();
     },
-    methods: {
-      createTask() {
-        this.task.isAllow = this.task.isTest;
-        const exercises = this.task.exercises.map(exercise => ({ text: exercise.task.task, fullSolution: exercise.fullSolution.task, answer: exercise.fullSolution.result }));
-        this.$store.dispatch('createTask', Object.assign({}, this.task, { exercises, class: this.task.classNumber }))
-          .then(() => {
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      },
-      execute(index, field) {
-        this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.task.exercises[index][field].task })
-          .then(({ body }) => {
-            if (body.status === 'OK') {
-              let latexArr = body.latex.split('\n');
-              const latex = latexArr.reduce((latex, latexArrEl) => {
-                if (latexArrEl !== '') {
-                  latex += `<div>${latexArrEl}</div>`;
-                }
-                return latex;
-              }, '');
-              this.task.exercises[index][field].latex = latex;
-              this.task.exercises[index][field].result = body.result;
-              setTimeout(() => {
-                this.$nextTick(() => {
-                  window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
-                });
-              }, 0);
-              if (!this.task.exercises[index][field].isLatex) {
-                this.swap(index, field);
+    uploadText(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        const that = this;
+        reader.onload = function (e) {
+          /** @type {String} */
+          const content = reader.result;
+          const lines = content.split(/[\r\n]+/g);
+          const exercises = [];
+
+          let isTaskParsing = false;
+
+          let isTextParsing = true;
+          let isSolutionParsing = false;
+
+          let isWriteToText = true;
+          const taskRegExp = /TASK [\d]{2}/;
+          const endTextSeparatorRegExp = /---/;
+          const endTaskBodySeparator = /===/;
+
+          lines.forEach((line, i) => {
+            console.log(isTaskParsing);
+            if (!isTaskParsing && taskRegExp.test(line)) {
+              isTaskParsing = true;
+              isTextParsing = true;
+              console.log(1);
+              exercises.push({
+                task: {
+                  task: line,
+                  result: '',
+                  latex: '<p>No result yet</p>',
+                  isLatex: false,
+                },
+                fullSolution: {
+                  task: '',
+                  result: '',
+                  latex: '<p>No result yet</p>',
+                  isLatex: false,
+                },
+              });
+            } else if (isTaskParsing && isTextParsing) {
+              if (endTextSeparatorRegExp.test(line)) {
+                isWriteToText = false;
+              } else if (endTaskBodySeparator.test(line)) {
+                isSolutionParsing = true;
+                isTextParsing = false;
+                isWriteToText = true;
+              } else if (isWriteToText) {
+                exercises[exercises.length - 1].task.task += (`${line}\r\n`);
+              } else {
+                exercises[exercises.length - 1].task.result += (`${line}\r\n`);
+              }
+            } else if (isTaskParsing && isSolutionParsing) {
+              if (endTextSeparatorRegExp.test(line)) {
+                isWriteToText = false;
+              } else if (endTaskBodySeparator.test(line)) {
+                isTaskParsing = false;
+                isSolutionParsing = false;
+                isWriteToText = true;
+              } else if (isWriteToText) {
+                exercises[exercises.length - 1].fullSolution.task += (`${line}\r\n`);
+              } else {
+                exercises[exercises.length - 1].fullSolution.result += (`${line}\r\n`);
               }
             }
-          })
-      },
-      swap(index, field) {
-        this.task.exercises[index][field].isLatex = !this.task.exercises[index][field].isLatex;
-      },
-      createExercise(index) {
-        this.task.exercises.splice(index, 0, {
-          task: {
-            task: '',
-            result: '',
-            latex: '<p>No result yet</p>',
-            isLatex: false
-          },
-          fullSolution: {
-            task: '',
-            result: '',
-            latex: '<p>No result yet</p>',
-            isLatex: false
-          }
-          // images: {
-          //   type: [String],
-          //   required: false
-          // }
-        });
-      },
-      deleteExercise(index) {
-        this.task.exercises.splice(index, 1);
+          });
+          that.task.exercises = exercises;
+          that.task.exercises.forEach((exercise, i) => {
+            that.execute(i, 'task');
+            that.execute(i, 'fullSolution');
+          });
+        };
+        reader.readAsText(file);
+      } else {
+        // TODO Handle if no file
       }
     },
-    created() {
-      this.$http.get(`subjects`)
-        .then(data => { this.subjects = data.body; });
-      const client = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client;
-      this.task.schoolId = client.schoolId._id;
-      this.task.teacherId = client._id;
-      for (let i = 0; i < this.exercisesCount; ++i) {
-        this.task.exercises.push({
-          task: {
-            task: '',
-            result: '',
-            latex: '<p>No result yet</p>',
-            isLatex: false
-          },
-          fullSolution: {
-            task: '',
-            result: '',
-            latex: '<p>No result yet</p>',
-            isLatex: false
-          }
-          // images: {
-          //   type: [String],
-          //   required: false
-          // }
+    saveText() {
+      const text = this.task.name + this.task.exercises.reduce((text, { task, fullSolution }) => {
+        text += (`${task.task}\r\n"---"\r\n${task.result}\r\n"==="\r\n${fullSolution.task}\r\n"---"\r\n${fullSolution.result}\r\n"==="\r\n`);
+        return text;
+      }, '');
+      const blob = new Blob([text], { type: 'text/plain' });
+      const anchor = document.createElement('a');
+      const objURL = window.URL.createObjectURL(blob);
+      anchor.download = this.task.name || 'TASK';
+      anchor.href = objURL;
+      anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
+      anchor.click();
+      // clean
+      window.URL.revokeObjectURL(objURL);
+    },
+    savePDFAndTex() {
+      const formData = new FormData();
+      formData.append('format', 'pdf');
+      formData.append('filename', '');
+      formData.append('pdf_page_width', 21);
+      formData.append('pdf_page_height', 29.7);
+      formData.append('task', '2');
+      formData.append('answer', '2');
+      formData.append('latex', `$ 2 $
+
+$ out: $
+
+$ \\ $
+
+$ 2 $`);
+
+      this.$http.post('http://localhost:8080/api/export', formData)
+        .then(({ body }) => {
+          // window.open('http://localhost:8081/#/');
+          window.open(`http://localhost:8080/api/export?format=tex&filename=${body.filename.replace(/\.pdf$/, '.tex')}`);
+          console.log(body);
         });
-      }
+    },
+    createTask() {
+      this.task.isAllow = this.task.isTest;
+      const exercises = this.task.exercises.map(exercise => ({ text: exercise.task.task, fullSolution: exercise.fullSolution.task, answer: exercise.fullSolution.result }));
+      this.$store.dispatch('createTask', Object.assign({}, this.task, { exercises, class: this.task.classNumber }))
+        .then(() => {
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
+    },
+    execute(index, field) {
+      this.$http.post('http://localhost:8080/api/calc', { task: this.task.exercises[index][field].task })
+        .then(({ body }) => {
+          if (body.status === 'OK') {
+            const latexArr = body.latex.split('\n');
+            const latex = latexArr.reduce((latex, latexArrEl) => {
+              if (latexArrEl !== '') {
+                latex += `<div>${latexArrEl}</div>`;
+              }
+              return latex;
+            }, '');
+            this.task.exercises[index][field].latex = latex;
+            this.task.exercises[index][field].result = body.result;
+            setTimeout(() => {
+              this.$nextTick(() => {
+                window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
+              });
+            }, 0);
+            if (!this.task.exercises[index][field].isLatex) {
+              this.swap(index, field);
+            }
+          }
+        });
+    },
+    swap(index, field) {
+      this.task.exercises[index][field].isLatex = !this.task.exercises[index][field].isLatex;
+    },
+    createExercise(index) {
+      this.task.exercises.splice(index, 0, {
+        task: {
+          task: '',
+          result: '',
+          latex: '<p>No result yet</p>',
+          isLatex: false,
+        },
+        fullSolution: {
+          task: '',
+          result: '',
+          latex: '<p>No result yet</p>',
+          isLatex: false,
+        },
+        // images: {
+        //   type: [String],
+        //   required: false
+        // }
+      });
+    },
+    deleteExercise(index) {
+      this.task.exercises.splice(index, 1);
+    },
+  },
+  created() {
+    this.$http.get('subjects')
+      .then((data) => { this.subjects = data.body; });
+    const client = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client;
+    this.task.schoolId = client.schoolId._id;
+    this.task.teacherId = client._id;
+    for (let i = 0; i < this.exercisesCount; ++i) {
+      this.task.exercises.push({
+        task: {
+          task: '',
+          result: '',
+          latex: '<p>No result yet</p>',
+          isLatex: false,
+        },
+        fullSolution: {
+          task: '',
+          result: '',
+          latex: '<p>No result yet</p>',
+          isLatex: false,
+        },
+        // images: {
+        //   type: [String],
+        //   required: false
+        // }
+      });
     }
-  }
+  },
+};
 </script>
 
 <style scoped>

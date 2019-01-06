@@ -49,54 +49,54 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        items: [
-          {
-            value: false,
-            name: 'School',
-            val: 159
-          },
-          {
-            value: false,
-            name: 'Address',
-            val: 'asdf 112.fc'
-          },
-          {
-            value: false,
-            name: 'Number of Teachers',
-            val: 100
-          },
-          {
-            value: false,
-            name: 'Number of Students',
-            val: 262
-          },
-          {
-            value: false,
-            name: 'AVG SR Mark',
-            val: 262
-          },
-          {
-            value: false,
-            name: 'AVG KR Mark',
-            val: 262
-          },
-          {
-            value: false,
-            name: 'AVG SR Dispersion',
-            val: 262
-          },
-          {
-            value: false,
-            name: 'AVG KR Dispersion',
-            val: 262
-          }
-        ]
-      }
-    }
-  }
+export default {
+  data() {
+    return {
+      items: [
+        {
+          value: false,
+          name: 'School',
+          val: 159,
+        },
+        {
+          value: false,
+          name: 'Address',
+          val: 'asdf 112.fc',
+        },
+        {
+          value: false,
+          name: 'Number of Teachers',
+          val: 100,
+        },
+        {
+          value: false,
+          name: 'Number of Students',
+          val: 262,
+        },
+        {
+          value: false,
+          name: 'AVG SR Mark',
+          val: 262,
+        },
+        {
+          value: false,
+          name: 'AVG KR Mark',
+          val: 262,
+        },
+        {
+          value: false,
+          name: 'AVG SR Dispersion',
+          val: 262,
+        },
+        {
+          value: false,
+          name: 'AVG KR Dispersion',
+          val: 262,
+        },
+      ],
+    };
+  },
+};
 </script>
 
 

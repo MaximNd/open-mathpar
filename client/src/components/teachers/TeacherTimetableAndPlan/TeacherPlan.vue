@@ -41,55 +41,55 @@
 </template>
 
 <script>
-  import EditPlan from './EditPlan.vue';
-  import DeletePlan from './DeletePlan.vue';
+import EditPlan from './EditPlan.vue';
+import DeletePlan from './DeletePlan.vue';
 
-  export default {
-    props: {
-      chooseMode: {
-        type: Boolean,
-        required: true
-      },
-      planKey: {
-        type: String,
-        required: true
-      }
+export default {
+  props: {
+    chooseMode: {
+      type: Boolean,
+      required: true,
     },
-    data() {
-      return {
-        lectures: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-        tasks: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-        date: null,
-        menu: false,
-        modal: false
-      };
+    planKey: {
+      type: String,
+      required: true,
     },
-    computed: {
-      isThisTeacherPlan() {
-        return this.$store.getters[this.planKey].teacherId._id === this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
-      },
-      planName() {
-        return this.$store.getters[this.planKey].name;
-      },
-      timetable() {
-        return this.$store.getters[this.planKey].timetable.reduce((resultTimetable, lesson) => {
-          resultTimetable[0].push(lesson.lectionId);
-          resultTimetable[1].push(lesson.taskId);
-          resultTimetable[2].push(new Date(lesson.date).toDateString());
-          return resultTimetable;
-        }, [['Lections'], ['Tasks'], ['Date']]);
-      }
+  },
+  data() {
+    return {
+      lectures: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
+      tasks: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
+      date: null,
+      menu: false,
+      modal: false,
+    };
+  },
+  computed: {
+    isThisTeacherPlan() {
+      return this.$store.getters[this.planKey].teacherId._id === this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
     },
-    methods: {
-      choosePlan() {
-        this.$emit('clicked-choose', this.$store.getters[this.planKey]._id);
-      }
+    planName() {
+      return this.$store.getters[this.planKey].name;
     },
-    components: {
-      appEditPlan: EditPlan,
-      appDeletePlan: DeletePlan
-    }
-  };
+    timetable() {
+      return this.$store.getters[this.planKey].timetable.reduce((resultTimetable, lesson) => {
+        resultTimetable[0].push(lesson.lectionId);
+        resultTimetable[1].push(lesson.taskId);
+        resultTimetable[2].push(new Date(lesson.date).toDateString());
+        return resultTimetable;
+      }, [['Lections'], ['Tasks'], ['Date']]);
+    },
+  },
+  methods: {
+    choosePlan() {
+      this.$emit('clicked-choose', this.$store.getters[this.planKey]._id);
+    },
+  },
+  components: {
+    appEditPlan: EditPlan,
+    appDeletePlan: DeletePlan,
+  },
+};
 </script>
 
 <style scoped>

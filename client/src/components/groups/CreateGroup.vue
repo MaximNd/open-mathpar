@@ -38,27 +38,27 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        group: {
-          name: '',
-          course: ''
-        },
-        dialog: null
-      };
+export default {
+  data() {
+    return {
+      group: {
+        name: '',
+        course: '',
+      },
+      dialog: null,
+    };
+  },
+  methods: {
+    createGroup() {
+      this.$store.dispatch('createGroup', this.group)
+        .then(() => {
+          this.$alertify.success('Success');
+          this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
     },
-    methods: {
-      createGroup() {
-        this.$store.dispatch('createGroup', this.group)
-          .then(() => {
-            this.$alertify.success('Success');
-            this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      }
-    }
-  }
+  },
+};
 </script>

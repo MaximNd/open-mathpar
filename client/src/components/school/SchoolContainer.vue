@@ -13,21 +13,21 @@
 </template>
 
 <script>
-  import SchoolData from './SchoolData.vue';
-  import SchoolFilials from './SchoolFilials.vue';
-  import SchoolTeachers from './SchoolTeachers.vue';
-  import SchoolStudents from './SchoolStudents.vue';
-  import SchoolGroups from './SchoolGroups.vue';
+import SchoolData from './SchoolData.vue';
+import SchoolFilials from './SchoolFilials.vue';
+import SchoolTeachers from './SchoolTeachers.vue';
+import SchoolStudents from './SchoolStudents.vue';
+import SchoolGroups from './SchoolGroups.vue';
 
-  export default {
-    components: {
-      appSchoolData: SchoolData,
-      appSchoolFilials: SchoolFilials,
-      appSchoolTeachers: SchoolTeachers,
-      appSchoolStudents: SchoolStudents,
-      appSchoolGroups: SchoolGroups
-    }
-  };
+export default {
+  components: {
+    appSchoolData: SchoolData,
+    appSchoolFilials: SchoolFilials,
+    appSchoolTeachers: SchoolTeachers,
+    appSchoolStudents: SchoolStudents,
+    appSchoolGroups: SchoolGroups,
+  },
+};
 
 </script>
 

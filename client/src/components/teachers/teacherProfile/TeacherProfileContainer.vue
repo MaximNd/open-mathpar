@@ -6,14 +6,11 @@
 
 
 <script>
-  import TeacherProfileData from './TeacherProfileData.vue';
+import TeacherProfileData from './TeacherProfileData.vue';
 
-  export default {
-    components: {
-      appTeacherProfileData: TeacherProfileData
-    }
-  };
+export default {
+  components: {
+    appTeacherProfileData: TeacherProfileData,
+  },
+};
 </script>
-
-
-

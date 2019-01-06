@@ -6,29 +6,29 @@
 </template>
 
 <script>
-  import TeacherPlan from './TeacherPlan.vue';
-  import TeacherTimetable from './TeacherTimetable.vue';
+import TeacherPlan from './TeacherPlan.vue';
+import TeacherTimetable from './TeacherTimetable.vue';
 
-  export default {
-    computed: {
-      isShow() {
-        return this.$store.getters.isShow;
-      }
+export default {
+  computed: {
+    isShow() {
+      return this.$store.getters.isShow;
     },
-    components: {
-      appTeacherTimetable: TeacherTimetable,
-      appTeacherPlan: TeacherPlan
-    },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.$store.commit('SET_PLAN', undefined);
-      })
-    },
-    beforeRouteLeave(to, from, next) {
-      this.$store.commit('SET_TASKS', []);
-      next();
-    }
-  };
+  },
+  components: {
+    appTeacherTimetable: TeacherTimetable,
+    appTeacherPlan: TeacherPlan,
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.$store.commit('SET_PLAN', undefined);
+    });
+  },
+  beforeRouteLeave(to, from, next) {
+    this.$store.commit('SET_TASKS', []);
+    next();
+  },
+};
 </script>
 
 <style scoped>

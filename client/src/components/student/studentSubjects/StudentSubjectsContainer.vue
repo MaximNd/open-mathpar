@@ -7,15 +7,15 @@
 
 
 <script>
-    import StudentSubjectsList from './StudentSubjectsList.vue';
-    import StudentSubjectPlan from './StudentSubjectPlan.vue';
+import StudentSubjectsList from './StudentSubjectsList.vue';
+import StudentSubjectPlan from './StudentSubjectPlan.vue';
 
-    export default {
-        components: {
-            appStudentSubjectsList: StudentSubjectsList,
-            appStudentSubjectPlan: StudentSubjectPlan
-        }
-    }
+export default {
+  components: {
+    appStudentSubjectsList: StudentSubjectsList,
+    appStudentSubjectPlan: StudentSubjectPlan,
+  },
+};
 </script>
 
 

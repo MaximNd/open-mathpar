@@ -6,11 +6,11 @@
 
 
 <script>
-    import StudentProfileData from './StudentProfileData.vue';
+import StudentProfileData from './StudentProfileData.vue';
 
-    export default {
-        components: {
-            appStudentProfileData: StudentProfileData
-        }
-    };
+export default {
+  components: {
+    appStudentProfileData: StudentProfileData,
+  },
+};
 </script>

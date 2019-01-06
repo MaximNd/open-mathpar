@@ -8,22 +8,22 @@ import student from './modules/student';
 import teacher from './modules/teacher';
 import lection from './modules/lection';
 import task from './modules/task';
-import taskExecution from './modules/task_execution'
+import taskExecution from './modules/task_execution';
 import plan from './modules/plan';
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-    modules: {
-        currentUser,
-        headTeacher,
-        class_,
-        group,
-        student,
-        teacher,
-        lection,
-        task,
-        taskExecution,
-        plan
-    }
+  modules: {
+    currentUser,
+    headTeacher,
+    class_,
+    group,
+    student,
+    teacher,
+    lection,
+    task,
+    taskExecution,
+    plan,
+  },
 });

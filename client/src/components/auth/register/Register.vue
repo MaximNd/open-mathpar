@@ -9,7 +9,7 @@
           </v-card-title>
 
           <v-card-text>
-            
+
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
@@ -177,105 +177,105 @@
 
 
 <script>
-  export default {
-    data() {
-      return {
-        testFormData: new FormData(),
-        director: {
-          user: {
-            lastName: '',
-            firstName: '',
-            middleName: '',
-            gender: '',
-            email: '',
-            password: '',
-            birthday: null,
-            role: 'director',
-            image: ''
-          }
-          // ,
-          // isMainDirector: true,
-          // access: false
+export default {
+  data() {
+    return {
+      testFormData: new FormData(),
+      director: {
+        user: {
+          lastName: '',
+          firstName: '',
+          middleName: '',
+          gender: '',
+          email: '',
+          password: '',
+          birthday: null,
+          role: 'director',
+          image: '',
         },
-        school: {
-          name: '',
-          number: '',
-          isPhilial: false,
-          country: '',
-          region: '',
-          city: '',
-          district: '',
-          address: ''
-        },
-        authority: {
-          user: {
-            lastName: '',
-            firstName: '',
-            middleName: '',
-            gender: '',
-            email: '',
-            password: '',
-            birthday: null,
-            role: 'admin',
-            image: ''
-          },
-          company: ''
-        },
-        authorities: [
-          'Alabama', 'Alaska', 'American Samoa', 'Arizona',
-          'Arkansas', 'California', 'Colorado', 'Connecticut',
-          'Delaware', 'District of Columbia', 'Federated States of Micronesia',
-          'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho',
-          'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-          'Louisiana', 'Maine', 'Marshall Islands', 'Maryland',
-          'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
-          'Missouri', 'Montana', 'Nebraska', 'Nevada',
-          'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
-          'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio',
-          'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico',
-          'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
-          'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia',
-          'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-        ],
-        menu: false,
-        modal: false,
-        authorityModel: null,
-        authorityModal: false,
-        authorityExist: true
-      };
-    },
-    methods: {
-      registerUser() {
-        this.testFormData.append('text', 'text');
-        this.testFormData.append('director', JSON.stringify(this.director));
-        this.testFormData.append('school', JSON.stringify(this.school));
-        this.testFormData.append('authority', JSON.stringify(this.authority));
-        // this.testFormData.append('obj', { test: 'value', test2: [1, 2, 3, 4], test3: { key: 1234 } });
-        // console.log(this.testFormData);
-        // this.$http.post('user/signup', this.testFormData).then(res => console.log(res));
-        // this.$auth.register(this.testFormData);
-        this.$auth.register({
-          body: this.testFormData
-        });
+        // ,
+        // isMainDirector: true,
+        // access: false
       },
-      onPickFile(who) {
-        this.$refs[who].click();
+      school: {
+        name: '',
+        number: '',
+        isPhilial: false,
+        country: '',
+        region: '',
+        city: '',
+        district: '',
+        address: '',
       },
-      onFilePicked(event, who) {
-        this.testFormData.append(who, event.target.files[0]);
-        // let fileReader = new FileReader();
-        this.$refs[`${who}AvatarPreview`].setAttribute('src', URL.createObjectURL(event.target.files[0]));
-        // fileReader.onload = (e) => {
-        //     this.$refs[`${who}AvatarPreview`].setAttribute('src', e.target.result);
-        // };
-        // fileReader.readAsDataURL(event.target.files[0]);
-      }
+      authority: {
+        user: {
+          lastName: '',
+          firstName: '',
+          middleName: '',
+          gender: '',
+          email: '',
+          password: '',
+          birthday: null,
+          role: 'admin',
+          image: '',
+        },
+        company: '',
+      },
+      authorities: [
+        'Alabama', 'Alaska', 'American Samoa', 'Arizona',
+        'Arkansas', 'California', 'Colorado', 'Connecticut',
+        'Delaware', 'District of Columbia', 'Federated States of Micronesia',
+        'Florida', 'Georgia', 'Guam', 'Hawaii', 'Idaho',
+        'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
+        'Louisiana', 'Maine', 'Marshall Islands', 'Maryland',
+        'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
+        'Missouri', 'Montana', 'Nebraska', 'Nevada',
+        'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+        'North Carolina', 'North Dakota', 'Northern Mariana Islands', 'Ohio',
+        'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico',
+        'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee',
+        'Texas', 'Utah', 'Vermont', 'Virgin Island', 'Virginia',
+        'Washington', 'West Virginia', 'Wisconsin', 'Wyoming',
+      ],
+      menu: false,
+      modal: false,
+      authorityModel: null,
+      authorityModal: false,
+      authorityExist: true,
+    };
+  },
+  methods: {
+    registerUser() {
+      this.testFormData.append('text', 'text');
+      this.testFormData.append('director', JSON.stringify(this.director));
+      this.testFormData.append('school', JSON.stringify(this.school));
+      this.testFormData.append('authority', JSON.stringify(this.authority));
+      // this.testFormData.append('obj', { test: 'value', test2: [1, 2, 3, 4], test3: { key: 1234 } });
+      // console.log(this.testFormData);
+      // this.$http.post('user/signup', this.testFormData).then(res => console.log(res));
+      // this.$auth.register(this.testFormData);
+      this.$auth.register({
+        body: this.testFormData,
+      });
     },
-    created() {
-      console.log(this.$refs);
-      // this.testFormData = new FormData(this.$refs.form);
-    }
-  };
+    onPickFile(who) {
+      this.$refs[who].click();
+    },
+    onFilePicked(event, who) {
+      this.testFormData.append(who, event.target.files[0]);
+      // let fileReader = new FileReader();
+      this.$refs[`${who}AvatarPreview`].setAttribute('src', URL.createObjectURL(event.target.files[0]));
+      // fileReader.onload = (e) => {
+      //     this.$refs[`${who}AvatarPreview`].setAttribute('src', e.target.result);
+      // };
+      // fileReader.readAsDataURL(event.target.files[0]);
+    },
+  },
+  created() {
+    console.log(this.$refs);
+    // this.testFormData = new FormData(this.$refs.form);
+  },
+};
 </script>
 
 

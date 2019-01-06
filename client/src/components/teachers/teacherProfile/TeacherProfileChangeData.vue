@@ -40,14 +40,14 @@
 
 
 <script>
-  export default {
-    props: ['changeTeacherDataDialog'],
-    methods: {
-      close() {
-        this.$emit('closeDialog');
-      }
-    }
-  }
+export default {
+  props: ['changeTeacherDataDialog'],
+  methods: {
+    close() {
+      this.$emit('closeDialog');
+    },
+  },
+};
 </script>
 
 

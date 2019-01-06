@@ -6,14 +6,11 @@
 
 
 <script>
-  import HeadTeacherProfileData from './HeadTeacherProfileData.vue';
+import HeadTeacherProfileData from './HeadTeacherProfileData.vue';
 
-  export default {
-    components: {
-      appHeadTeacherProfileData: HeadTeacherProfileData
-    }
-  };
+export default {
+  components: {
+    appHeadTeacherProfileData: HeadTeacherProfileData,
+  },
+};
 </script>
-
-
-

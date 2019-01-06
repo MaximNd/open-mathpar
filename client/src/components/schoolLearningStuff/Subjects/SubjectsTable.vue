@@ -164,50 +164,106 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        themesToAdd: [
-          {
-            name: '',
-            class: '',
-            order: ''
-          }
-        ],
-        rowsPerPageItems: [4, 8, 12],
-        pagination: {
-          rowsPerPage: 4
+export default {
+  data() {
+    return {
+      themesToAdd: [
+        {
+          name: '',
+          class: '',
+          order: '',
         },
-        subjects: [
+      ],
+      rowsPerPageItems: [4, 8, 12],
+      pagination: {
+        rowsPerPage: 4,
+      },
+      subjects: [
 
-        ],
-        addThemesDialogs: [],
-        listGroup: [],
-        themesHeaders: [
-          {
-            text: 'Name',
-            align: 'left',
-            value: 'name',
-            sortable: false
-          },
-          {
-            text: 'Class',
-            align: 'right',
-            value: 'class',
-            sortable: false
-          },
-          {
-            text: 'Order',
-            align: 'right',
-            value: 'order'
+      ],
+      addThemesDialogs: [],
+      listGroup: [],
+      themesHeaders: [
+        {
+          text: 'Name',
+          align: 'left',
+          value: 'name',
+          sortable: false,
+        },
+        {
+          text: 'Class',
+          align: 'right',
+          value: 'class',
+          sortable: false,
+        },
+        {
+          text: 'Order',
+          align: 'right',
+          value: 'order',
+        },
+      ],
+    };
+  },
+  watch: {
+    subjects(newSubjects) {
+      this.addThemesDialogs = this.subjects.map(() => false);
+      newSubjects.forEach((subject) => {
+        subject.themes.sort((a, b) => {
+          if (a.order < b.order) {
+            return -1;
           }
-        ]
-      };
+          if (a.order > b.order) {
+            return 1;
+          }
+          return 0;
+        });
+        this.listGroup.push(subject.themes.map(() => false));
+      });
     },
-    watch: {
-      subjects(newSubjects) {
-        this.addThemesDialogs = this.subjects.map(() => false);
-        newSubjects.forEach(subject => {
+  },
+  methods: {
+    addThemeToList() {
+      this.themesToAdd.push({
+        name: '',
+        class: '',
+        order: '',
+      });
+    },
+    deleteThemeFromList(index) {
+      this.themesToAdd.splice(index, 1);
+    },
+    addThemesToSubject(subjectIndex, dialogIndex) {
+      const client = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client;
+      const teacherId = client._id;
+      const schoolId = client.schoolId._id;
+      const themes = this.themesToAdd.map(theme => ({ ...theme, teacher: teacherId, school: schoolId }));
+      const subjectId = this.subjects[subjectIndex]._id;
+      this.$http.put(`subject/${subjectId}/themes`, { themes })
+        .then(({ body }) => {
+          this.subjects[subjectIndex].themes.push(...body.themes);
+          this.subjects[subjectIndex].themes.sort((a, b) => {
+            if (a.order < b.order) {
+              return -1;
+            }
+            if (a.order > b.order) {
+              return 1;
+            }
+            return 0;
+          });
+          this.addThemesDialogs.splice(dialogIndex, 1, false);
+          this.$alertify.success('Success');
+        })
+        .catch(() => {
+          this.$alertify.error('Error! Try again later please.');
+        });
+    },
+  },
+  created() {
+    this.$http.get('subjects')
+      .then(({ body }) => {
+        const subjects = body;
+
+        subjects.forEach((subject) => {
           subject.themes.sort((a, b) => {
             if (a.order < b.order) {
               return -1;
@@ -217,67 +273,11 @@
             }
             return 0;
           });
-          this.listGroup.push(subject.themes.map(() => false));
         });
-      }
-    },
-    methods: {
-      addThemeToList() {
-        this.themesToAdd.push({
-            name: '',
-            class: '',
-            order: ''
-          });
-      },
-      deleteThemeFromList(index) {
-        this.themesToAdd.splice(index, 1);
-      },
-      addThemesToSubject(subjectIndex, dialogIndex) {
-        const client = this.$auth.user().clients.find(client => client.clientRole === 'teacher').client;
-        const teacherId = client._id;
-        const schoolId = client.schoolId._id;
-        const themes = this.themesToAdd.map(theme => ({ ...theme, teacher: teacherId, school: schoolId }));
-        const subjectId = this.subjects[subjectIndex]._id;
-        this.$http.put(`subject/${subjectId}/themes`, { themes })
-          .then(({ body }) => {
-            this.subjects[subjectIndex].themes.push(...body.themes);
-            this.subjects[subjectIndex].themes.sort((a, b) => {
-              if (a.order < b.order) {
-                return -1;
-              }
-              if (a.order > b.order) {
-                return 1;
-              }
-              return 0;
-            });
-            this.addThemesDialogs.splice(dialogIndex, 1, false);
-            this.$alertify.success('Success');
-          })
-          .catch(() => {
-            this.$alertify.error('Error! Try again later please.');
-          });
-      }
-    },
-    created() {
-      this.$http.get('subjects')
-        .then(({ body }) => {
-          const subjects = body;
-
-          subjects.forEach(subject => {
-            subject.themes.sort((a, b) => {
-              if (a.order < b.order) {
-                return -1;
-              }
-              if (a.order > b.order) {
-                return 1;
-              }
-              return 0;
-            });
-          });
-          this.subjects = subjects.map(subject => ({ ...subject, value: false }));
-        });
-    }
-  }
+        this.subjects = subjects.map(subject => ({ ...subject, value: false }));
+      });
+  },
+};
 </script>
 
 <style scoped>

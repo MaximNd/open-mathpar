@@ -22,22 +22,22 @@
 
 
 <script>
-    export default {
-        data() {
-            return {
-                subjects: []
-            };
-        },
-        created() {
-            this.$http.get(`student/${this.$auth.user().clients.find(client => client.clientRole === 'student').client._id}/subjects`)
-                .then(data => { this.subjects = data.body });
-        },
-        methods: {
-            showPlan(plan) {
-                this.$store.commit('SET_PLAN', plan);
-            }
-        }
-    }
+export default {
+  data() {
+    return {
+      subjects: [],
+    };
+  },
+  created() {
+    this.$http.get(`student/${this.$auth.user().clients.find(client => client.clientRole === 'student').client._id}/subjects`)
+      .then((data) => { this.subjects = data.body; });
+  },
+  methods: {
+    showPlan(plan) {
+      this.$store.commit('SET_PLAN', plan);
+    },
+  },
+};
 </script>
 
 

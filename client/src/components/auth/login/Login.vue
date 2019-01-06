@@ -29,39 +29,39 @@
 </template>
 
 <script>
-  import Vue from 'vue';
+import Vue from 'vue';
 
-  export default {
-    beforeRouteEnter(to, from, next) {
-      if (Vue.auth.check()) {
-        Vue.router.push('/');
-      }
-      next();
-    },
-    data() {
-      return {
-        data: {
-          email: '',
-          password: ''
-        }
-      };
-    },
-    methods: {
-      loginUser() {
-        this.$auth.login({
-          body: this.data,
-          success: function (data) {
-            let user = data.body.user;
-            user.clients = data.body.clients;
-            this.$auth.user(user);
-            this.$store.commit('SET_USER', user);
-            this.$store.commit('SET_IS_LOGGED_IN_USER', true);
-          },
-          rememberMe: true
-        });
-      }
+export default {
+  beforeRouteEnter(to, from, next) {
+    if (Vue.auth.check()) {
+      Vue.router.push('/');
     }
-  }
+    next();
+  },
+  data() {
+    return {
+      data: {
+        email: '',
+        password: '',
+      },
+    };
+  },
+  methods: {
+    loginUser() {
+      this.$auth.login({
+        body: this.data,
+        success(data) {
+          const user = data.body.user;
+          user.clients = data.body.clients;
+          this.$auth.user(user);
+          this.$store.commit('SET_USER', user);
+          this.$store.commit('SET_IS_LOGGED_IN_USER', true);
+        },
+        rememberMe: true,
+      });
+    },
+  },
+};
 </script>
 
 

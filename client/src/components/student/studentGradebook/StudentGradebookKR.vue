@@ -44,23 +44,27 @@
 
 
 <script>
-  export default {
-    props: {
-      subjectsData: {
-        type: Array,
-        required: true
-      }
+export default {
+  props: {
+    subjectsData: {
+      type: Array,
+      required: true,
     },
-    data() {
-      return {
-        search: '',
-        headers: [
-          { text: 'Task', align: 'left', sortable: true, value: 'taskName' },
-          { text: 'Mark', align: 'right', sortable: false, value: 'studentMarks' }
-        ]
-      };
-    }
-  };
+  },
+  data() {
+    return {
+      search: '',
+      headers: [
+        {
+          text: 'Task', align: 'left', sortable: true, value: 'taskName',
+        },
+        {
+          text: 'Mark', align: 'right', sortable: false, value: 'studentMarks',
+        },
+      ],
+    };
+  },
+};
 </script>
 
 

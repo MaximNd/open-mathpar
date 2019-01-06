@@ -8,15 +8,15 @@
 </template>
 
 <script>
-  import CreateTask from './CreateTask.vue';
-  import TasksTable from './TasksTable.vue';
+import CreateTask from './CreateTask.vue';
+import TasksTable from './TasksTable.vue';
 
-  export default {
-    components: {
-      appTasksTable: TasksTable,
-      appCreateTask: CreateTask
-    }
-  };
+export default {
+  components: {
+    appTasksTable: TasksTable,
+    appCreateTask: CreateTask,
+  },
+};
 </script>
 
 <style scoped>

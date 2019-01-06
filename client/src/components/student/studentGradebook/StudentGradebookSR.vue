@@ -58,34 +58,42 @@
 
 
 <script>
-  export default {
-    props: {
-      subjectsData: {
-        type: Array,
-        required: true
-      }
+export default {
+  props: {
+    subjectsData: {
+      type: Array,
+      required: true,
     },
-    data() {
-      return {
-        search: '',
-        currentIndexOfSrTries: [],
-        headers: [
-          { text: 'Task', align: 'left', sortable: true, value: 'taskName' },
-          { text: '№', align: 'right', sortable: false, value: false, width: '20px' },
-          { text: 'Mark', align: 'right', sortable: false, value: 'studentMarks.mark' },
-          { text: 'Four Numbers', align: 'right', sortable: false, value: 'studentMarks.fourNumbers' }
-        ]
-      };
+  },
+  data() {
+    return {
+      search: '',
+      currentIndexOfSrTries: [],
+      headers: [
+        {
+          text: 'Task', align: 'left', sortable: true, value: 'taskName',
+        },
+        {
+          text: '№', align: 'right', sortable: false, value: false, width: '20px',
+        },
+        {
+          text: 'Mark', align: 'right', sortable: false, value: 'studentMarks.mark',
+        },
+        {
+          text: 'Four Numbers', align: 'right', sortable: false, value: 'studentMarks.fourNumbers',
+        },
+      ],
+    };
+  },
+  watch: {
+    subjectsData(newSubjectsData) {
+      this.currentIndexOfSrTries = newSubjectsData.map(subjectData => subjectData.tasks.map(task => task.studentMarks.length));
     },
-    watch: {
-      subjectsData(newSubjectsData) {
-        this.currentIndexOfSrTries = newSubjectsData.map(subjectData => subjectData.tasks.map(task => task.studentMarks.length));
-      }
-    },
-    created() {
+  },
+  created() {
 
-    }
-  };
+  },
+};
 </script>
 
 
