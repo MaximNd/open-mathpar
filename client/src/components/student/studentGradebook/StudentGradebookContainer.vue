@@ -1,6 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- <appStudentGgradebookList></appStudentGgradebookList> -->
     <v-layout wrap>
       <v-flex xs12>
         <v-flex xs12 class="text-xs-center"><h3 class="info--text">SR's</h3></v-flex>
@@ -118,7 +117,6 @@ export default {
       .then((data) => { this.studentSubjects = data.body; });
   },
   components: {
-    appStudentGgradebookList: StudentGgradebookList,
     appStudentGradebookSR: StudentGradebookSR,
     appStudentGradebookKR: StudentGradebookKR,
   },

@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import Vue from 'vue';
-import './plugins/vuetify'
+import './plugins/vuetify';
 import colors from 'vuetify/es5/util/colors';
 import VueResource from 'vue-resource';
 import Vuetify from 'vuetify';
@@ -33,8 +33,11 @@ Vue.use(VueAlertify);
 Vue.http.options.root = 'http://localhost:3000/app-api';
 
 Vue.use(VueAuth, {
+  // eslint-disable-next-line
   auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
+  // eslint-disable-next-line
   http: require('@websanova/vue-auth/drivers/http/vue-resource.1.x.js'),
+  // eslint-disable-next-line
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
   loginData: {
     url: `${Vue.http.options.root}/user/login`, method: 'POST', redirect: '/', fetchUser: false,
