@@ -125,6 +125,7 @@ module.exports = {
                     json: true,
                     body: {
                         userAnswer: req.params.answer,
+                        // TODO fix index to _id in all
                         dbSolutionAnswer: task.exercises[req.params.exercise].answer
                     }
                 }, function(error, response, body) {

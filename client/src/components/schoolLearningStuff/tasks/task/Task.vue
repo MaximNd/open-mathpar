@@ -334,6 +334,29 @@ export default {
                 { title: 'table', dataInsert: '=\\table();', offset: 8 },
               ],
             },
+            {
+              title: '3D plots',
+              items: [
+                { title: 'plot3d',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = x^2 / 20 + y^2 / 20;\\newline pl=\\plot3d([f], [-20, 20, -20, 20]);', offset: 100 },
+                { title: 'implicitPlot3d_1',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = -x^2+2y^2+3z^2-25; iPl=\\implicitPlot3d( f, -10, 10, -10, 10, -10, 10);', offset: 100 },
+                { title: 'implicitPlot3d_2',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = (x^2+y^2+z^2)^2-80xyz; iPl=\\implicitPlot3d( f, -10, 10, -10, 10, -10, 10);', offset: 100 },
+                { title: 'explicitPlot3d',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = (x^2+y^2)/20; ePl=\\explicitPlot3d( f, -10, 10, -10, 10, -10, 10, 40);', offset: 100 },
+              ]
+            },
+            {
+              title: 'Parametric 3D plots',
+              items: [
+                { title: 'Torus',  dataInsert: '\\clean(); SPACE = R64[u, v]; X=\\cos(u)*(3+\\cos(v)); Y=\\sin(u)*(3+\\cos(v)); Z=\\sin(v);pPl=\\parametricPlot3d(X, Y, Z, 0, 7, 0, 7, 64);', offset: 100 },
+                { title: 'Spiral',  dataInsert: '\\clean();  SPACE = R64[u, v]; X=\\cos(u)*(\\cos(v)+2); Y=\\sin(u) * (\\cos(v)+2); Z=\\sin(v)+u/2+1; pPl=\\parametricPlot3d(X,Y,Z, -6.3, 6.3, -3.15, 3.15, 64);', offset: 100 },
+                { title: 'Dini\'s surface',  dataInsert: '\\clean();  SPACE = R64[u, v]; X = \\cos(u) * \\sin(v) * 2.5; Y = \\sin(u) * \\sin(v) * 2.5; Z = \\cos(v) + \\ln(\\tg(v / 2)) + u / 6; pPl=\\parametricPlot3d(X, Y, Z, 0, 12.56, 0.001, 2, 64);', offset: 100 },
+              ]
+            },
+            {
+              title: 'Table in text',
+              items: [
+                { title: '"Table in text"',  dataInsert: '" \\begin{array}{|l|c|r|} \\hline \\hbox{This is}&{\\bf bold}&{\\it italic}\\\\ \\hline 1&2&3\\\\ \\hline \\end{array} "', offset: 100 },
+              ]
+            },
           ],
         },
       ],
@@ -423,7 +446,8 @@ export default {
       this.currentResults[exerciseId].active = true;
     },
     execute(exerciseId, section) {
-      if (this.currentResults[exerciseId].giveUp ? section !== 0 : (this.currentResults[exerciseId].passed || this.taskFinished)) return;
+      if (this.currentResults[exerciseId].giveUp
+        ? section !== 0 : (this.currentResults[exerciseId].passed || this.taskFinished)) return;
       let task;
       let sectionId;
       if (typeof section === 'undefined' || section === null) {
@@ -648,7 +672,7 @@ export default {
     },
     getCaretPosition(sectionId) {
       // console.log(this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[1].children[0].value)
-      const textarea = this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[1].children[0];
+      const textarea = this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[0].children[0].children[0].children[1];
       if (document.selection) {
         textarea.focus();
         const range = document.selection.createRange();
@@ -668,7 +692,7 @@ export default {
     setCaretPosition(position) {
       const start = position;
       const end = position;
-      const textarea = this.$refs[`studentAnswerTextField${this.lastSection.sectionId}`][0].$el.children[1].children[0];
+      const textarea = this.$refs[`studentAnswerTextField${this.lastSection.sectionId}`][0].$el.children[0].children[0].children[0].children[1];
       setTimeout(() => {
         if (textarea.setSelectionRange) {
           textarea.focus();

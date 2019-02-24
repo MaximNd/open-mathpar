@@ -1,3 +1,6 @@
+/* eslint-disable no-empty-pattern */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 import Vue from 'vue';
 import Router from 'vue-router';
 import VueResource from 'vue-resource';
@@ -6,15 +9,40 @@ Vue.use(Router);
 Vue.use(VueResource);
 
 const state = {
+  space: '',
   task: null,
   currentResults: [],
   sections: [],
   taskFinished: false,
-  resource: Vue.resource('http://localhost:8080/api/calc', {},
+  resource: Vue.resource(`${process.env.VUE_APP_API}/api/calc`, {},
     {
       calc: {
         method: 'POST',
-        url: 'http://localhost:8080/api/calc',
+        url: `${process.env.VUE_APP_API}/api/calc`,
+      },
+      space: {
+        method: 'POST',
+        url: `${process.env.VUE_APP_API}/api/space-memory`,
+      },
+      getMatrix3d: {
+        method: 'GET',
+        url: `${process.env.VUE_APP_API}/servlet/matrix3d?section_number={sectionId}`,
+      },
+      setMatrix3d: {
+        method: 'POST',
+        url: `${process.env.VUE_APP_API}/servlet/matrix3d?section_number={sectionId}`,
+      },
+      plot3dImplicit: {
+        method: 'POST',
+        url: `${process.env.VUE_APP_API}/api/plot3dimplicit`,
+      },
+      plot3dExplicit: {
+        method: 'POST',
+        url: `${process.env.VUE_APP_API}/api/plot3dexplicit`,
+      },
+      plot3dparametric: {
+        method: 'POST',
+        url: `${process.env.VUE_APP_API}/api/plot3dparametric`,
       },
     },
     {
@@ -23,10 +51,18 @@ const state = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      before(request) {
+        if (request.method === 'POST' && request.url.includes('/servlet/matrix3d?section_number=')) {
+          request.headers.map['Content-Type'] = ['application/x-www-form-urlencoded'];
+        }
+      },
     }),
 };
 
 const getters = {
+  space(state) {
+    return state.space;
+  },
   task(state) {
     return state.task;
   },
@@ -42,6 +78,9 @@ const getters = {
 };
 
 const mutations = {
+  SET_SPACE(state, payload) {
+    state.space = payload;
+  },
   SET_TASK(state, payload) {
     state.task = payload;
   },
@@ -70,14 +109,46 @@ const actions = {
       })
       .catch(err => reject(err)));
   },
-  calc({ commit, state }, payload) {
+  calc({ state }, payload) {
     return state.resource.calc({}, { sectionId: payload.sectionId, task: payload.task });
   },
-  giveUp({ commit }, payload) {
+  giveUp({}, payload) {
     return Vue.http.get(`task/${payload.id}/show-solution/${payload.exercise}`);
   },
-  check({ commit }, payload) {
+  check({}, payload) {
     return Vue.http.get(`task/${payload.id}/check-answer/${payload.exercise}/${payload.studentAnswers}`);
+  },
+  space({ commit, state }) {
+    return state.resource.space()
+      .then(({ body }) => {
+        commit('SET_SPACE', body.space);
+      });
+  },
+  getMatrix3d({ state }, payload) {
+    return new Promise((resolve, reject) => state.resource
+      .getMatrix3d({ sectionId: payload })
+      .then((res) => {
+        resolve(res);
+      })
+      .catch(reject));
+  },
+  setMatrix3d({ state }, payload) {
+    return new Promise((resolve, reject) => state.resource
+      .setMatrix3d({ sectionId: payload.sectionId }, payload.data)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch(reject));
+  },
+  plot3dImplicit({ state }, payload) {
+    return state.resource.plot3dImplicit({}, { sectionId: payload.sectionId, task: payload.task });
+  },
+  plot3dExplicit({ state }, payload) {
+    return state.resource.plot3dExplicit({}, { sectionId: payload.sectionId, task: payload.task });
+  },
+  plot3dparametric({ state }, payload) {
+    return state.resource
+      .plot3dparametric({}, { sectionId: payload.sectionId, task: payload.task });
   },
 };
 

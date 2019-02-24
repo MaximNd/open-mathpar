@@ -25,6 +25,7 @@ export default {
     if (store.getters.taskFinished) {
       reset();
       next();
+      // eslint-disable-next-line
     } else if (confirm('You have unsaved data!')) {
       reset();
       next();
