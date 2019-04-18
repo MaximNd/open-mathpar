@@ -77,7 +77,25 @@ export default {
           { title: 'Groups', icon: 'people', link: '/groups' },
           { title: 'School №445', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` },
         ];
-      } else if (this.$auth.user().role.indexOf('headTeacher') !== -1) {
+      } else if (this.$auth.user().role.indexOf('rector') !== -1) {
+        this.menuItems = [
+          { title: 'Profile', icon: 'description', link: `/profile/${this.$auth.user().id}` },
+          { title: 'New Dean', icon: 'person_add', link: `/rector/new-dean` },
+          // { title: 'Create Head Teacher', icon: 'accessibility', link: `/director/${this.$auth.user().id}/create-head-teacher` },
+          // { title: 'Create class', icon: 'group_add', link: `/director/${this.$auth.user().id}/create-class` },
+          // { title: 'Groups', icon: 'people', link: '/groups' },
+          { title: 'University', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.universityId._id}` },
+        ];
+      } else if (this.$auth.user().role.indexOf('dean') !== -1) {
+        this.menuItems = [
+          { title: 'Profile', icon: 'description', link: `/profile/${this.$auth.user().id}` },
+          { title: 'New Dean', icon: 'person_add', link: `/rector/new-dean` },
+          // { title: 'Create Head Teacher', icon: 'accessibility', link: `/director/${this.$auth.user().id}/create-head-teacher` },
+          // { title: 'Create class', icon: 'group_add', link: `/director/${this.$auth.user().id}/create-class` },
+          // { title: 'Groups', icon: 'people', link: '/groups' },
+          { title: 'University', icon: 'school', link: `/school/${this.$auth.user().clients[0].client.universityId._id}` },
+        ];
+      }else if (this.$auth.user().role.indexOf('headTeacher') !== -1) {
         this.menuItems = [
           { title: 'View Profile', icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
           { title: 'Create Member', icon: 'person_add', link: `/head-teacher/${this.$auth.user().id}/create-member` },

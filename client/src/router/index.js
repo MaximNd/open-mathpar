@@ -22,6 +22,9 @@ import DirectorCreateHeadTeacher from '../components/director/directorCreateHead
 import DirectorCreateClass from '../components/director/directorCreateClass/DirectorCreateClassContainer.vue';
 import Login from '../components/auth/login/Login.vue';
 import Register from '../components/auth/register/Register.vue';
+import RegisterUniversity from '../components/univesity/register/Register.vue';
+import NewDean from '../components/univesity/rector/NewDean.vue';
+import Rector from '../components/univesity/rector/Rector.vue';
 
 Vue.use(Router);
 
@@ -72,6 +75,16 @@ export default new Router({
       ],
     },
     {
+      path: '/rector',
+      name: 'rector',
+      component: Rector,
+      children: [
+        { path: 'new-dean', name: 'new-dean', component: NewDean },
+        // { path: 'create-head-teacher', name: 'director-create-head-teacher', component: DirectorCreateHeadTeacher },
+        // { path: 'create-class', name: 'director-create-class', component: DirectorCreateClass },
+      ],
+    },
+    {
       path: '/groups',
       name: 'groups',
       component: Groups,
@@ -105,6 +118,11 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register,
+    },
+    {
+      path: '/register/university',
+      name: 'registerUniversity',
+      component: RegisterUniversity,
     },
     {
       path: '',
