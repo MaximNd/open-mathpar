@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
 });
 
 // routes
-const { authority, director, headTeacher, student, teacher, user, class_, group, subject, lection, task, plan, school } = require('./routes/');
+const { authority, director, headTeacher, student, teacher, user, class_, group, subject, lection, task, plan, school, dean } = require('./routes/');
 const API = '/app-api';
 app.use(API, authority);
 app.use(API, director);
@@ -71,5 +71,6 @@ app.use(API, lection);
 app.use(API, task);
 app.use(API, plan);
 app.use(API, school);
+app.use(API, dean);
 
 app.listen(app.get('port'), () => console.log(`Server started on port ${app.get('port')}`));

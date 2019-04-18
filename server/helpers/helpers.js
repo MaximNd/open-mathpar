@@ -8,6 +8,10 @@ module.exports = {
     findShoollId(clients, role) {
         return clients.find(client => client.clientRole === role).client.schoolId;
     },
+    
+    findUniversityId(clients, role) {
+        return clients.find(client => client.clientRole === role).client.universityId;
+    },
 
     calculateFourNumbersBySRMark(mark) {
         // Count of numbers(number of solved tasks)
@@ -116,7 +120,7 @@ module.exports = {
 
     jwtSignUser(user) {
         const ONE_WEEK = 60 * 60 * 24 * 7;
-        return jwt.sign({
+        return jwt.sign({   
             sub: user.id
         }, config.authentication.jwtSecret, {
             expiresIn: ONE_WEEK

@@ -1,8 +1,10 @@
 //@ts-check
 const User = require('./../models/user');
 const Director = require('../models/director');
+const Rector = require('../models/rector');
 const Authority = require('../models/authority');
 const School = require('../models/school');
+const University = require('../models/university');
 const path = require('path');
 const uniqid = require('uniqid');
 
@@ -37,11 +39,16 @@ module.exports = {
             });
     },
     async register(req, res) {
+        if(req.body.rector) {
+            module.exports.registerUniversity(req, res);
+            return;
+        }
         const directorData = JSON.parse(req.body.director);
         const schoolData = JSON.parse(req.body.school);
         const authorityData = JSON.parse(req.body.authority) || undefined;
 
-        directorData.user.image = req.files.director[0].filename;
+        if(req.files && req.files.director)
+            directorData.user.image = req.files.director[0].filename;
     
         // Create User for director
         const directorUser = new User(directorData.user);
@@ -58,7 +65,8 @@ module.exports = {
 
         // Create Authority if not exist
         if (typeof schoolData.authorityId === 'undefined' && typeof authorityData !== 'undefined') {
-            authorityData.user.image = req.files.authority[0].filename;
+            if(req.files && req.files.authority)
+                authorityData.user.image = req.files.authority[0].filename;
 
             // Create User for authority
             const authorityUser = new User(authorityData.user);
@@ -98,6 +106,46 @@ module.exports = {
                     directorUser,
                     director,
                     school
+                });
+            });
+    },
+
+    async registerUniversity(req, res) {
+        const rectorData = JSON.parse(req.body.rector);
+        const schoolData = JSON.parse(req.body.university);
+
+        if(req.files && req.files.rector)
+            rectorData.user.image = req.files.rector[0].filename;
+        const rectorUser = new User(rectorData.user);
+        await rectorUser.save();
+
+        const rector = new Rector({
+            userId: rectorUser.id,
+            isMainRector: true,
+            access: false
+        });
+
+        await rector.save();
+
+        const university = new University({
+            name: schoolData.name,
+            isPhilial: schoolData.isPhilial,
+            country: schoolData.country,
+            region: schoolData.region,
+            city: schoolData.city,
+            district: schoolData.district,
+            address: schoolData.address,
+            rectorId: rectorUser.id
+        });
+
+        university.save()
+            .then(async data => {
+                rector.universityId = university.id;
+                await rector.save();
+                return res.send({
+                    rectorUser,
+                    rector,
+                    university
                 });
             });
     }
