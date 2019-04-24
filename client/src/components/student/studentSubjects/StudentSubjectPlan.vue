@@ -9,17 +9,30 @@
             </full-calendar>
             <v-card v-if="isShow        ">
                 <v-card-title class="primary--text title">
-                    <!-- Timetable -->
-                    Plan: {{ planName }}
+                    {{ $t('student.subjects.plan.name') }}: {{ planName }}
                 </v-card-title>
                 <v-card-text>
                     <v-data-table :items="timetable" hide-actions header-text="Text" class="mt-2 elevation-3">
                         <template slot="items" slot-scope="props">
                             <td class="text-xs-left title">{{ props.item[0] }}</td>
-                            <td class="text-xs-left text clickable" v-if="index != 0" v-for="(i, index) in props.item" :key="index">
-                                <span v-if="props.index === 1" @click="redirectToTask(i)">{{ i.name || i }}</span>
+                            <template v-for="(i, index) in props.item">
+                              <td class="text-xs-left text clickable" v-if="index != 0" :key="index">
+                                <span
+                                  v-if="props.index === 1"
+                                  :class="{ 'grey--text lighten-2': !i.isAllow }"
+                                  @click="redirectToTask(i)">
+                                  {{ i.name || i }}
+                                </span>
                                 <span v-else>{{ i.name || i }}</span>
-                            </td>
+                                <v-icon
+                                  v-if="!i.isTest && props.item[0] === tasks"
+                                  class="ml-1 mb-2"
+                                  color="error"
+                                  size="20">
+                                  fa-tasks
+                                </v-icon>
+                              </td>
+                            </template>
                         </template>
                     </v-data-table>
                 </v-card-text>
@@ -59,63 +72,68 @@ import FullCalendar from 'vue-fullcalendar';
 export default {
   data() {
     return {
-      fcEvents: [{
-        title: 'Sunny 725-727',
-        start: '2017-02-25',
-        end: '2017-02-27',
-        cssClass: 'family',
-      },
-      {
-        title: 'Lunfel 726-727',
-        start: '2017-02-26',
-        end: '2017-02-27',
-        cssClass: ['home', 'work'],
-      },
-      {
-        title: 'Lunfel 2/27-2/28',
-        start: '2017-02-27',
-        end: '2017-02-28',
-      },
-      {
-        title: 'Lunfel 2/27-2/28',
-        start: '2017-02-27',
-        end: '2017-02-28',
-      },
-      {
-        title: 'Lunfel 2/27-2/28',
-        start: '2017-02-27',
-        end: '2017-02-28',
-      },
-      {
-        title: 'Lunfel 2/26-3/05',
-        start: '2017-02-26',
-        end: '2017-03-05',
-      },
-      {
-        title: 'Lunfel 1/27-1/28',
-        start: '2017-01-27',
-        end: '2017-01-28',
-      },
-      {
-        title: 'Lunfel 1/27-2/2',
-        start: '2017-01-27',
-        end: '2017-02-02',
-      },
-      {
-        title: 'Lunfel 3/27-3/28',
-        start: '2017-03-27',
-        end: '2017-03-28',
-      },
+      fcEvents: [
+        {
+          title: 'Sunny 725-727',
+          start: '2017-02-25',
+          end: '2017-02-27',
+          cssClass: 'family',
+        },
+        {
+          title: 'Lunfel 726-727',
+          start: '2017-02-26',
+          end: '2017-02-27',
+          cssClass: ['home', 'work'],
+        },
+        {
+          title: 'Lunfel 2/27-2/28',
+          start: '2017-02-27',
+          end: '2017-02-28',
+        },
+        {
+          title: 'Lunfel 2/27-2/28',
+          start: '2017-02-27',
+          end: '2017-02-28',
+        },
+        {
+          title: 'Lunfel 2/27-2/28',
+          start: '2017-02-27',
+          end: '2017-02-28',
+        },
+        {
+          title: 'Lunfel 2/26-3/05',
+          start: '2017-02-26',
+          end: '2017-03-05',
+        },
+        {
+          title: 'Lunfel 1/27-1/28',
+          start: '2017-01-27',
+          end: '2017-01-28',
+        },
+        {
+          title: 'Lunfel 1/27-2/2',
+          start: '2017-01-27',
+          end: '2017-02-02',
+        },
+        {
+          title: 'Lunfel 3/27-3/28',
+          start: '2017-03-27',
+          end: '2017-03-28',
+        },
       ],
-      lec: false,
-      plan: [
-        ['Lec', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-        ['Prac', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-        ['Date', 'fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-      ],
+      lec: false
     };
   },
   computed: {
+    lections() {
+      return this.$t('student.subjects.plan.lections');
+    },
+    tasks() {
+      return this.$t('student.subjects.plan.tasks');
+    },
+    dateInPlan() {
+      return this.$t('student.subjects.plan.date');
+    },
     planName() {
       return this.$store.getters.plan.name;
     },
@@ -128,11 +146,17 @@ export default {
         resultTimetable[1].push(lesson.taskId);
         resultTimetable[2].push(new Date(lesson.date).toDateString());
         return resultTimetable;
-      }, [['Lections'], ['Tasks'], ['Date']]);
+      }, [[this.lections], [this.tasks], [this.dateInPlan]]);
     },
   },
   methods: {
     redirectToTask(task) {
+      if (!task.isAllow) return;
+      const studentClient = this.$auth.user().clients.find(client => client.clientRole === 'student').client;
+      const { variant } = this.$store.getters.plan.timetable
+        .find(({ taskId: { _id } }) => task._id === _id)
+        .studentsVariants.find(({ studentId }) => studentId === studentClient._id);
+      this.$store.commit('SET_VARIANT', variant);
       this.$router.push(`/task/${task._id}`);
     },
   },

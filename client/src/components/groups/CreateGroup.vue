@@ -4,29 +4,52 @@
       <v-card>
         <v-card-text>
           <v-dialog v-model="dialog" max-width="500px">
-            <v-btn color="primary" dark slot="activator">Create Group</v-btn>
+            <v-btn color="primary" dark slot="activator">
+              {{ $t('groups.createGroup.name') }}
+            </v-btn>
             <v-card>
               <v-card-title>
-                <span class="headline">New Group</span>
+                <span class="headline">
+                  {{ $t('groups.createGroup.newGroup') }}
+                </span>
               </v-card-title>
               <v-form @submit.prevent="createGroup">
                 <v-card-text>
                   <v-container grid-list-md>
                     <v-layout wrap>
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="group.name" label="Group name" required></v-text-field>
+                        <v-text-field
+                          v-model="group.name"
+                          :label="$t('groups.createGroup.groupName')"
+                          required></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6>
-                        <v-text-field v-model="group.course" label="Course" required></v-text-field>
+                        <v-text-field
+                          v-model="group.course"
+                          :label="$t('groups.createGroup.course')"
+                          required></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-container>
-                  <small>*indicates required field</small>
+                  <small>
+                    {{ $t('utils.hint.indicatesRequiredField') }}
+                  </small>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="error" flat @click.native="dialog = false">Close</v-btn>
-                  <v-btn type="submit" color="success" flat @click.native="dialog = false">Save</v-btn>
+                  <v-btn
+                    color="error"
+                    flat
+                    @click.native="dialog = false">
+                    {{ $t('utils.button.close') }}
+                  </v-btn>
+                  <v-btn
+                    type="submit"
+                    color="success"
+                    flat
+                    @click.native="dialog = false">
+                    {{ $t('utils.button.create') }}
+                  </v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -52,11 +75,11 @@ export default {
     createGroup() {
       this.$store.dispatch('createGroup', this.group)
         .then(() => {
-          this.$alertify.success('Success');
+          this.$alertify.success(this.$t('utils.action.success'));
           this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
         })
         .catch(() => {
-          this.$alertify.error('Error! Try again later please.');
+          this.$alertify.error(this.$t('utils.action.errorTryAgainLater'));
         });
     },
   },

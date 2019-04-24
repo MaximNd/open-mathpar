@@ -91,7 +91,7 @@ module.exports = {
     },
 
     setPlan(req, res) {
-        const { planId, recordId, groupId } = req.body;
+        const { planId, recordId, groupId, studentsVariants } = req.body;
 
         req.user.clients
             .then(clients => {
@@ -99,9 +99,11 @@ module.exports = {
                 const teacherId = teacher._id;
                 Plan.findById(planId)
                     .then(plan => {
+                        studentsVariants.forEach((studentsWithVariants, index) => {
+                            plan.timetable[index].studentsVariants = studentsWithVariants;
+                        });
                         if (plan.teacherId.toString() === teacherId.toString()) {
                             plan.groupId = groupId;
-
                             return Promise.all([
                                 plan.save(),
                                 Teacher.findById(teacherId)

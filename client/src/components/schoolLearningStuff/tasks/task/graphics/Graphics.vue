@@ -104,7 +104,7 @@ export default {
         || this.isPlot3dExplicit
         || this.isPlot3dParametric
         || this.isRenderMultipleSurfaces)) {
-          (this.isGraph || this.isTablePlot) && this.updateImgPath(this.getImageUrl());
+        (this.isGraph || this.isTablePlot) && this.updateImgPath(this.getImageUrl());
       }
       this.oldSettings = this.DEFAULT_SETTINGS;
       this.parameters = [];

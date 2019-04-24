@@ -11,6 +11,8 @@ const Subject = require('./../models/subject');
 // Get task by ID
 router.get('/task/:id', isAuthenticated, TasksController.getTaskById);
 
+router.get('/task/:id/:variant', isAuthenticated, TasksController.getTaskByIdWithOneVariant);
+
 // Get all tasks by teacher ID
 router.get('/tasks/teacher/:id', isAuthenticated, TasksController.getTasksByTeacherId);
 
@@ -51,11 +53,11 @@ router.get('/tasks/:schoolId/:fetchType/:teacherId/:classNumber/:subjectId/:them
 
 // Chek exercise
 // TODO isStudent is auth
-router.get('/task/:id/check-answer/:exercise/:answer', TasksController.checkExercise);
+router.get('/task/:id/check-answer/:exerciseId/:answer', TasksController.checkExercise);
 
 // Show full solution
 // TODO isStudent is auth
-router.get('/task/:id/show-solution/:exercise', TasksController.showSolution);
+router.get('/task/:id/show-solution/:exerciseId', TasksController.showSolution);
 
 // Check kr
 // router.post('/task/:id/check-kr', isAuthenticated, isStudent, TasksController.checkKr);

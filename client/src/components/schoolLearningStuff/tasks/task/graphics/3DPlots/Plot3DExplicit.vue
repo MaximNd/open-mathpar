@@ -7,8 +7,9 @@
 <script>
 import * as THREE from 'three';
 import OrbitControlsLibrary from 'three-orbit-controls';
+import plot3dMixin from '../../../../../../mixins/plot3DMixin.js';
+
 const OrbitControls = OrbitControlsLibrary(THREE);
-import plot3dMixin from './../../../../../../mixins/plot3DMixin.js';
 
 export default {
   mixins: [plot3dMixin],
@@ -19,15 +20,15 @@ export default {
     },
     task: {
       type: String,
-      required: true
+      required: true,
     },
     canvasWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     canvasHeight: {
       type: Number,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -49,7 +50,7 @@ export default {
       geometry,
       xLabel: null,
       yLabel: null,
-      zLabel: null
+      zLabel: null,
     };
   },
   methods: {
@@ -88,34 +89,35 @@ export default {
             this.createAxisLabel('y', new THREE.Vector3(0, axesSize, 0), this.camera.rotation),
             this.createAxisLabel('z', new THREE.Vector3(0, 0, axesSize), this.camera.rotation),
           ])
-          .then(([ xLabel, yLabel, zLabel ]) => {
-            this.xLabel = xLabel;
-            this.yLabel = yLabel;
-            this.zLabel = zLabel
-            this.scene.add(this.xLabel);
-            this.scene.add(this.yLabel);
-            this.scene.add(this.zLabel);
-          });
+            .then(([xLabel, yLabel, zLabel]) => {
+              this.xLabel = xLabel;
+              this.yLabel = yLabel;
+              this.zLabel = zLabel;
+              this.scene.add(this.xLabel);
+              this.scene.add(this.yLabel);
+              this.scene.add(this.zLabel);
+            });
           // LIGHT
           const light = new THREE.PointLight(0xffffff, 1.2);
           light.position.set(lightX, lightY, lightZ);
           this.scene.add(light);
 
-          for (var i = 1; i < body.length; i++) {
+          for (let i = 1; i < body.length; i++) {
             this.geometry.vertices.push(this.toVector3(body[i]));
           }
 
-          let a, b, c, d;
-          let uva, uvb, uvc, uvd;
-          let sliceCount = stacks + 1;
+          let a; let b; let c; let
+            d;
+          let uva; let uvb; let uvc; let
+            uvd;
+          const sliceCount = stacks + 1;
 
           for (let i = 0; i < stacks; ++i) {
             for (let j = 0; j < stacks; ++j) {
-
               a = i * sliceCount + j;
               b = i * sliceCount + j + 1;
-              c = ( i + 1 ) * sliceCount + j + 1;
-              d = ( i + 1 ) * sliceCount + j;
+              c = (i + 1) * sliceCount + j + 1;
+              d = (i + 1) * sliceCount + j;
 
               uva = new THREE.Vector2(j / stacks, i / stacks);
               uvb = new THREE.Vector2((j + 1) / stacks, i / stacks);
@@ -131,8 +133,8 @@ export default {
           this.geometry.computeVertexNormals();
 
           const colorMaterial = new THREE.MeshLambertMaterial({
-            color: '#' + Math.floor(Math.random()*16777215).toString(16),
-            side: THREE.DoubleSide
+            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+            side: THREE.DoubleSide,
           });
 
           const mesh = new THREE.Mesh(this.geometry, colorMaterial);
@@ -154,8 +156,8 @@ export default {
   created() {
     this.init();
     this.initData();
-  }
-}
+  },
+};
 </script>
 
 <style>

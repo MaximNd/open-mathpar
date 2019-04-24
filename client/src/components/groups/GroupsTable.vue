@@ -3,11 +3,11 @@
         <v-flex d-flex xs12>
             <v-card>
                 <v-card-title class="primary--text title">
-                  Groups
+                  {{ $t('groups.groupsTable.name') }}
                   <v-spacer></v-spacer>
                   <v-text-field
                     append-icon="search"
-                    label="Search"
+                    :label="$t('utils.labels.search')"
                     single-line
                     hide-details
                     v-model="search"
@@ -19,25 +19,27 @@
                     v-bind:search="search"
                   >
                   <template slot="items" slot-scope="props">
-                    <td class="text-xs-left"><router-link :to="`/group/${props.item.group.id}`">{{ props.item.group.name }}</router-link></td>
+                    <td class="text-xs-left">
+                      <router-link :to="`/group/${props.item.group.id}`">{{ props.item.group.name }}
+                    </router-link></td>
                     <td class="text-xs-right">{{ props.item.studentsCount }}</td>
                     <td class="text-xs-right">{{ props.item.teachersCount }}</td>
                     <td class="text-xs-right">
-                      {{ props.item.groupAVGMarks.avgSR.firstNumber || 'No data yet' }} |
-                      {{ props.item.groupAVGMarks.avgSR.secondNumber || 'No data yet' }} |
-                      {{ props.item.groupAVGMarks.avgSR.thirdNumber || 'No data yet' }} |
-                      {{ props.item.groupAVGMarks.avgSR.fourthNumber || 'No data yet' }}
+                      {{ props.item.groupAVGMarks.avgSR.firstNumber || $t('utils.data.noDataYet') }} |
+                      {{ props.item.groupAVGMarks.avgSR.secondNumber || $t('utils.data.noDataYet') }} |
+                      {{ props.item.groupAVGMarks.avgSR.thirdNumber || $t('utils.data.noDataYet') }} |
+                      {{ props.item.groupAVGMarks.avgSR.fourthNumber || $t('utils.data.noDataYet') }}
                     </td>
                     <td class="text-xs-right">
-                      {{ props.item.groupAVGMarks.avgKR || 'No data yet' }}
+                      {{ props.item.groupAVGMarks.avgKR || $t('utils.data.noDataYet') }}
                     </td>
                     <td class="text-xs-right">
-                      {{ props.item.groupAVGDispersion.avgSR.firstNumber || 'No data yet' }} |
-                      {{ props.item.groupAVGDispersion.avgSR.secondNumber || 'No data yet' }} |
-                      {{ props.item.groupAVGDispersion.avgSR.thirdNumber || 'No data yet' }} |
-                      {{ props.item.groupAVGDispersion.avgSR.fourthNumber || 'No data yet' }}
+                      {{ props.item.groupAVGDispersion.avgSR.firstNumber || $t('utils.data.noDataYet') }} |
+                      {{ props.item.groupAVGDispersion.avgSR.secondNumber || $t('utils.data.noDataYet') }} |
+                      {{ props.item.groupAVGDispersion.avgSR.thirdNumber || $t('utils.data.noDataYet') }} |
+                      {{ props.item.groupAVGDispersion.avgSR.fourthNumber || $t('utils.data.noDataYet') }}
                     </td>
-                    <td class="text-xs-right">{{ props.item.groupAVGDispersion.avgKR || 'No data yet' }}</td>
+                    <td class="text-xs-right">{{ props.item.groupAVGDispersion.avgKR || $t('utils.data.noDataYet') }}</td>
                   </template>
                   <template slot="pageText" slot-scope="{ pageStart, pageStop }">
                     From {{ pageStart }} to {{ pageStop }}
@@ -56,19 +58,21 @@ export default {
       max25chars: v => v.length <= 25 || 'Input too long!',
       tmp: '',
       search: '',
-      pagination: {},
-      headers: [
-        { text: 'Group name', align: 'left' },
-        { text: 'Number of students\n', value: 'studentsCount' },
-        { text: 'Number of teachers\n', value: 'teachersCount' },
-        { text: 'AVG SR Mark', value: 'groupAVGMarks.avgSR' },
-        { text: 'AVG KR Mark', value: 'groupAVGMarks.avgKR' },
-        { text: 'AVG SR Dispersion', value: 'groupAVGDispersion.avgSR' },
-        { text: 'AVG KR Dispersion', value: 'groupAVGDispersion.avgKR' },
-      ],
+      pagination: {}
     };
   },
   computed: {
+    headers() {
+      return [
+        { text: this.$t('groups.groupsTable.groupName'), align: 'left' },
+        { text: this.$t('groups.groupsTable.numberOfStudents'), align: 'right', value: 'studentsCount' },
+        { text: this.$t('groups.groupsTable.numberOfTeachers'), align: 'right', value: 'teachersCount' },
+        { text: this.$t('groups.groupsTable.AVGSRMark'), align: 'right', value: 'groupAVGMarks.avgSR' },
+        { text: this.$t('groups.groupsTable.AVGKRMark'), align: 'right', value: 'groupAVGMarks.avgKR' },
+        { text: this.$t('groups.groupsTable.AVGSRDispersion'), align: 'right', value: 'groupAVGDispersion.avgSR' },
+        { text: this.$t('groups.groupsTable.AVGKRDispersion'), align: 'right', value: 'groupAVGDispersion.avgKR' }
+      ];
+    },
     groups() {
       return this.$store.getters.groups;
     },

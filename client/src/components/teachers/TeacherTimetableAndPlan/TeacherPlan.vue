@@ -3,19 +3,29 @@
     <v-flex xs12>
       <v-card>
         <v-card-title class="primary--text title">
-          <!-- Timetable -->
-          Plan: {{ planName }}
+          {{ $t('teacher.timetableAndPlan.plan.name') }}: {{ planName }}
         </v-card-title>
         <v-card-text>
           <v-data-table :items="timetable" hide-actions hide-headers class="elevation-1">
             <template slot="items" slot-scope="props">
               <td class="text-xs-left title">{{ props.item[0] }}</td>
-              <td class="text-xs-left text clickable"
-                v-if="index != 0" v-for="(i, index) in props.item"
-                :key="index + '-Teacher_plan'">
-                  <router-link v-if="props.item[0] === 'Tasks'" :to="`/task/${i._id}`">{{ i.name || i }}</router-link>
+              <template v-for="(i, index) in props.item">
+                <td class="text-xs-left text clickable"
+                  v-if="index != 0"
+                  :key="index + '-Teacher_plan'">
+                  <router-link v-if="props.item[0] === tasks" :to="`/task/${i._id}`">
+                    {{ i.name || i }}
+                  </router-link>
                   <template v-else>{{ i.name || i }}</template>
-              </td>
+                  <v-icon
+                    v-if="!i.isTest && props.item[0] === tasks"
+                    class="ml-1 mb-2"
+                    color="error"
+                    size="20">
+                    fa-tasks
+                  </v-icon>
+                </td>
+              </template>
             </template>
           </v-data-table>
         </v-card-text>
@@ -57,14 +67,21 @@ export default {
   },
   data() {
     return {
-      lectures: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
-      tasks: ['fdsfsd', 'sdfsfdsfsd', 'sfdfs', 'sfdsfsd', 'fdsfsdfsd', 'sfdfsdfsd', 'sfsdfdsfsd', 'sfsdfsdfds', 'sdfsdfsdsd', 'sfdsdsdfds'],
       date: null,
       menu: false,
       modal: false,
     };
   },
   computed: {
+    lections() {
+      return this.$t('teacher.timetableAndPlan.plan.lections');
+    },
+    tasks() {
+      return this.$t('teacher.timetableAndPlan.plan.tasks');
+    },
+    dateInPlan() {
+      return this.$t('teacher.timetableAndPlan.plan.date');
+    },
     isThisTeacherPlan() {
       return this.$store.getters[this.planKey].teacherId._id === this.$auth.user().clients.find(client => client.clientRole === 'teacher').client._id;
     },
@@ -77,7 +94,7 @@ export default {
         resultTimetable[1].push(lesson.taskId);
         resultTimetable[2].push(new Date(lesson.date).toDateString());
         return resultTimetable;
-      }, [['Lections'], ['Tasks'], ['Date']]);
+      }, [[this.lections], [this.tasks], [this.dateInPlan]]);
     },
   },
   methods: {

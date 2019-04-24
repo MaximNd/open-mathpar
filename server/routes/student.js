@@ -25,6 +25,8 @@ router.get('/student/:id/subjects', isAuthenticated, StudentsController.getStude
 // Get student gradebook by student ID
 router.get('/student/:id/gradebook', isAuthenticated, StudentsController.getStudentGradebookById);
 
+router.get('/student/:id/tasks-full-answers/:task_id', isAuthenticated, StudentsController.getStudentTasksFullAnswers);
+
 // Create student
 router.post('/student', isAuthenticated, isHeadTeacher, StudentsController.createStudent);
 

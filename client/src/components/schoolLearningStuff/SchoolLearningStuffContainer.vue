@@ -4,19 +4,27 @@
       <v-flex xs12>
         <v-expansion-panel popout>
           <v-expansion-panel-content lazy class="elevation-1">
-            <div slot="header" class="primary--text title">Tasks</div>
+            <div slot="header" class="primary--text title">
+              {{ $t('schoolLearningStuff.tasks.name') }}
+            </div>
             <appTasksContainer></appTasksContainer>
           </v-expansion-panel-content>
           <v-expansion-panel-content lazy class="elevation-1">
-            <div slot="header" class="primary--text title">Lectures</div>
+            <div slot="header" class="primary--text title">
+              {{ $t('schoolLearningStuff.lectures.name') }}
+            </div>
             <appLecturesContainer></appLecturesContainer>
           </v-expansion-panel-content>
           <v-expansion-panel-content lazy class="elevation-1">
-            <div slot="header" class="primary--text title">Subjects and Themes</div>
+            <div slot="header" class="primary--text title">
+              {{ $t('schoolLearningStuff.subjectsAndThemes.name') }}
+            </div>
             <appSubjectsContainer></appSubjectsContainer>
           </v-expansion-panel-content>
           <v-expansion-panel-content lazy class="elevation-1">
-            <div slot="header" class="primary--text title">Plans</div>
+            <div slot="header" class="primary--text title">
+              {{ $t('schoolLearningStuff.plans.name') }}
+            </div>
             <appPlansContainer></appPlansContainer>
           </v-expansion-panel-content>
         </v-expansion-panel>

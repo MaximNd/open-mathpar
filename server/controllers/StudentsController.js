@@ -26,6 +26,16 @@ module.exports = {
             .catch(err => console.log(err));
     },
 
+    getStudentTasksFullAnswers(req, res) {
+        const {id, task_id} = req.params;
+        Student.find({ id, 'gradeBook.taskId': task_id })
+            .select('gradeBook.fullAnswers')
+            .then(fullAnswers => {
+                res.send(fullAnswers);
+            })
+            .catch(err => console.log(err));
+    },
+
     async createStudent(req, res) {
         try {
             const { user, groupId, classId }  = req.body;
@@ -68,7 +78,7 @@ module.exports = {
             .then(task => {
                 mark = 0;
                 let promises = [];
-                function makeRequest(result, index) {
+                function makeRequest(exerciseId, answer) {
                     return new Promise((resolve, reject) => {
                         request.post({
                             headers: { 
@@ -76,11 +86,11 @@ module.exports = {
                                 'Accept': 'application/json',
                                 'Accept-Charset': 'utf-8',
                             },
-                            url: 'http://mathpar.ukma.edu.ua/api/check',
+                            url: 'http://localhost:8080/api-app/check',
                             json: true,
                             body: {
-                                userAnswer: result,
-                                dbSolutionAnswer: task.exercises[index].answer
+                                userAnswer: answer,
+                                dbSolutionAnswer: task.exercises.find(exercise => exercise._id.toString() === exerciseId).answer
                             }
                         }, function(error, response, body) {
                             if (body.result === 'YES') {
@@ -91,8 +101,13 @@ module.exports = {
                     });
                 }
                 
-                studentResult.forEach((result, index) => {
-                    promises.push(makeRequest(result, index));
+                const fullExerciseAnswers = [];
+                studentResult.forEach(({ exerciseId, answer, fullAnswers }) => {
+                    promises.push(makeRequest(exerciseId, answer));
+                    fullExerciseAnswers.push({
+                        exerciseId,
+                        exerciseAnswers: fullAnswers
+                    });
                 });
 
                 Promise.all(promises)
@@ -101,7 +116,7 @@ module.exports = {
                         return req.user.clients;
                     })
                     .then(clients => {
-                        Student.update({ _id: clients.find(client => client.clientRole === 'student').client.id, }, { $push: { gradeBook: { taskId, mark, time } } }, (err) => {
+                        Student.update({ _id: clients.find(client => client.clientRole === 'student').client.id, }, { $push: { gradeBook: { taskId, mark, time, fullAnswers: fullExerciseAnswers } } }, (err) => {
                             if (err) {
                                 console.log(err);
                                 res.send({

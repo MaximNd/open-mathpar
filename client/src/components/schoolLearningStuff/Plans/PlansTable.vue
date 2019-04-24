@@ -1,20 +1,21 @@
 <template>
-  <v-card>
+  <v-card class="mt-2">
     <v-card-text>
       <v-card class="elevation-1">
         <v-card-title>
-          <p class="headline primary--text">Filters</p>
+          <p class="headline primary--text">
+            {{ $t('schoolLearningStuff.plans.plansTable.filters.name') }}
+          </p>
         </v-card-title>
         <v-card-text>
           <v-container fluid>
             <v-layout row justify-space-between wrap>
               <v-flex xs3>
                 <v-select
-                  :items="[{ text: 'Find in this school', value: true }, { text: 'Find in all schools', value: false }]"
+                  :items="filterThisSchool"
                   item-text="text"
                   item-value="value"
                   v-model="filterData.thisSchool"
-                  label="Select "
                   single-line
                 ></v-select>
               </v-flex>
@@ -22,7 +23,7 @@
                 <v-select
                   :items="filterData.fetchTypes"
                   v-model="filterData.fetchType"
-                  label="Select type"
+                  :label="$t('utils.labels.selectType')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -32,7 +33,7 @@
                   v-model="filterData.subjectId"
                   item-text="name"
                   item-value="_id"
-                  label="Select subject"
+                  :label="$t('utils.labels.selectSubject')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -41,7 +42,9 @@
         </v-card-text>
         <v-card-text>
           <v-layout justify-end>
-            <v-btn color="primary" @click="filterPlans">Filter plans</v-btn>
+            <v-btn color="primary" @click="filterPlans">
+              {{ $t('schoolLearningStuff.plans.plansTable.filters.filterPlans') }}
+            </v-btn>
           </v-layout>
         </v-card-text>
       </v-card>
@@ -50,7 +53,7 @@
       <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
-        label="Search"
+        :label="$t('utils.labels.search')"
         single-line
         hide-details
         v-model="search"
@@ -79,6 +82,14 @@
             <v-card-text>
               <appPlan @clicked-choose="emitPlanChoosed($event)" :planKey="'planInTable'" :chooseMode="chooseMode"></appPlan>
             </v-card-text>
+            <v-card-text v-if="chooseMode">
+              <appStudentsVariants
+                v-for="(task, taskIndex) in props.item.timetable"
+                v-model="studentsVariants[props.item._id][taskIndex]"
+                :key="`task-${task._id}`"
+                :task="task.taskId"
+                :students="students"></appStudentsVariants>
+            </v-card-text>
           </v-card>
         </template>
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
@@ -92,6 +103,7 @@
 
 <script>
 import Plan from '../../teachers/TeacherTimetableAndPlan/TeacherPlan.vue';
+import StudentsVariants from '../../teachers/TeacherTimetableAndPlan/StudentsVariants.vue';
 
 export default {
   props: {
@@ -103,9 +115,15 @@ export default {
       type: String,
       required: false,
     },
+    groupId: {
+      type: String,
+      required: false,
+    }
   },
   data() {
     return {
+      students: [],
+      studentsVariants: {},
       plansLoading: true,
       plansNoDataText: 'Loading...',
       filterData: {
@@ -116,27 +134,47 @@ export default {
         subjectId: undefined,
       },
       search: '',
-      pagination: {},
-      headers: [
-        {
-          text: 'Plan', align: 'left', value: 'name', sortable: false, width: '20px',
-        },
-        {
-          text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false, width: '20px',
-        },
-        {
-          text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false, width: '20px',
-        },
-        {
-          text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false, width: '20px',
-        },
-      ],
+      pagination: {}
     };
+  },
+  watch: {
+    plans(newVal) {
+      if (newVal) {
+        for (let i = 0; i < newVal.length; ++i) {
+          this.studentsVariants[newVal[i]._id] = [];
+          for (let j = 0; j < newVal[i].timetable.length; ++j) {
+            this.studentsVariants[newVal[i]._id].push([]);
+          }
+        }
+      }
+    }
   },
   computed: {
     plans() {
       return this.$store.getters.plans;
     },
+    filterThisSchool() {
+      return [
+        { text: this.$t('schoolLearningStuff.plans.plansTable.filters.findInThisSchool'), value: true },
+        { text: this.$t('schoolLearningStuff.plans.plansTable.filters.findInAllSchools'), value: false }
+      ];
+    },
+    headers() {
+      return [
+        {
+          text: this.$t('schoolLearningStuff.plans.plansTable.headers.plan'), align: 'left', value: 'name', sortable: false, width: '20px',
+        },
+        {
+          text: this.$t('schoolLearningStuff.plans.plansTable.headers.subject'), align: 'right', value: 'subjectId.name', sortable: false, width: '20px',
+        },
+        {
+          text: this.$t('schoolLearningStuff.plans.plansTable.headers.teacher'), align: 'right', value: 'teacherId.userId.fullName', sortable: false, width: '20px',
+        },
+        {
+          text: this.$t('schoolLearningStuff.plans.plansTable.headers.school'), align: 'right', value: 'teacherId.schoolId.name', sortable: false, width: '20px',
+        },
+      ];
+    }
   },
   methods: {
     filterPlans() {
@@ -162,7 +200,7 @@ export default {
       this.$store.dispatch('getFilteredPlans', filter)
         .then(() => {
           this.plansLoading = false;
-          this.plansNoDataText = 'No data available';
+          this.plansNoDataText = this.$t('utils.data.noDataAvailable');
         });
     },
     setExpandedPlan(props, plan) {
@@ -170,11 +208,12 @@ export default {
       this.$store.commit('SET_PLAN_IN_TABLE', plan);
     },
     emitPlanChoosed(planId) {
-      this.$emit('plan-choosed', planId);
+      this.$emit('plan-choosed', { planId, studentsVariants: this.studentsVariants[planId] });
     },
   },
   components: {
     appPlan: Plan,
+    appStudentsVariants: StudentsVariants
   },
   created() {
     this.$http.get('subjects')
@@ -182,6 +221,12 @@ export default {
         this.filterData.subjects = body;
         this.filterPlans();
       });
+    if (this.groupId) {
+      this.$http.get(`groups/${this.groupId}/students`)
+        .then(({ body }) => {
+          this.students = body;
+        });
+    }
   },
 };
 </script>

@@ -6,8 +6,8 @@ const Teacher = require('./teacher');
 const { calculateFourNumbersBySRMark, calculateAVGFourNumbersBySRMark, calculateAVGKRMarks, calculateDispersion } = require('./../helpers/helpers');
 
 const TaskTimeExecutionSchema = new Schema({
-  exerciseIndex: {
-    type: Number,
+  exerciseId: {
+    type: ObjectId,
     required: true
   },
   hours: {
@@ -22,6 +22,14 @@ const TaskTimeExecutionSchema = new Schema({
     type: Number,
     required: true
   }
+});
+
+const ExerciseAnswersSchema = new Schema({
+  exerciseId: {
+    type: ObjectId,
+    required: true
+  },
+  exerciseAnswers: [String]
 });
 
 const StudentSchema = new Schema({
@@ -57,6 +65,10 @@ const StudentSchema = new Schema({
         time: {
           type: [TaskTimeExecutionSchema],
           required: true
+        },
+        fullAnswers: {
+          type: [ExerciseAnswersSchema],
+          required: false
         }
       }
     ],

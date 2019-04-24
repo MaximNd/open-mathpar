@@ -1,6 +1,9 @@
 const Task = require('./../models/task');
 const Student = require('./../models/student');
 const request = require('request');
+// const mongoose = require('mongoose');
+// const ObjectId = mongoose.Schema.Types.ObjectId;
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     getTasksByTeacherId(req, res) {
@@ -42,7 +45,8 @@ module.exports = {
         // { theme: req.params.themeId, subjectId: req.params.subjectId, class: req.params.class }
         Task.find(filter)
             .populate({ path: 'subjectId' })
-            .populate({ path: 'teacherId', populate: { path: 'userId' } }).populate({ path: 'teacherId', populate: { path: 'schoolId' } })
+            .populate({ path: 'teacherId', populate: { path: 'userId' } })
+            .populate({ path: 'teacherId', populate: { path: 'schoolId' } })
             .populate({ path: 'theme' })
             .select('-exercises')
             .then(task => { res.send(task) });
@@ -54,7 +58,9 @@ module.exports = {
         //         .then(result => res.send(result));
                 
         // });
-        let query = Task.findById(req.params.id).populate({ path: 'subjectId' }).populate({ path: 'teacherId', populate: { path: 'userId' } });
+        let query = Task.findById(req.params.id)
+            .populate({ path: 'subjectId' })
+            .populate({ path: 'teacherId', populate: { path: 'userId' } });
         req.user.clients
             .then(clients => {
                 if(!clients.find(client => client.clientRole === 'teacher')) {
@@ -66,6 +72,66 @@ module.exports = {
             });
     },
 
+    getTaskByIdWithOneVariant(req, res) {
+        Task.aggregate([
+            { $match: { _id: ObjectId(req.params.id) } },
+            { $unwind: '$exercises' },
+            { $match: { 'exercises.variant': parseInt(req.params.variant) } },
+            { $group: {
+                _id: '$_id',
+                schoolId: { $first: '$schoolId' },
+                subjectId: { $first: '$subjectId' },
+                teacherId: { $first: '$teacherId' },
+                isTest: { $first: '$isTest' },
+                isAllow: { $first: '$isAllow' },
+                class: { $first: '$class' },
+                difficultyLevel: { $first: '$difficultyLevel' },
+                theme: { $first: '$theme' },
+                name: { $first: '$name' },
+                order: { $first: '$order' },
+                countOfVariants: { $first: '$countOfVariants' },
+                exercises: { $push: {
+                    _id: '$exercises._id',
+                    text: '$exercises.text',
+                    variant: '$exercises.variant',
+                    images: '$exercises.images'
+                }}
+            }},
+            { $lookup: {
+                from: 'subjects',
+                localField: 'subjectId',
+                foreignField: '_id',
+                as: 'subjectId'
+            }},
+            { $lookup: {
+                from: 'teachers',
+                localField: 'teacherId',
+                foreignField: '_id',
+                as: 'teacherId'
+            }},
+            { $unwind: '$subjectId' },
+            { $unwind: '$teacherId' },
+            {
+                $project: {
+                    schoolId: '$schoolId',
+                    subjectId: '$subjectId',
+                    teacherId: '$teacherId',
+                    isTest: '$isTest',
+                    isAllow: '$isAllow',
+                    class: '$class',
+                    difficultyLevel: '$difficultyLevel',
+                    theme: '$theme',
+                    name: '$name',
+                    order: '$order',
+                    countOfVariants: '$countOfVariants',
+                    exercises: '$exercises'
+                }
+            }
+        ])
+        .then(tasks => {
+            res.send(tasks[0]);
+        });
+    },
     // checkKr(req, res) {
     //     console.log(req.body);
     //     Task.findById(req.params.id)
@@ -90,11 +156,11 @@ module.exports = {
             res.status(200, { message: 'ok' }).end();
         });
     },
-
+    // TODO update variants
     updateTask(req, res) {
         const taskId = req.params.id;
         const { name, isTest, isAllow, difficultyLevel, order,  exercises } = req.body;
-        // console.log(req.body);
+        
         Task.update({ _id: taskId }, { $set: { name, isTest, isAllow, difficultyLevel, order,  exercises } }, (err) => {
             if (err) {
                 console.log(err);
@@ -125,8 +191,7 @@ module.exports = {
                     json: true,
                     body: {
                         userAnswer: req.params.answer,
-                        // TODO fix index to _id in all
-                        dbSolutionAnswer: task.exercises[req.params.exercise].answer
+                        dbSolutionAnswer: task.exercises.find(exercise => exercise._id.toString() === req.params.exerciseId).answer
                     }
                 }, function(error, response, body) {
                     if (body.result === 'YES') {
@@ -148,7 +213,7 @@ module.exports = {
         Task.findById(req.params.id)
             .then(task => {
                 res.send({
-                    solution: task.exercises[req.params.exercise].fullSolution
+                    solution: task.exercises.find(exercise => exercise._id.toString() === req.params.exerciseId).fullSolution
                 });
             });
     }

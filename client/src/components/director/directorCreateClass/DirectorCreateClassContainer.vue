@@ -4,18 +4,21 @@
       <v-flex xs12>
         <v-card>
           <v-card-title class="primary--text title">
-            <span class="headline">New Class</span>
+            <span class="headline">{{ $t('director.createClass.newClass') }}</span>
           </v-card-title>
           <v-card-text>
             <v-form @submit.prevent="creteClass">
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 sm6 md4>
-                    <v-text-field v-model="newClass.name" label="Name" required></v-text-field>
+                    <v-text-field
+                      v-model="newClass.name"
+                      :label="$t('utils.labels.name')"
+                      required></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-container>
-              <v-btn type="submit" color="success" flat>Create</v-btn>
+              <v-btn type="submit" color="success" flat>{{ $t('utils.button.create') }}</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -38,10 +41,10 @@ export default {
     creteClass() {
       this.$store.dispatch('createClass', { class: this.newClass })
         .then(() => {
-          this.$alertify.success('Success');
+          this.$alertify.success(this.$t('utils.action.success'));
         })
         .catch(() => {
-          this.$alertify.error('Error! Try again later please.');
+          this.$alertify.error(this.$t('utils.action.errorTryAgainLater'));
         });
     },
   },

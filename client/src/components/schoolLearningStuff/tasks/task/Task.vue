@@ -10,7 +10,7 @@
             :complete="currentResults[index].passed"
             editable
           >
-            Exercise {{ n }}
+            {{ $t('task.exerciseNumber', [n]) }}
           </v-stepper-step>
           <v-divider v-if="n !== steps" :key="index"></v-divider>
         </template>
@@ -23,42 +23,17 @@
         <v-container fluid>
           <v-layout>
             <v-flex xs3>
-              <v-card class="elevation-0">
+              <v-card flat>
                 <v-card-text>
-                  <v-expansion-panel>
-                    <v-expansion-panel-content v-for="(item, itemIndx) in tips" :key="itemIndx">
-                      <div slot="header">{{ item.title }}</div>
-                      <v-card>
-                        <v-card-text>
-                          <template v-for="(subItem, subItemIndx) in item.items">
-                            <template v-if="!subItem.items">
-                              <v-chip class="mb-3" :key="subItemIndx" @click="insertTipsData(index, subItem.dataInsert, subItem.offset)">
-                                <span>{{ subItem.title }}</span>
-                              </v-chip>
-                            </template>
-                            <template v-else>
-                              <v-expansion-panel :key="subItemIndx">
-                                <v-expansion-panel-content>
-                                  <div slot="header">{{ subItem.title }}</div>
-                                  <template v-for="(subItem2, subItemIndx2) in subItem.items">
-                                    <v-chip  @click="insertTipsData(index, subItem2.dataInsert, subItem2.offset)" :class="{ 'mb-3': true, 'ml-4': subItemIndx2 === 0, 'mr-4': subItemIndx2 === subItem.items.length-1 }" :key="subItemIndx2">
-                                      <span>{{ subItem2.title }}</span>
-                                    </v-chip>
-                                  </template>
-                                </v-expansion-panel-content>
-                              </v-expansion-panel>
-                            </template>
-                          </template>
-                        </v-card-text>
-                      </v-card>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
+                  <appTips
+                    :exerciseId="index"
+                    @tip:selected="insertTipsData('studentAnswerTextField', $event)"></appTips>
                 </v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs9>
               <div :style="{ 'overflow-y': 'scroll', 'height': height }">
-              <v-card class="mb-5 elevation-0">
+              <v-card class="mb-5" flat>
                 <v-layout column>
                   <v-flex>
                     <v-card-text>
@@ -70,15 +45,15 @@
                               <v-flex xs12 align-start>
                                 <v-btn :color="currentResults[index].active ? 'warning' : 'primary'" @click="execute(index)" :disabled="currentResults[index].passed || taskFinished">
                                   <v-icon left>play_arrow</v-icon>
-                                  {{ currentResults[index].active ? 'Active Task' : 'Start Task' }}
+                                  {{ currentResults[index].active ? $t('utils.button.activeTask') : $t('utils.button.startTask') }}
                                 </v-btn>
                                 <v-btn color="info" @click="swap(index)" :disabled="!currentResults[index].active">
                                   <v-icon left>swap_horiz</v-icon>
-                                  Swap
+                                  {{ $t('utils.button.swap') }}
                                 </v-btn>
                                 <v-btn color="success" @click="addInputBelow(index)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished">
                                   <v-icon left>add</v-icon>
-                                  Add one input below
+                                  {{ $t('utils.button.addOneInputBelow') }}
                                 </v-btn>
                               </v-flex>
                             </v-layout>
@@ -88,15 +63,20 @@
                           <v-card class="original">
                             <template v-if="!currentResults[index].active">
                               <v-card-text class="original-input">
-                                You have not started this exercise yet
+                                {{ $t('task.exerciseNotStartedYet') }}
                               </v-card-text>
                             </template>
                             <template v-else-if="!currentResults[index].exerciseText.isLatex">
                               <v-card-text class="original-input">
-                                <v-textarea :value="currentResults[index].exerciseText.task" label="Exercise" auto-grow ></v-textarea>
+                                <v-textarea
+                                  :value="currentResults[index].exerciseText.task"
+                                  :label="$t('utils.labels.exercise')"
+                                  auto-grow></v-textarea>
                               </v-card-text>
                               <v-card-text class="original-output">
-                                <h3>Output: </h3>
+                                <h3>
+                                  {{ $t('utils.text.output') }}
+                                </h3>
                                 <p>{{ currentResults[index].exerciseText.result }}</p>
                               </v-card-text>
                             </template>
@@ -118,19 +98,19 @@
                               <v-flex xs12 align-start>
                                 <v-btn color="primary" @click="execute(index, index2)" :disabled="currentResults[index].giveUp ? index2 !== 0 : (!currentResults[index].active || currentResults[index].passed || taskFinished)">
                                   <v-icon left>play_arrow</v-icon>
-                                  Execute
+                                  {{ $t('utils.button.execute') }}
                                 </v-btn>
                                 <v-btn color="info" @click="swap(index, index2)" :disabled="currentResults[index].giveUp ? index2 !== 0 : (currentResults[index].passed || taskFinished || !currentResults[index].active)">
                                   <v-icon left>swap_horiz</v-icon>
-                                  Swap
+                                  {{ $t('utils.button.swap') }}
                                 </v-btn>
                                 <v-btn color="success" @click="addInputBelow(index, index2+1)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished">
                                   <v-icon left>add</v-icon>
-                                  Add one input below
+                                  {{ $t('utils.button.addOneInputBelow') }}
                                 </v-btn>
                                 <v-btn color="error" @click="deleteInputById(index, index2)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished">
                                   <v-icon left>close</v-icon>
-                                  Delete this input
+                                  {{ $t('utils.button.deleteThisInput') }}
                                 </v-btn>
                               </v-flex>
                             </v-layout>
@@ -140,10 +120,17 @@
                           <v-card class="original">
                             <template v-if="!currentResults[index].studentAnswers[index2].isLatex">
                               <v-card-text class="original-input">
-                                <v-textarea :ref='`studentAnswerTextField${index2}`' :value="currentResults[index].studentAnswers[index2].task" @input="updateInput(index, index2, $event)" label="Your answer" auto-grow @blur="getCaretPosition(index2)" @focus="lastSection.sectionId = index2"></v-textarea>
+                                <v-textarea
+                                  :label="$t('utils.labels.yourAnswer')"
+                                  auto-grow
+                                  :ref='`studentAnswerTextField${index2}`'
+                                  :value="currentResults[index].studentAnswers[index2].task"
+                                  @input="updateInput(index, index2, $event)"
+                                  @blur="getCaretPosition($refs[`studentAnswerTextField${index2}`][0].$el.children[0].children[0].children[0].children[1])"
+                                  @focus="lastSection.sectionId = index2"></v-textarea>
                               </v-card-text>
                               <v-card-text class="original-output">
-                                <h3>Output: {{ currentResults[index].studentAnswers[index2].result }}</h3>
+                                <h3>{{ $t('utils.text.output') }} {{ currentResults[index].studentAnswers[index2].result }}</h3>
                               </v-card-text>
                             </template>
                             <template v-else>
@@ -171,16 +158,35 @@
           </v-layout>
         </v-container>
         <v-flex xs12>
-          <v-btn color="primary" @click="prevStep(n)">Prev</v-btn>
-          <v-btn color="primary" @click="nextStep(n)">Next</v-btn>
+          <v-btn
+            color="primary"
+            @click="prevStep(n)">
+            {{ $t('utils.button.prev') }}
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="nextStep(n)">
+            {{ $t('utils.button.next') }}
+          </v-btn>
           <template v-if="task.isTest" >
-            <v-btn @click="check(index)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished" color="success">Check</v-btn>
-            <v-btn @click="giveUp(index)" :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished" color="warning">Give up</v-btn>
+            <v-btn
+              @click="check(index)"
+              :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished"
+              color="success">
+              {{ $t('task.check') }}
+            </v-btn>
+            <v-btn
+              @click="giveUp(index)"
+              :disabled="!currentResults[index].active || currentResults[index].passed || taskFinished"
+              color="warning">
+              {{ $t('task.giveUp') }}
+            </v-btn>
           </template>
         </v-flex>
         <v-flex xs12>
-          <v-btn @click="finish" :disabled="taskFinished" color="error">Finish</v-btn>
-          <!-- <v-btn v-else @click="submitForReview" color="error">Submit for review</v-btn> -->
+          <v-btn @click="finish" :disabled="taskFinished" color="error">
+            {{ $t('task.finish') }}
+          </v-btn>
         </v-flex>
       </v-stepper-content>
     </v-stepper>
@@ -191,7 +197,9 @@
 <script>
 import Vue from 'vue';
 import moment from 'moment';
+import Tips from './tips/Tips.vue';
 import Graphics from './graphics/Graphics.vue';
+import { prepareTask, setCaretPosition, getCaretPosition } from '../../../../utils/utils';
 // import MathJax from 'mathjax';
 
 export default {
@@ -199,167 +207,8 @@ export default {
     return {
       lastSection: {
         sectionId: 0,
-        cursorIndex: 0,
+        cursorIndex: 0
       },
-      tips: [
-        {
-          title: 'Space',
-          items: [
-            { title: '$\\mathbb{Z}$', dataInsert: 'SPACE = Z[];', offset: 10 },
-            { title: '$\\mathbb{Z}p$', dataInsert: 'SPACE = Zp[];', offset: 11 },
-            { title: '$\\mathbb{Z}p32$', dataInsert: 'SPACE = Zp32[];', offset: 13 },
-            { title: '$\\mathbb{Z}64$', dataInsert: 'SPACE = Z64[];', offset: 12 },
-            { title: '$\\mathbb{Q}$', dataInsert: 'SPACE = Q[];', offset: 10 },
-            { title: '$\\mathbb{R}$', dataInsert: 'SPACE = R[];', offset: 10 },
-            { title: '$\\mathbb{R}64$', dataInsert: 'SPACE = R64[];', offset: 13 },
-            { title: '$\\mathbb{R}128$', dataInsert: 'SPACE = R128[];', offset: 13 },
-            { title: '$\\mathbb{C}$', dataInsert: 'SPACE = C[];', offset: 10 },
-            { title: '$\\mathbb{C}64$', dataInsert: 'SPACE = C64[];', offset: 12 },
-            { title: '$\\mathbb{C}128$', dataInsert: 'SPACE = C128[];', offset: 13 },
-            { title: '$\\mathbb{CZ}$', dataInsert: 'SPACE = CZ[];', offset: 11 },
-            { title: '$\\mathbb{CZ}p$', dataInsert: 'SPACE = CZp[];', offset: 12 },
-            { title: '$\\mathbb{CZ}p32$', dataInsert: 'SPACE = CZp32[];', offset: 14 },
-            { title: '$\\mathbb{CZ}64$', dataInsert: 'SPACE = CZ64[];', offset: 13 },
-            { title: '$\\mathbb{CQ}$', dataInsert: 'SPACE = CQ[];', offset: 11 },
-            {
-              title: 'Constants',
-              items: [
-                { title: 'FLOATPOS', dataInsert: 'FLOATPOS = ;' },
-                { title: 'MachineEpsilonR64', dataInsert: 'MachineEpsilonR64 = ;' },
-                { title: 'MachineEpsilonR', dataInsert: 'MachineEpsilonR = ;' },
-                { title: 'MachineEpsilonR/Accuracy', dataInsert: 'MachineEpsilonR = / ;' },
-                { title: 'MOD', dataInsert: 'MOD = ;' },
-                { title: 'MOD32', dataInsert: 'MOD32 = ;' },
-                { title: 'RADIAN', dataInsert: 'RADIAN = ;' },
-                { title: 'STEPBYSTEP', dataInsert: 'STEPBYSTEP = ;' },
-                { title: 'EXPAND', dataInsert: 'EXPAND = ;' },
-                { title: 'SUBSTITUTION', dataInsert: 'SUBSTITUTION = ;' },
-                { title: 'TIMEOUT', dataInsert: 'TIMEOUT = ;' },
-              ],
-            },
-          ],
-        },
-        {
-          title: 'Symbols',
-          items: [
-            {
-              title: 'Numbers, sets, intequality',
-              items: [
-                { title: '$i$', dataInsert: '\\i' },
-                { title: '$e$', dataInsert: '\\e' },
-                { title: '$\\pi$', dataInsert: '\\pi' },
-                { title: '$\\infty$', dataInsert: '\\infty' },
-                { title: '$\\emptyset$', dataInsert: '\\emptyset' },
-                { title: '$\\cup$', dataInsert: '\\cup' },
-                { title: '$\\setminus$', dataInsert: '\\setminus' },
-                { title: '$\\triangle$', dataInsert: '\\triangle' },
-                { title: '$\'$', dataInsert: '\'' },
-                { title: '$\\cap$', dataInsert: '\\cap' },
-                { title: '$(a,b)$', dataInsert: '\\(,\\)' },
-                { title: '$[a,b]$', dataInsert: '\\[,\\]' },
-                { title: '$(a,b]$', dataInsert: '\\(,\\]' },
-                { title: '$[a,b)$', dataInsert: '\\[,\\)' },
-                { title: '$\\ge$', dataInsert: '\\ge' },
-                { title: '$\\ne$', dataInsert: '\\ne' },
-                { title: '$=$', dataInsert: '==' },
-                { title: '$\\le$', dataInsert: '\\le' },
-                { title: '$\\lor$', dataInsert: '\\lor' },
-                { title: '$\\&$', dataInsert: '\\&' },
-                { title: '$\\neg$', dataInsert: '\\neg' },
-              ],
-            },
-            {
-              title: 'Other symbols',
-              items: [
-                { title: '$\\circ$', dataInsert: '\\circ' },
-                { title: '$\\partial$', dataInsert: '\\partial' },
-                { title: '$\\nabla$', dataInsert: '\\nabla' },
-                { title: '$\\hbar$', dataInsert: '\\hbar' },
-                { title: '$\\to$', dataInsert: '\\to' },
-                { title: '$\\perp$', dataInsert: '\\perp' },
-                { title: '$\\parallel$', dataInsert: '\\parallel' },
-                { title: '$\\angle$', dataInsert: '\\angle' },
-                { title: '$\\smile$', dataInsert: '\\smile' },
-                { title: '$\\equiv$', dataInsert: '\\equiv' },
-                { title: '$\\square$', dataInsert: '\\square' },
-                { title: '$\\blacksquare$', dataInsert: '\\blacksquare' },
-                { title: '$\\approx$', dataInsert: '\\approx' },
-                { title: '$\\sim$', dataInsert: '\\sim' },
-                { title: '$\\in$', dataInsert: '\\in' },
-                { title: '$\\notin$', dataInsert: '\\notin' },
-                { title: '$\\owns$', dataInsert: '\\owns' },
-                { title: '$\\subset$', dataInsert: '\\subset' },
-                { title: '$\\subseteq$', dataInsert: '\\subseteq' },
-                { title: '$\\supset$', dataInsert: '\\supset' },
-                { title: '$\\supseteq$', dataInsert: '\\supseteq' },
-                { title: '$\\exists$', dataInsert: '\\exists' },
-                { title: '$\\nexists$', dataInsert: '\\nexists' },
-                { title: '$\\forall$', dataInsert: '\\forall' },
-                { title: '$\\neg$', dataInsert: '\\neg' },
-                { title: '$\\vee$', dataInsert: '\\vee' },
-                { title: '$\\wedge$', dataInsert: '\\wedge' },
-                { title: '$\\oplus$', dataInsert: '\\oplus' },
-                { title: '$\\otimes$', dataInsert: '\\otimes' },
-                { title: '$\\hat a$', dataInsert: '\\hat' },
-                { title: '$\\bar a$', dataInsert: '\\bar' },
-                { title: '$\\tilde a$', dataInsert: '\\tilde' },
-                { title: '$\\vec a$', dataInsert: '\\vec ' },
-                { title: '$\\dot a$', dataInsert: '\\dot ' },
-                { title: '$\\ddot a$', dataInsert: '\\ddot' },
-                { title: '$\\widetilde{az}$', dataInsert: '\\widetilde{}' },
-                { title: '$\\widehat{az}$', dataInsert: '\\widehat{}' },
-                { title: '$\\overline{az}$', dataInsert: '\\overline{}' },
-                { title: '$\\overrightarrow{az}$', dataInsert: '\\overrightarrow{}' },
-                { title: '$\\underbrace{az}$', dataInsert: '\\underbrace{}' },
-                { title: '$\\overbrace{az}$', dataInsert: '\\overbrace{}' },
-                { title: '$\\frac{a}{b}$', dataInsert: '\\frac{}{}' },
-                { title: '$\\{$', dataInsert: '\\system(,)' },
-                { title: '$[$', dataInsert: '\\systemOR(,)' },
-              ],
-            },
-          ],
-        },
-        {
-          title: 'Graphics and tables',
-          items: [
-            {
-              title: '2D plots and tables',
-              items: [
-                { title: 'plot', dataInsert: '\\set2D(-5,5,-4,6); f=3\\arctg(x+1); \\plot([f,-x+5, 3x+5]);', offset: 57 },
-                { title: 'paramPlot', dataInsert: '\\set2D(-20, 20, -20, 20);\\newline g = x\\sin(x); k = x\\cos(x);\\newline f = \\paramPlot([g, k], [0, 5\\pi]);', offset: 104 },
-                { title: 'tablePlot', dataInsert: '\\set2D( 0, 10,  -5, 30);\\newline \\tablePlot([[0, 1, 2, 3, 4, 5],[0, 1, 4, 9, 16, 25],[0, -1, -2, -3, -4, -5],[0, 4, 8, 12, 16, 20]]);', offset: 133 },
-                { title: 'showPlots', dataInsert: '\\set2D(-5, 5, -5, 5);\\newline f1 = \\plot(\\tg(x));\\newline f2 = \\tablePlot([[0, 1, 4, 9, 16, 25], [0, 1, 2, 3, 4, 5]]);\\newline f3 = \\paramPlot([\\sin(x), \\cos(x)], [-10, 10]);\\newline f4=\\tablePlot([[0, 1, 4, 9, 16, 25], [0, -1, -2, -3, -4, -5]]);\\newline \\showPlots([f1, f2, f3, f4]);', offset: 284 },
-                { title: 'approximation', dataInsert: 'SPACE=R64[x];\\set2D(0, 5, -5, 10);\\newline A=[[0, 1, 2, 3,  4, 5],[3, 0, 4, 10, 5, 10]];\\newline  t=\\table(A);\\newline p=\\approximation(t,4);\\newline P=\\plot(p );\\newline T=\\tablePlot(t);\\showPlots([P,T]);\\print(p);', offset: 215 },
-                { title: 'tableFromFile', dataInsert: '=\\tableFromFile(\'\');', offset: 17 },
-                { title: 'table', dataInsert: '=\\table();', offset: 8 },
-              ],
-            },
-            {
-              title: '3D plots',
-              items: [
-                { title: 'plot3d',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = x^2 / 20 + y^2 / 20;\\newline pl=\\plot3d([f], [-20, 20, -20, 20]);', offset: 100 },
-                { title: 'implicitPlot3d_1',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = -x^2+2y^2+3z^2-25; iPl=\\implicitPlot3d( f, -10, 10, -10, 10, -10, 10);', offset: 100 },
-                { title: 'implicitPlot3d_2',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = (x^2+y^2+z^2)^2-80xyz; iPl=\\implicitPlot3d( f, -10, 10, -10, 10, -10, 10);', offset: 100 },
-                { title: 'explicitPlot3d',  dataInsert: '\\clean(); SPACE = R64[x, y, z];f = (x^2+y^2)/20; ePl=\\explicitPlot3d( f, -10, 10, -10, 10, -10, 10, 40);', offset: 100 },
-              ]
-            },
-            {
-              title: 'Parametric 3D plots',
-              items: [
-                { title: 'Torus',  dataInsert: '\\clean(); SPACE = R64[u, v]; X=\\cos(u)*(3+\\cos(v)); Y=\\sin(u)*(3+\\cos(v)); Z=\\sin(v);pPl=\\parametricPlot3d(X, Y, Z, 0, 7, 0, 7, 64);', offset: 100 },
-                { title: 'Spiral',  dataInsert: '\\clean();  SPACE = R64[u, v]; X=\\cos(u)*(\\cos(v)+2); Y=\\sin(u) * (\\cos(v)+2); Z=\\sin(v)+u/2+1; pPl=\\parametricPlot3d(X,Y,Z, -6.3, 6.3, -3.15, 3.15, 64);', offset: 100 },
-                { title: 'Dini\'s surface',  dataInsert: '\\clean();  SPACE = R64[u, v]; X = \\cos(u) * \\sin(v) * 2.5; Y = \\sin(u) * \\sin(v) * 2.5; Z = \\cos(v) + \\ln(\\tg(v / 2)) + u / 6; pPl=\\parametricPlot3d(X, Y, Z, 0, 12.56, 0.001, 2, 64);', offset: 100 },
-              ]
-            },
-            {
-              title: 'Table in text',
-              items: [
-                { title: '"Table in text"',  dataInsert: '" \\begin{array}{|l|c|r|} \\hline \\hbox{This is}&{\\bf bold}&{\\it italic}\\\\ \\hline 1&2&3\\\\ \\hline \\end{array} "', offset: 100 },
-              ]
-            },
-          ],
-        },
-      ],
       marks: {
         numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9],
         smallLetters: [
@@ -406,15 +255,15 @@ export default {
       sections[exerciseId] = newSection;
       if (currentRes[exerciseId].studentAnswers.length === 0) {
         currentRes[exerciseId].studentAnswers.push({
-          task: '', latex: '<p>No result yet</p>', isLatex: false, result: '', sectionId: newSection,
+          task: '', latex: `<p>${this.$t('utils.data.noResultYet')}</p>`, isLatex: false, result: '', sectionId: newSection,
         });
       } else if (typeof sectionId === 'undefined' || sectionId === null) {
         currentRes[exerciseId].studentAnswers.splice(0, 0, {
-          task: '', latex: '<p>No result yet</p>', isLatex: false, result: '', sectionId: newSection,
+          task: '', latex: `<p>${this.$t('utils.data.noResultYet')}</p>`, isLatex: false, result: '', sectionId: newSection,
         });
       } else {
         currentRes[exerciseId].studentAnswers.splice(sectionId, 0, {
-          task: '', latex: '<p>No result yet</p>', isLatex: false, result: '', sectionId: newSection,
+          task: '', latex: `<p>${this.$t('utils.data.noResultYet')}</p>`, isLatex: false, result: '', sectionId: newSection,
         });
       }
       this.$store.commit('SET_CURRENT_RESULT', currentRes);
@@ -520,8 +369,12 @@ export default {
       let studentResult = [];
       const taksResult = {};
       if (!this.task.isTest) {
-        // If the student decide to didn't do the exercise, then the answer is an empty string('')
-        studentResult = this.currentResults.map(result => (result.studentAnswers.length > 0 ? result.studentAnswers[result.studentAnswers.length - 1].result : ''));
+        // If the student decides not to do the exercise, then the answer is an empty string('')
+        studentResult = this.currentResults.map(result => ({
+          exerciseId: result.exerciseId,
+          answer: result.studentAnswers.length > 0 ? result.studentAnswers[result.studentAnswers.length - 1].result : '',
+          fullAnswers: result.studentAnswers.map(({ task }) => task)
+        }));
         taksResult.studentResult = studentResult;
       }
       const { mark, time } = this.currentResults.reduce((results, exerciseResult) => {
@@ -534,14 +387,14 @@ export default {
         let time = {};
         if (exerciseResult.time.totalDuration !== 0) {
           time = {
-            exerciseIndex: exerciseResult.exercise,
+            exerciseId: exerciseResult.exerciseId,
             hours: exerciseResult.time.totalDuration.hours(),
             minutes: exerciseResult.time.totalDuration.minutes(),
             seconds: exerciseResult.time.totalDuration.seconds(),
           };
         } else {
           time = {
-            exerciseIndex: exerciseResult.exercise,
+            exerciseId: exerciseResult.exerciseId,
             hours: exerciseResult.time.totalDuration,
             minutes: exerciseResult.time.totalDuration,
             seconds: exerciseResult.time.totalDuration,
@@ -594,17 +447,19 @@ export default {
       this.currentResults[exerciseId].time.isRun = true;
     },
     initialize() {
-      this.$store.dispatch('getTaskById', this.$route.params.id)
-        .then((res) => {
+      this.$store.dispatch('getTaskByIdWithOneVariant', this.$route.params.id)
+        .then(({ status }) => {
+          if (status !== 'success') return;
           const currentRes = [];
           const sections = [];
           for (let i = 0; i < this.steps; ++i) {
             currentRes.push({
+              exerciseId: this.task.exercises[i]._id,
               exercise: i,
               active: false,
               exerciseText: {
                 task: this.task.exercises[i].text,
-                latex: '<p>No result yet</p>',
+                latex: `<p>${this.$t('utils.data.noResultYet')}</p>`,
                 isLatex: false,
                 result: '',
                 sectionId: i,
@@ -627,19 +482,20 @@ export default {
           this.$store.commit('SET_SECTIONS', sections);
         });
     },
-    check(exercise) {
-      if (!this.currentResults[exercise].active || this.currentResults[exercise].passed || this.taskFinished) return;
-      const lastIndexOfStudentAnswers = this.currentResults[exercise].studentAnswers.length - 1;
-      const studentAnswers = this.currentResults[exercise].studentAnswers[lastIndexOfStudentAnswers].result;
+    check(index) {
+      if (!this.currentResults[index].active || this.currentResults[index].passed || this.taskFinished) return;
+      const lastIndexOfStudentAnswers = this.currentResults[index].studentAnswers.length - 1;
+      const studentAnswers = this.currentResults[index].studentAnswers[lastIndexOfStudentAnswers].result;
       if (studentAnswers === '') return;
-      this.$store.dispatch('check', { id: this.$route.params.id, exercise, studentAnswers })
+      const exerciseId = this.task.exercises[index]._id;
+      this.$store.dispatch('check', { id: this.$route.params.id, exerciseId, studentAnswers })
         .then(({ body }) => {
-          if (this.currentResults[exercise].countTry !== 9) {
-            ++this.currentResults[exercise].countTry;
-            ++this.currentResults[exercise].mark;
+          if (this.currentResults[index].countTry !== 9) {
+            ++this.currentResults[index].countTry;
+            ++this.currentResults[index].mark;
           }
           if (body.correct) {
-            this.currentResults[exercise].passed = true;
+            this.currentResults[index].passed = true;
             this.offOldTimer();
             this.setInactiveOldTask();
             this.$alertify.success('Success');
@@ -648,63 +504,31 @@ export default {
           }
         });
     },
-    giveUp(exercise) {
-      if (!this.currentResults[exercise].active || this.currentResults[exercise].passed || this.taskFinished) return;
-      this.$store.dispatch('giveUp', { id: this.$route.params.id, exercise })
+    giveUp(index) {
+      if (!this.currentResults[index].active || this.currentResults[index].passed || this.taskFinished) return;
+      const exerciseId = this.task.exercises[index]._id;
+      this.$store.dispatch('giveUp', { id: this.$route.params.id, exerciseId })
         .then(({ body }) => {
-          this.currentResults[exercise].mark = this.marks.bigLetters.find(el => el.number === this.currentResults[exercise].countTry).mark;
-          this.addInputBelow(exercise);
-          this.currentResults[exercise].studentAnswers[0].task = body.solution;
-          this.currentResults[exercise].passed = true;
-          this.currentResults[exercise].giveUp = true;
+          this.currentResults[index].mark = this.marks.bigLetters.find(el => el.number === this.currentResults[index].countTry).mark;
+          this.addInputBelow(index);
+          this.currentResults[index].studentAnswers[0].task = body.solution;
+          this.currentResults[index].passed = true;
+          this.currentResults[index].giveUp = true;
 
           this.offOldTimer();
           this.setInactiveOldTask();
         });
     },
-    insertTipsData(exerciseId, dataToInsert, offset) {
+    insertTipsData(ref, { exerciseId, dataToInsert, offset }) {
       if (this.currentResults[exerciseId].studentAnswers.length === 0) return;
-      const task = this.currentResults[exerciseId].studentAnswers[this.lastSection.sectionId].task.split('');
-      task.splice(this.lastSection.cursorIndex, 0, dataToInsert.replace(/\\newline/g, '\n'));
-      const newTask = task.join('');
-      Vue.set(this.currentResults[exerciseId].studentAnswers[this.lastSection.sectionId], 'task', newTask);
-      this.setCaretPosition(this.lastSection.cursorIndex + offset);
+      const { task } = this.currentResults[exerciseId].studentAnswers[this.lastSection.sectionId];
+      const newTask = prepareTask(task, this.lastSection.cursorIndex, dataToInsert);
+      this.$set(this.currentResults[exerciseId].studentAnswers[this.lastSection.sectionId], 'task', newTask);
+      const input = this.$refs[`${ref}${this.lastSection.sectionId}`][0].$el.children[0].children[0].children[0].children[1];
+      setCaretPosition(input, this.lastSection.cursorIndex + offset);
     },
-    getCaretPosition(sectionId) {
-      // console.log(this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[1].children[0].value)
-      const textarea = this.$refs[`studentAnswerTextField${sectionId}`][0].$el.children[0].children[0].children[0].children[1];
-      if (document.selection) {
-        textarea.focus();
-        const range = document.selection.createRange();
-        const rangelen = range.text.length;
-        range.moveStart('character', -textarea.value.length);
-        const start = range.text.length - rangelen;
-        this.lastSection.cursorIndex = start;
-        // return { 'start': start, 'end': start + rangelen };
-      } else if (textarea.selectionStart || textarea.selectionStart === '0') {
-        this.lastSection.cursorIndex = textarea.selectionStart;
-        // return { 'start': textarea.selectionStart, 'end': textarea.selectionEnd };
-      } else {
-        this.lastSection.cursorIndex = 0;
-        // return {'start': 0, 'end': 0};
-      }
-    },
-    setCaretPosition(position) {
-      const start = position;
-      const end = position;
-      const textarea = this.$refs[`studentAnswerTextField${this.lastSection.sectionId}`][0].$el.children[0].children[0].children[0].children[1];
-      setTimeout(() => {
-        if (textarea.setSelectionRange) {
-          textarea.focus();
-          textarea.setSelectionRange(start, end);
-        } else if (textarea.createTextRange) {
-          const range = textarea.createTextRange();
-          range.collapse(true);
-          range.moveEnd('character', end);
-          range.moveStart('character', start);
-          range.select();
-        }
-      }, 0);
+    getCaretPosition(input) {
+      this.lastSection.cursorIndex = getCaretPosition(input);
     },
     nextStep(n) {
       if (n === this.steps) {
@@ -728,12 +552,14 @@ export default {
     // this.$store.dispatch('calc');
     // console.log(window)
     // this.$http.get('task/1/check-answer/1/1');
-    setTimeout(() => {
+    setInterval(() => {
       this.$nextTick(() => {
         window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
-        // start first exercise
-        this.execute(0);
       });
+    }, 2000);
+    setTimeout(() => {
+      // start first exercise
+      this.execute(0);
     }, 2000);
   },
   mounted() {
@@ -747,6 +573,7 @@ export default {
   },
   components: {
     appGraphics: Graphics,
+    appTips: Tips
   },
 };
 </script>

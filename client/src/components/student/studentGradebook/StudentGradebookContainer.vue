@@ -2,9 +2,13 @@
   <v-container fluid>
     <v-layout wrap>
       <v-flex xs12>
-        <v-flex xs12 class="text-xs-center"><h3 class="info--text">SR's</h3></v-flex>
+        <v-flex xs12 class="text-xs-center">
+          <h3 class="info--text">{{ $t('student.gradeBook.sr.name') }}</h3>
+        </v-flex>
         <appStudentGradebookSR :subjectsData="SRsubjectsData"></appStudentGradebookSR>
-        <v-flex xs12 class="text-xs-center"><h3 class="info--text">KR's</h3></v-flex>
+        <v-flex xs12 class="text-xs-center">
+          <h3 class="info--text">{{ $t('student.gradeBook.kr.name') }}</h3>
+        </v-flex>
         <appStudentGradebookKR :subjectsData="KRsubgectsData"></appStudentGradebookKR>
       </v-flex>
     </v-layout>
@@ -13,7 +17,6 @@
 
 
 <script>
-import StudentGgradebookList from './StudentGgradebookList.vue';
 import StudentGradebookSR from './StudentGradebookSR.vue';
 import StudentGradebookKR from './StudentGradebookKR.vue';
 
@@ -40,12 +43,15 @@ export default {
       }));
     },
     KRsubgectsData() {
+      const currentStudentId = this.$auth.user().clients.find(client => client.clientRole === 'student').client.id;
       return this.studentSubjects.map(({ subject }) => ({
         subject: { name: subject.name, id: subject.id || subject._id },
         tasks: subject.plan ? subject.plan.timetable.reduce((tasksData, timetableRow) => (!timetableRow.taskId.isTest ? [...tasksData, {
           taskName: timetableRow.taskId.name,
           taskId: timetableRow.taskId._id,
           studentMarks: this.studentGradebook.reduce((marks, gradebookRow) => ((gradebookRow.taskId._id === timetableRow.taskId._id && gradebookRow.taskId.subjectId._id === subject.id) ? [...marks, gradebookRow.mark] : marks), []),
+          variant: timetableRow.studentsVariants.find(({ studentId }) => (studentId === currentStudentId)).variant,
+          fullAnswers: this.studentGradebook.find(({ taskId }) => (taskId._id === timetableRow.taskId._id && taskId.subjectId._id === subject.id)).fullAnswers
         }] : tasksData), []) : [],
         teacher: subject.teacher,
       }));

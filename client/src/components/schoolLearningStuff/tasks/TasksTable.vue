@@ -1,20 +1,21 @@
 <template>
-  <v-card>
+  <v-card class="mt-2">
     <v-card-text>
       <v-card class="elevation-1">
         <v-card-title>
-          <p class="headline primary--text">Filters</p>
+          <p class="headline primary--text">
+            {{ $t('schoolLearningStuff.tasks.tasksTable.filters.name') }}
+          </p>
         </v-card-title>
         <v-card-text>
           <v-container fluid>
             <v-layout row justify-space-between wrap>
               <v-flex xs3>
                 <v-select
-                  :items="[{ text: 'Find in this school', value: true }, { text: 'Find in all schools', value: false }]"
+                  :items="filterThisSchool"
                   item-text="text"
                   item-value="value"
                   v-model="filterData.thisSchool"
-                  label="Select "
                   single-line
                 ></v-select>
               </v-flex>
@@ -22,7 +23,7 @@
                 <v-select
                   :items="filterData.fetchTypes"
                   v-model="filterData.fetchType"
-                  label="Select type"
+                  :label="$t('utils.labels.selectType')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -30,7 +31,7 @@
                 <v-select
                   :items="['Eazy', 'Middle', 'Hard']"
                   v-model="filterData.difficultyLevel"
-                  label="Select difficulty level"
+                  :label="$t('utils.labels.selectDifficultyLevel')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -40,7 +41,7 @@
                   v-model="filterData.subjectId"
                   item-text="name"
                   item-value="_id"
-                  label="Select subject"
+                  :label="$t('utils.labels.selectSubject')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -48,7 +49,7 @@
                 <v-select
                   :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
                   v-model="filterData.classNumber"
-                  label="Select class"
+                  :label="$t('utils.labels.selectClass')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -58,17 +59,18 @@
                   v-model="filterData.themeId"
                   item-text="name"
                   item-value="_id"
-                  label="Select theme"
+                  :label="$t('utils.labels.selectTheme')"
                   single-line
                 ></v-select>
               </v-flex>
-
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-text>
           <v-layout justify-end>
-            <v-btn color="primary" @click="filter">Filter tasks</v-btn>
+            <v-btn color="primary" @click="filter">
+              {{ $t('utils.button.filterTasks') }}
+            </v-btn>
           </v-layout>
         </v-card-text>
       </v-card>
@@ -77,7 +79,7 @@
       <v-spacer></v-spacer>
       <v-text-field
         append-icon="search"
-        label="Search"
+        :label="$t('utils.labels.search')"
         single-line
         hide-details
         v-model="search"
@@ -92,15 +94,27 @@
       >
         <template slot="items" slot-scope="props">
           <td class="text-xs-left">{{ props.item.order }}</td>
-          <td class="text-xs-left clickable"><router-link :to="`/task/${props.item._id}`" tag="span">{{ props.item.name }}</router-link></td>
+          <td class="text-xs-left clickable">
+            <router-link :to="`/task/${props.item._id}`" tag="span">
+              {{ props.item.name }}
+            </router-link>
+          </td>
           <td class="text-xs-right">{{ props.item.class }}</td>
           <td class="text-xs-right">{{ props.item.difficultyLevel }}</td>
           <td class="text-xs-right">{{ props.item.subjectId.name }}</td>
           <td class="text-xs-left">{{ props.item.theme.order }}</td>
           <td class="text-xs-left">{{ props.item.theme.name }}</td>
           <td class="text-xs-right">{{ props.item.isTest ? 'SR' : 'KR' }}</td>
-          <td class="text-xs-right clickable"><router-link :to="`/profile/${props.item.teacherId.userId._id}`" tag="span">{{ props.item.teacherId.userId.fullName }}</router-link></td>
-          <td class="text-xs-right clickable"><router-link :to="`/school/${props.item.teacherId.schoolId._id}`" tag="span">{{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}</router-link></td>
+          <td class="text-xs-right clickable">
+            <router-link :to="`/profile/${props.item.teacherId.userId._id}`" tag="span">
+              {{ props.item.teacherId.userId.fullName }}
+            </router-link>
+          </td>
+          <td class="text-xs-right clickable">
+            <router-link :to="`/school/${props.item.teacherId.schoolId._id}`" tag="span">
+              {{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}
+            </router-link>
+          </td>
         </template>
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}
@@ -128,45 +142,53 @@ export default {
       max25chars: v => v.length <= 25 || 'Input too long!',
       tmp: '',
       search: '',
-      pagination: {},
-      headers: [
-        {
-          text: '№ Task', align: 'left', value: 'order', sortable: false, width: '20px',
-        },
-        {
-          text: 'Task', align: 'left', value: 'name', sortable: false,
-        },
-        {
-          text: 'Class', align: 'right', value: 'class', sortable: false,
-        },
-        {
-          text: 'Difficulty level', align: 'right', value: 'difficultyLevel', sortable: false,
-        },
-        {
-          text: 'Subject', align: 'right', value: 'subjectId.name', sortable: false,
-        },
-        {
-          text: '№ Theme', align: 'left', value: 'theme.order', sortable: false, width: '20px',
-        },
-        {
-          text: 'Theme', align: 'left', value: 'theme.name', sortable: false,
-        },
-        {
-          text: 'Type', align: 'right', value: 'isTest', sortable: false,
-        },
-        {
-          text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false,
-        },
-        {
-          text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false,
-        },
-      ],
+      pagination: {}
     };
   },
   computed: {
     tasks() {
       return this.$store.getters.tasks;
     },
+    filterThisSchool() {
+      return [
+        { text: this.$t('schoolLearningStuff.tasks.tasksTable.filters.findInThisSchool'), value: true },
+        { text: this.$t('schoolLearningStuff.tasks.tasksTable.filters.findInAllSchools'), value: false }
+      ];
+    },
+    headers() {
+      return [
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.taskNumber'), align: 'left', value: 'order', sortable: false, width: '20px',
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.task'), align: 'left', value: 'name', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.class'), align: 'right', value: 'class', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.difficultyLevel'), align: 'right', value: 'difficultyLevel', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.subject'), align: 'right', value: 'subjectId.name', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.themeNumber'), align: 'left', value: 'theme.order', sortable: false, width: '20px',
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.theme'), align: 'left', value: 'theme.name', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.type'), align: 'right', value: 'isTest', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.teacher'), align: 'right', value: 'teacherId.userId.fullName', sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.school'), align: 'right', value: 'teacherId.schoolId.name', sortable: false,
+        }
+      ];
+    }
   },
   watch: {
     'filterData.subjectId': function (newSubjectId) {

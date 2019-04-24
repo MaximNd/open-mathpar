@@ -40,6 +40,14 @@ const PlanSchema = new Schema({
                     ref: 'Task',
                     required: true
                 },
+                studentsVariants: {
+                    type: [{
+                        studentId: ObjectId,
+                        variant: Number
+                    }],
+                    required: false,
+                    default: []
+                },
                 date: {
                     type: Date,
                     required: true

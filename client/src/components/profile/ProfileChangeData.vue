@@ -2,37 +2,48 @@
     <v-dialog v-model="changeDataDialog" persistent width="500px">
       <v-card>
         <v-card-title>
-          <span class="headline">User Profile</span>
+          <span class="headline">{{ $t('profile.changeProfile.userProfile') }}</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm6 md4>
-                <v-text-field label="Legal first name" required></v-text-field>
+                <v-text-field
+                  :label="$t('utils.labels.firstName')"
+                  required></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
+                <v-text-field
+                  :label="$t('utils.labels.midName')"
+                  required>
+                </v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field label="Legal last name" hint="example of persistent helper text"
+                <v-text-field
+                  :label="$t('utils.labels.lastName')"
                   persistent-hint
                   required
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field label="Email" required></v-text-field>
+                <v-text-field
+                  :label="$t('utils.labels.email')"
+                  required></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field label="Password" type="password" required></v-text-field>
+                <v-text-field
+                  :label="$t('utils.labels.password')"
+                  type="password"
+                  required></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
-          <small>*indicates required field</small>
+          <small>{{ $t('utils.hint.indicatesRequiredField') }}</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="error" flat @click="close">Close</v-btn>
-          <v-btn color="success" flat @click="close">Save</v-btn>
+          <v-btn color="error" flat @click="close">{{ $t('utils.button.close') }}</v-btn>
+          <v-btn color="success" flat @click="close">{{ $t('utils.button.save') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="editTimetableDialog" max-width="2000px">
-    <v-btn color="info" slot="activator">Edit Plan</v-btn>
+    <v-btn color="info" slot="activator">{{ $t('teacher.timetableAndPlan.plan.editPlan') }}</v-btn>
     <v-card>
       <v-card-title class="primary white--text">
-        <span class="headline">Edit Plan {{ planName }}</span>
+        <span class="headline">{{ $t('teacher.timetableAndPlan.plan.editPlan') }}: {{ planName }}</span>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>

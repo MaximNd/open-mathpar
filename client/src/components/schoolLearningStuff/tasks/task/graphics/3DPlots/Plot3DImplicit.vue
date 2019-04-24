@@ -12,8 +12,9 @@
 <script>
 import * as THREE from 'three';
 import OrbitControlsLibrary from 'three-orbit-controls';
+import plot3dMixin from '../../../../../../mixins/plot3DMixin.js';
+
 const OrbitControls = OrbitControlsLibrary(THREE);
-import plot3dMixin from './../../../../../../mixins/plot3DMixin.js';
 
 export default {
   mixins: [plot3dMixin],
@@ -24,15 +25,15 @@ export default {
     },
     task: {
       type: String,
-      required: true
+      required: true,
     },
     canvasWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     canvasHeight: {
       type: Number,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -54,7 +55,7 @@ export default {
       geometry,
       xLabel: null,
       yLabel: null,
-      zLabel: null
+      zLabel: null,
     };
   },
   methods: {
@@ -90,14 +91,14 @@ export default {
             this.createAxisLabel('y', new THREE.Vector3(0, axesSize, 0), this.camera.rotation),
             this.createAxisLabel('z', new THREE.Vector3(0, 0, axesSize), this.camera.rotation),
           ])
-          .then(([ xLabel, yLabel, zLabel ]) => {
-            this.xLabel = xLabel;
-            this.yLabel = yLabel;
-            this.zLabel = zLabel
-            this.scene.add(this.xLabel);
-            this.scene.add(this.yLabel);
-            this.scene.add(this.zLabel);
-          });
+            .then(([xLabel, yLabel, zLabel]) => {
+              this.xLabel = xLabel;
+              this.yLabel = yLabel;
+              this.zLabel = zLabel;
+              this.scene.add(this.xLabel);
+              this.scene.add(this.yLabel);
+              this.scene.add(this.zLabel);
+            });
           // LIGHT
           const light = new THREE.PointLight(0xffffff, 1.2);
           light.position.set(lightX, lightY, lightZ);
@@ -113,7 +114,7 @@ export default {
           this.geometry.computeVertexNormals();
 
           const colorMaterial = new THREE.MeshLambertMaterial({
-            color: '#' + Math.floor(Math.random()*16777215).toString(16),
+            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
             side: THREE.DoubleSide,
           });
 
@@ -136,8 +137,8 @@ export default {
   created() {
     this.init();
     this.initData();
-  }
-}
+  },
+};
 </script>
 
 <style>

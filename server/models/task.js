@@ -34,6 +34,10 @@ const TaskSchema = new Schema({
   // filter
   name: String,
   order: Number,
+  countOfVariants: {
+    type: Number,
+    required: true
+  },
   exercises: {
     type: [
       {
@@ -43,7 +47,8 @@ const TaskSchema = new Schema({
         images: {
           type: [String],
           required: false
-        }
+        },
+        variant: Number
       }
     ],
     required: true

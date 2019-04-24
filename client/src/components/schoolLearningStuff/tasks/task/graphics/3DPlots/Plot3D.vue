@@ -18,20 +18,20 @@ export default {
     },
     task: {
       type: String,
-      required: true
+      required: true,
     },
     canvasWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     canvasHeight: {
       type: Number,
-      required: true
+      required: true,
     },
     getImageUrl: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -40,7 +40,7 @@ export default {
         [500, 0, 500, 250000],
         [0, 500, 350, 175000],
         [0, 0, 1, 0],
-        [0, 0, 1, 500]
+        [0, 0, 1, 500],
       ],
       points3D: [[-20, -20, -20], [-20, 20, -20], [20, -20, -20], [20, 20, -20], [-20, -20, 20], [-20, 20, 20], [20, -20, 20], [20, 20, 20]],
       points2D: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
@@ -48,7 +48,7 @@ export default {
       oldX: 0,
       oldY: 0,
       mouseDown: false,
-      shiftDown: false
+      shiftDown: false,
     };
   },
   methods: {
@@ -173,7 +173,7 @@ export default {
     },
     projection() {
       for (let j = 0; j < 8; ++j) {
-        let x = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+        const x = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
         for (let i = 0; i < 4; ++i) {
           x[i] = this.matrix[i][0] * this.points3D[j][0] + this.matrix[i][1] * this.points3D[j][1]
               + this.matrix[i][2] * this.points3D[j][2] + this.matrix[i][3];
@@ -190,17 +190,17 @@ export default {
       if (alpha !== 0 && !this.shiftDown) {
         cos = Math.cos(alpha);
         sin = Math.sin(alpha);
-        let na = [[1, 0, 0, 0], [0, cos, -sin, 0], [0, sin, cos, 0], [0, 0, 0, 1]];
+        const na = [[1, 0, 0, 0], [0, cos, -sin, 0], [0, sin, cos, 0], [0, 0, 0, 1]];
         this.matrixMult(na);
       }
       if (beta !== 0 && !this.shiftDown) {
         cos = Math.cos(beta);
         sin = Math.sin(beta);
-        let nb = [[cos, 0, sin, 0], [0, 1, 0, 0], [-sin, 0, cos, 0], [0, 0, 0, 1]];
+        const nb = [[cos, 0, sin, 0], [0, 1, 0, 0], [-sin, 0, cos, 0], [0, 0, 0, 1]];
         this.matrixMult(nb);
       }
       if (this.shiftDown) {
-        let ns = [[1 + scale, 0, 0, 0], [0, 1 + scale, 0, 0], [0, 0, 1 + scale, 0], [0, 0, 0, 1]];
+        const ns = [[1 + scale, 0, 0, 0], [0, 1 + scale, 0, 0], [0, 0, 1 + scale, 0], [0, 0, 0, 1]];
         this.matrixMult(ns);
       }
       matrixOld = this.matrix;
@@ -210,21 +210,17 @@ export default {
     },
     update3d() {
       this.setMatrix3D()
-        .then(() => {
-          return this.$store.dispatch('calc', {
-            sectionId: this.sectionId,
-            task: this.task
-          });
-        })
-        .then(() => {
-          return this.$store.dispatch('space');
-        })
+        .then(() => this.$store.dispatch('calc', {
+          sectionId: this.sectionId,
+          task: this.task,
+        }))
+        .then(() => this.$store.dispatch('space'))
         .then(() => {
           this.$emit('update:imgPath', this.getImageUrl());
         });
     },
     matrixMult(otherMatrix) {
-      let M = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+      const M = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
       for (let i = 0; i < 4; ++i) {
         for (let j = 0; j < 4; ++j) {
           for (let k = 0; k < 4; ++k) {
@@ -233,7 +229,7 @@ export default {
         }
       }
       this.matrix = M;
-    }
+    },
   },
   created() {
     this.init();
@@ -241,8 +237,8 @@ export default {
   beforeDestroy() {
     window.removeEventListener('keydown', this.onShiftPressed);
     window.removeEventListener('keyup', this.onShiftReleased);
-  }
-}
+  },
+};
 </script>
 
 <style>
