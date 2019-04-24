@@ -87,8 +87,7 @@ export default {
         if (client.clientRole === 'director' || client.clientRole === 'headTeacher') {
           res.push({ title: this.$t('profile.directorData.school'), text: client.client.schoolId.name });
         } else if (client.clientRole === 'rector' || client.clientRole === 'dean' || client.clientRole === 'methodist') {
-          // TODO: UNIVERSITY
-          res.push({ title: 'University', text: client.client.universityId.name });
+          res.push({ title: this.$t('profile.university'), text: client.client.universityId.name });
         } else if (client.clientRole === 'teacher') {
           res.push({ title: client.client.schoolModel, text: client.client.schoolId.name });
           res.push({

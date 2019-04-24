@@ -159,9 +159,8 @@ export default {
     },
     filterThisSchool() {
       return [
-        // TODO: UNIVERSITY
-        { text: this.$t('schoolLearningStuff.plans.plansTable.filters.findInThisSchool'), value: true },
-        { text: this.$t('schoolLearningStuff.plans.plansTable.filters.findInAllSchools'), value: false }
+        { text: this.$t('schoolLearningStuff.plans.plansTable.filters.' + (this.schoolModel === 'School' ? 'findInThisSchool' : 'findInThisUniversity')), value: true },
+        { text: this.$t('schoolLearningStuff.plans.plansTable.filters.' + (this.schoolModel === 'School' ? 'findInAllSchools' : 'findInAllUniversities')), value: false }
       ];
     },
     headers() {
@@ -176,8 +175,7 @@ export default {
           text: this.$t('schoolLearningStuff.plans.plansTable.headers.teacher'), align: 'right', value: 'teacherId.userId.fullName', sortable: false, width: '20px',
         },
         {
-          // TODO: UNIVERSITY
-          text: this.$t('schoolLearningStuff.plans.plansTable.headers.school'), align: 'right', value: 'teacherId.schoolId.name', sortable: false, width: '20px',
+          text: this.$t('schoolLearningStuff.plans.plansTable.headers.' + (this.schoolModel === 'School' ? 'school' : 'university')), align: 'right', value: 'teacherId.schoolId.name', sortable: false, width: '20px',
         },
       ];
     }
