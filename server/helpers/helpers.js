@@ -6,7 +6,8 @@ const config = require('./../config/passport');
 
 module.exports = {
     findShoollId(clients, role) {
-        return clients.find(client => client.clientRole === role).client.schoolId;
+        const client = clients.find(client => client.clientRole === role).client;
+        return client.schoolId ? client.schoolId : client.universityId;
     },
     
     findUniversityId(clients, role) {

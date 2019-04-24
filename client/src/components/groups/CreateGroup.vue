@@ -50,10 +50,16 @@ export default {
   },
   methods: {
     createGroup() {
-      this.$store.dispatch('createGroup', this.group)
+      const goal = this.$auth.user().role.indexOf('headTeacher') !== -1
+        ? 'createGroup'
+        : 'createGroupU';
+      this.$store.dispatch(goal, this.group)
         .then(() => {
           this.$alertify.success('Success');
-          this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
+          const id = goal === 'createGroup'
+            ? this.$auth.user().clients[0].client.schoolId._id
+            : this.$auth.user().clients[0].client.universityId._id
+          this.$store.dispatch('getGroupsBySchoolId', { schoolId: id });
         })
         .catch(() => {
           this.$alertify.error('Error! Try again later please.');

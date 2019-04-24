@@ -30,6 +30,11 @@ const actions = {
       .then(data => resolve(data))
       .catch(err => reject(err)));
   },
+  createTeacherU({ commit }, payload) {
+    return new Promise((resolve, reject) => Vue.http.post('teacher-u', payload)
+      .then(data => resolve(data))
+      .catch(err => reject(err)));
+  },
 };
 
 export default {

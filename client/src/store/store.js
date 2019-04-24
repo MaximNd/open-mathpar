@@ -13,6 +13,7 @@ import task from './modules/task';
 import taskExecution from './modules/task_execution';
 import plan from './modules/plan';
 import dean from './modules/dean';
+import methodist from './modules/methodist';
 
 Vue.use(Vuex);
 
@@ -29,5 +30,6 @@ export const store = new Vuex.Store({
     taskExecution,
     plan,
     dean,
+    methodist,
   },
 });

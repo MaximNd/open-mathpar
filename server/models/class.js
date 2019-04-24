@@ -14,7 +14,14 @@ const ClassSchema = new Schema({
   schoolId: {
       type: ObjectId,
       required: true,
-      ref: 'School'
+      //ref: 'School'
+      refPath: 'schoolModel'
+  },
+  schoolModel: {
+    type: String,
+    required: true,
+    enum: ['School', 'University'],
+    default: 'School'
   }
 });
 

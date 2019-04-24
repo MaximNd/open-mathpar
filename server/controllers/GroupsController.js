@@ -43,10 +43,14 @@ module.exports = {
 
         req.user.clients
             .then(clients => {
+                const role = clients.find(client => client.clientRole === "methodist")
+                            ? "methodist"
+                            : "headTeacher";
                 const group = new Group({
                     name,
-                    schoolId: findShoollId(clients, 'headTeacher'),
-                    course
+                    schoolId: findShoollId(clients, role),
+                    course,
+                    schoolModel: role === 'methodist' ? "University" : "School",
                 });
                 group.save(err => {
                     if (err) {

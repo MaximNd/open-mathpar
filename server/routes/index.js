@@ -12,6 +12,7 @@ const task = require('./task');
 const teacher = require('./teacher');
 const user = require('./user');
 const dean = require('./dean');
+const methodist = require('./methodist');
 
 
 module.exports = {
@@ -28,5 +29,6 @@ module.exports = {
   task,
   plan,
   school,
-  dean
+  dean,
+  methodist,
 }

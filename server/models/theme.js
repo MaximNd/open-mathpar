@@ -8,7 +8,14 @@ const ThemeSchema = new Schema({
     school: {
         type: ObjectId,
         required: true,
-        ref: 'School'
+        //ref: 'School'
+        refPath: 'schoolModel'
+    },
+    schoolModel: {
+      type: String,
+      required: true,
+      enum: ['School', 'University'],
+      default: 'School'
     },
     teacher: {
         type: ObjectId,

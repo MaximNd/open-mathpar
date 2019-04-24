@@ -10,7 +10,7 @@
             <v-layout row justify-space-between wrap>
               <v-flex xs3>
                 <v-select
-                  :items="[{ text: 'Find in this school', value: true }, { text: 'Find in all schools', value: false }]"
+                  :items="[{ text: 'Find in this ' + schoolModel.toLowerCase(), value: true }, { text: 'Find in all schools', value: false }]"
                   item-text="text"
                   item-value="value"
                   v-model="filterData.thisSchool"
@@ -158,7 +158,7 @@ export default {
           text: 'Teacher', align: 'right', value: 'teacherId.userId.fullName', sortable: false,
         },
         {
-          text: 'School', align: 'right', value: 'teacherId.schoolId.name', sortable: false,
+          text: this.schoolModel, align: 'right', value: 'teacherId.schoolId.name', sortable: false,
         },
       ],
     };
@@ -208,6 +208,7 @@ export default {
         this.filter();
       });
   },
+  props: ['schoolModel'],
 };
 </script>
 

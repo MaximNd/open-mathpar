@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <appSubjectsTable></appSubjectsTable>
+      <appSubjectsTable :schoolModel="schoolModel" :isSchool="isSchool"></appSubjectsTable>
     </v-card-text>
   </v-card>
 </template>
@@ -14,5 +14,6 @@ export default {
   components: {
     appSubjectsTable: SubjectsTable,
   },
+  props: ['schoolModel', 'isSchool'],
 };
 </script>

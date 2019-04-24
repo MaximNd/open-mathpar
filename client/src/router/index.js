@@ -25,6 +25,11 @@ import Register from '../components/auth/register/Register.vue';
 import RegisterUniversity from '../components/univesity/register/Register.vue';
 import NewDean from '../components/univesity/rector/NewDean.vue';
 import Rector from '../components/univesity/rector/Rector.vue';
+import Dean from '../components/univesity/dean/Dean.vue';
+import NewMethodist from '../components/univesity/dean/NewMethodist.vue';
+import Methodist from '../components/univesity/methodist/MethodistContainer.vue';
+import MethodistNewMember from '../components/univesity/methodist/createMember/CreateMemberContainer.vue';
+import CreateSpecialty from '../components/univesity/dean/CreateSpecialty.vue';
 
 Vue.use(Router);
 
@@ -80,8 +85,23 @@ export default new Router({
       component: Rector,
       children: [
         { path: 'new-dean', name: 'new-dean', component: NewDean },
-        // { path: 'create-head-teacher', name: 'director-create-head-teacher', component: DirectorCreateHeadTeacher },
-        // { path: 'create-class', name: 'director-create-class', component: DirectorCreateClass },
+      ],
+    },
+    {
+      path: '/dean',
+      name: 'dean',
+      component: Dean,
+      children: [
+        { path: 'new-methodist', name: 'new-methodist', component: NewMethodist },
+        { path: 'create-specialty', name: 'create-specialty', component: CreateSpecialty },
+      ],
+    },
+    {
+      path: '/methodist',
+      name: 'methodist',
+      component: Methodist,
+      children: [
+        { path: 'new-member', name: 'new-member', component: MethodistNewMember },
       ],
     },
     {

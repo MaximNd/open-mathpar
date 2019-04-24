@@ -2,7 +2,7 @@
   <v-card>
     <v-card-text>
       <appCreatePlan></appCreatePlan>
-      <appPlansTable :chooseMode="false"></appPlansTable>
+      <appPlansTable :chooseMode="false" :schoolModel="schoolModel"></appPlansTable>
     </v-card-text>
   </v-card>
 </template>
@@ -17,5 +17,6 @@ export default {
     appCreatePlan: CreatePlan,
     appPlansTable: PlansTable,
   },
+  props: ['schoolModel', 'isSchool'],
 };
 </script>

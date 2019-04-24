@@ -18,7 +18,14 @@ const GroupSchema = new Schema({
     schoolId: {
         type: ObjectId,
         required: true,
-        ref: 'School'
+        //ref: 'School'
+        refPath: 'schoolModel'
+    },
+    schoolModel: {
+      type: String,
+      required: true,
+      enum: ['School', 'University'],
+      default: 'School'
     }
 },
 {
@@ -34,7 +41,6 @@ GroupSchema.methods.students = function(groupId) {
                 users.forEach(user => {
                     promises.push(user.clients);
                 });
-
                 Promise.all(promises)
                     .then(allClients => {
                         let resUsers = [];
@@ -45,7 +51,8 @@ GroupSchema.methods.students = function(groupId) {
                         resUsers = resUsers.filter(student => student.clients.find(client => client.clientRole === 'student').client.groupId.toString() === groupId.toString());    
                         //console.log(users, clients);
                         return res({ students: resUsers })
-                    });
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => rej(err));
     });
