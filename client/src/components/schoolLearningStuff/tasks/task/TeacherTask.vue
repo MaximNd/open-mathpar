@@ -3,6 +3,14 @@
     <v-stepper v-if="task !== null" v-model="exercise">
       <v-subheader class="mt-3 primary--text">
         <div class="pb-4">{{ task.name }}</div>
+        <div class="ml-4">
+          <v-select
+            v-if="!task.isTest"
+            :items="variants"
+            label="Variant"
+            v-model="currentVariant"
+          ></v-select>
+        </div>
         <v-spacer></v-spacer>
         <v-select
           :items="[{ text: 'Open access to the task', value: true }, { text: 'Close access to the task', value: false}]"
@@ -52,18 +60,24 @@
       </v-card>
 
       <v-stepper-content
-          :step="n"
-          v-for="(n, index) in steps"
+          :step="index + 1"
+          v-for="(exercise, index) in currentExercises"
           :key="`${index}-content`"
         >
         <v-container fluid>
           <v-layout>
             <v-flex xs3>
-              Tips
+              <v-card flat>
+                <v-card-text>
+                  <appTips
+                    :exerciseId="index"
+                    @tip:selected="insertTipsData(`${lastInputName}${index}`, $event)"></appTips>
+                </v-card-text>
+              </v-card>
             </v-flex>
             <v-flex xs9>
               <div :style="{ 'overflow-y': 'scroll', 'height': '100vh' }">
-                <v-card class="mb-5 elevation-0">
+                <v-card flat class="mb-5">
                   <v-layout column>
                     <v-flex>
                       <v-card-text>
@@ -72,11 +86,11 @@
                             <v-container fluid>
                               <v-layout justify-start>
                                 <v-flex xs12 align-start>
-                                  <v-btn color="primary" @click="execute(index, 'task')" >
+                                  <v-btn color="primary" @click="execute(exercise, 'task')" >
                                     <v-icon left>play_arrow</v-icon>
                                     Execute
                                   </v-btn>
-                                  <v-btn color="info" @click="swap(index, 'task')">
+                                  <v-btn color="info" @click="swap(exercise, 'task')">
                                     <v-icon left>swap_horiz</v-icon>
                                     Swap
                                   </v-btn>
@@ -84,15 +98,21 @@
                               </v-layout>
                             </v-container>
                           </v-card-actions>
-                          <v-card-text class="original-input" v-show="!task.exercises[index].task.isLatex">
-                            <v-textarea v-model="task.exercises[index].task.task" label="Exercise" auto-grow ></v-textarea>
+                          <v-card-text class="original-input" v-show="!exercise.task.isLatex">
+                            <v-textarea
+                              v-model="exercise.task.task"
+                              label="Exercise"
+                              auto-grow
+                              :ref="`task${index}`"
+                              @blur="getCaretPosition($refs[`task${index}`][0].$el.children[0].children[0].children[0].children[1])"
+                              @focus="onFocusInput('task')"></v-textarea>
                           </v-card-text>
-                          <v-card-text class="original-output" v-show="!task.exercises[index].task.isLatex">
+                          <v-card-text class="original-output" v-show="!exercise.task.isLatex">
                             <h3>Output: </h3>
-                            <p>{{ task.exercises[index].task.result }}</p>
+                            <p>{{ exercise.task.result }}</p>
                           </v-card-text>
-                          <v-card-text v-show="task.exercises[index].task.isLatex">
-                            <div class="math-jax" id="latex_markup" v-html="task.exercises[index].task.latex">
+                          <v-card-text v-show="exercise.task.isLatex">
+                            <div class="math-jax" id="latex_markup" v-html="exercise.task.latex">
                             </div>
                           </v-card-text>
                         </v-card>
@@ -102,11 +122,11 @@
                             <v-container fluid>
                               <v-layout justify-start>
                                 <v-flex xs12 align-start>
-                                  <v-btn color="primary" @click="execute(index, 'fullSolution')">
+                                  <v-btn color="primary" @click="execute(exercise, 'fullSolution')">
                                     <v-icon left>play_arrow</v-icon>
                                     Execute
                                   </v-btn>
-                                  <v-btn color="info" @click="swap(index, 'fullSolution')">
+                                  <v-btn color="info" @click="swap(exercise, 'fullSolution')">
                                     <v-icon left>swap_horiz</v-icon>
                                     Swap
                                   </v-btn>
@@ -114,15 +134,21 @@
                               </v-layout>
                             </v-container>
                           </v-card-actions>
-                          <v-card-text class="original-input" v-show="!task.exercises[index].fullSolution.isLatex">
-                            <v-textarea v-model="task.exercises[index].fullSolution.task" label="Full Solution" auto-grow ></v-textarea>
+                          <v-card-text class="original-input" v-show="!exercise.fullSolution.isLatex">
+                            <v-textarea
+                              v-model="exercise.fullSolution.task"
+                              label="Full Solution"
+                              auto-grow
+                              :ref="`fullSolution${index}`"
+                              @blur="getCaretPosition($refs[`fullSolution${index}`][0].$el.children[0].children[0].children[0].children[1])"
+                              @focus="onFocusInput('fullSolution')"></v-textarea>
                           </v-card-text>
-                          <v-card-text class="original-output" v-show="!task.exercises[index].fullSolution.isLatex">
+                          <v-card-text class="original-output" v-show="!exercise.fullSolution.isLatex">
                             <h3>Output: </h3>
-                            <p>{{ task.exercises[index].fullSolution.result }}</p>
+                            <p>{{ exercise.fullSolution.result }}</p>
                           </v-card-text>
-                          <v-card-text v-show="task.exercises[index].fullSolution.isLatex">
-                            <div class="math-jax" id="latex_markup" v-html="task.exercises[index].fullSolution.latex">
+                          <v-card-text v-show="exercise.fullSolution.isLatex">
+                            <div class="math-jax" id="latex_markup" v-html="exercise.fullSolution.latex">
                             </div>
                           </v-card-text>
                         </v-card>
@@ -143,21 +169,38 @@
 </template>
 
 <script>
+import Tips from './tips/Tips.vue';
+import { prepareTask, setCaretPosition, getCaretPosition } from '../../../../utils/utils';
+
 export default {
   data() {
     return {
+      lastInputName: 'task',
+      lastCursorIndex: 0,
       exercise: 1,
       task: null,
+      currentVariant: 1
     };
   },
   computed: {
+    variants() {
+      const v = [];
+      for (let i = 1; i <= this.task.countOfVariants; ++i) {
+        v.push(i);
+      }
+      return v;
+    },
+    currentExercises() {
+      return this.task
+        ? this.task.exercises.filter(exercise => exercise.variant === this.currentVariant) : [];
+    },
     steps() {
-      return this.task ? this.task.exercises.length : 10;
+      return this.currentExercises.length;
     },
   },
   methods: {
-    execute(index, field) {
-      this.$http.post('http://mathpar.ukma.edu.ua/api/calc', { task: this.task.exercises[index][field].task })
+    execute(exercise, field) {
+      this.$http.post(`${process.env.VUE_APP_API}/api/calc`, { task: exercise[field].task })
         .then(({ body }) => {
           if (body.status === 'OK') {
             const latexArr = body.latex.split('\n');
@@ -167,31 +210,50 @@ export default {
               }
               return latex;
             }, '');
-            this.task.exercises[index][field].latex = latex;
-            this.task.exercises[index][field].result = body.result;
+            exercise[field].latex = latex;
+            exercise[field].result = body.result;
             setTimeout(() => {
               this.$nextTick(() => {
                 window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
               });
             }, 0);
-            if (!this.task.exercises[index][field].isLatex) {
-              this.swap(index, field);
+            if (!exercise[field].isLatex) {
+              this.swap(exercise, field);
             }
           }
         });
     },
-    swap(index, field) {
-      this.task.exercises[index][field].isLatex = !this.task.exercises[index][field].isLatex;
+    swap(exercise, field) {
+      exercise[field].isLatex = !exercise[field].isLatex;
     },
     update() {
-      const exercises = this.task.exercises.map(exercise => ({ text: exercise.task.task, fullSolution: exercise.fullSolution.task, answer: exercise.fullSolution.result }));
+      const exercises = this.task.exercises.map(exercise => ({
+        variant: exercise.variant,
+        text: exercise.task.task,
+        fullSolution: exercise.fullSolution.task,
+        answer: exercise.fullSolution.result
+      }));
       this.$http.put(`task/${this.$route.params.id}`, Object.assign({}, this.task, { exercises, class: this.task.classNumber }));
     },
+    insertTipsData(ref, { exerciseId, dataToInsert, offset }) {
+      const { task } = this.currentExercises[exerciseId].task;
+      const newTask = prepareTask(task, this.lastCursorIndex, dataToInsert);
+      this.$set(this.currentExercises[exerciseId].task, 'task', newTask);
+      const input = this.$refs[ref][0].$el.children[0].children[0].children[0].children[1];
+      setCaretPosition(input, this.lastCursorIndex + offset);
+    },
+    getCaretPosition(input) {
+      this.lastCursorIndex = getCaretPosition(input);
+    },
+    onFocusInput(inputName) {
+      this.lastInputName = inputName;
+    }
   },
   created() {
     this.$http.get(`task/${this.$route.params.id}`)
       .then(({ body }) => {
         const exercises = body.exercises.map(exercise => ({
+          variant: exercise.variant,
           task: {
             task: exercise.text,
             result: '',
@@ -209,5 +271,8 @@ export default {
         this.task.exercises = exercises;
       });
   },
+  components: {
+    appTips: Tips
+  }
 };
 </script>

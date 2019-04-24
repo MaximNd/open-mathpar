@@ -1,22 +1,27 @@
 <template>
   <v-expansion-panel popout>
-    <v-expansion-panel-content v-for="(subjectData, subjectDataIndex) in subjectsData" :key="`subject-SR-${subjectData.subject.id}`" class="elevation-1">
+    <v-expansion-panel-content
+      v-for="(subjectData, subjectDataIndex) in subjectsData"
+      :key="`subject-SR-${subjectData.subject.id}`"
+      class="elevation-1">
       <div slot="header" class="secondary--text">{{ subjectData.subject.name }}</div>
       <v-card>
         <v-card-title class="headline" primary-title>
           <p>
-            Teacher: <router-link :to="`/profile/${subjectData.teacher.id}`">{{ subjectData.teacher.fullName }}</router-link>
+            {{ $t('student.gradeBook.sr.teacher') }}: <router-link :to="`/profile/${subjectData.teacher.id}`">
+              {{ subjectData.teacher.fullName }}
+            </router-link>
           </p>
         </v-card-title>
         <v-card-text>
           <v-card>
             <v-card-title>
-              Tasks
+              {{ $t('student.gradeBook.sr.tasks') }}
               <v-spacer></v-spacer>
               <v-text-field
                 v-model="search"
                 append-icon="search"
-                label="Search"
+                :label="$t('utils.labels.search')"
                 single-line
                 hide-details
               ></v-text-field>
@@ -39,14 +44,18 @@
                     ></v-select>
                   </template>
                   <template v-else>
-                    No Data yet
+                    {{ $t('utils.data.noDataYet') }}
                   </template>
                 </td>
-                <td class="text-xs-right">{{ props.item.studentMarks.length === 0 ? 'No data yet' : props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].mark }}</td>
-                <td class="text-xs-right">{{ props.item.studentMarks.length === 0 ? 'No data yet' : `${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.firstNumber} ${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.secondNumber.toFixed(1)}/${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.thirdNumber}  ${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.fourthNumber.toFixed(1)}` }}</td>
+                <td class="text-xs-right">
+                  {{ props.item.studentMarks.length === 0 ? $t('utils.data.noDataYet') : props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].mark }}
+                </td>
+                <td class="text-xs-right">
+                  {{ props.item.studentMarks.length === 0 ? $t('utils.data.noDataYet') : `${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.firstNumber} ${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.secondNumber.toFixed(1)}/${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.thirdNumber}  ${props.item.studentMarks[currentIndexOfSrTries[subjectDataIndex][props.index] - 1].fourNumbers.fourthNumber.toFixed(1)}` }}
+                </td>
               </template>
               <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                Your search for "{{ search }}" found no results.
+                {{ $t('utils.data.noSearchResult', [search]) }}
               </v-alert>
             </v-data-table>
           </v-card>
@@ -68,21 +77,7 @@ export default {
   data() {
     return {
       search: '',
-      currentIndexOfSrTries: [],
-      headers: [
-        {
-          text: 'Task', align: 'left', sortable: true, value: 'taskName',
-        },
-        {
-          text: '№', align: 'right', sortable: false, value: false, width: '20px',
-        },
-        {
-          text: 'Mark', align: 'right', sortable: false, value: 'studentMarks.mark',
-        },
-        {
-          text: 'Four Numbers', align: 'right', sortable: false, value: 'studentMarks.fourNumbers',
-        },
-      ],
+      currentIndexOfSrTries: []
     };
   },
   watch: {
@@ -90,9 +85,24 @@ export default {
       this.currentIndexOfSrTries = newSubjectsData.map(subjectData => subjectData.tasks.map(task => task.studentMarks.length));
     },
   },
-  created() {
-
-  },
+  computed: {
+    headers() {
+      return [
+        {
+          text: this.$t('student.gradeBook.sr.task'), align: 'left', sortable: true, value: 'taskName',
+        },
+        {
+          text: '№', align: 'right', sortable: false, value: false, width: '20px',
+        },
+        {
+          text: this.$t('student.gradeBook.sr.mark'), align: 'right', sortable: false, value: 'studentMarks.mark',
+        },
+        {
+          text: this.$t('student.gradeBook.sr.fourNumbers'), align: 'right', sortable: false, value: 'studentMarks.fourNumbers',
+        },
+      ];
+    }
+  }
 };
 </script>
 

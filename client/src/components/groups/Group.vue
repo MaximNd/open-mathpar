@@ -5,7 +5,7 @@
         <v-card-title class="primary--text title">
           <v-layout row >
             <v-flex xs12 sm6>
-              Group: {{ group.group.name }}
+              {{ $t('group.name') }}: {{ group.group.name }}
             </v-flex>
           </v-layout>
         </v-card-title>
@@ -14,26 +14,26 @@
         <v-card-title class="primary--text title">
           <v-layout row justify-space-between>
             <v-flex xs12 sm6>
-              AVG SR Marks
+              {{ $t('group.AVGSRMark') }}
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-right">
-              AVG SR Dispersion
+              {{ $t('group.AVGSRDispersion') }}
             </v-flex>
           </v-layout>
         </v-card-title>
         <v-card-text>
           <v-layout row justify-space-between>
             <v-flex xs12 sm6>
-              {{ group.groupAVGMarks.avgSR.firstNumber == null ? 'No data yet' : group.groupAVGMarks.avgSR.firstNumber }} |
-              {{ group.groupAVGMarks.avgSR.secondNumber == null ? 'No data yet' : group.groupAVGMarks.avgSR.secondNumber }} |
-              {{ group.groupAVGMarks.avgSR.thirdNumber == null ? 'No data yet' : group.groupAVGMarks.avgSR.thirdNumber }} |
-              {{ group.groupAVGMarks.avgSR.fourthNumber == null ? 'No data yet' : group.groupAVGMarks.avgSR.fourthNumber }}
+              {{ group.groupAVGMarks.avgSR.firstNumber == null ? noDataYet : group.groupAVGMarks.avgSR.firstNumber }} |
+              {{ group.groupAVGMarks.avgSR.secondNumber == null ? noDataYet : group.groupAVGMarks.avgSR.secondNumber }} |
+              {{ group.groupAVGMarks.avgSR.thirdNumber == null ? noDataYet : group.groupAVGMarks.avgSR.thirdNumber }} |
+              {{ group.groupAVGMarks.avgSR.fourthNumber == null ? noDataYet : group.groupAVGMarks.avgSR.fourthNumber }}
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-right">
-              {{ group.groupAVGDispersion.avgSR.firstNumber == null ? 'No data yet' : group.groupAVGDispersion.avgSR.firstNumber }} |
-              {{ group.groupAVGDispersion.avgSR.secondNumber == null ? 'No data yet' : group.groupAVGDispersion.avgSR.secondNumber }} |
-              {{ group.groupAVGDispersion.avgSR.thirdNumber == null ? 'No data yet' : group.groupAVGDispersion.avgSR.thirdNumber }} |
-              {{ group.groupAVGDispersion.avgSR.fourthNumber == null ? 'No data yet' : group.groupAVGDispersion.avgSR.fourthNumber }}
+              {{ group.groupAVGDispersion.avgSR.firstNumber == null ? noDataYet : group.groupAVGDispersion.avgSR.firstNumber }} |
+              {{ group.groupAVGDispersion.avgSR.secondNumber == null ? noDataYet : group.groupAVGDispersion.avgSR.secondNumber }} |
+              {{ group.groupAVGDispersion.avgSR.thirdNumber == null ? noDataYet : group.groupAVGDispersion.avgSR.thirdNumber }} |
+              {{ group.groupAVGDispersion.avgSR.fourthNumber == null ? noDataYet : group.groupAVGDispersion.avgSR.fourthNumber }}
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -42,31 +42,31 @@
         <v-card-title class="primary--text title">
           <v-layout row>
             <v-flex xs12 sm6>
-              AVG KR Marks
+              {{ $t('group.AVGKRMark') }}
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-right">
-              AVG KR Dispersion
+              {{ $t('group.AVGKRDispersion') }}
             </v-flex>
           </v-layout>
         </v-card-title>
         <v-card-text>
           <v-layout row>
             <v-flex xs12 sm6>
-              {{ group.groupAVGMarks.avgKR == null ? 'No data yet' : group.groupAVGMarks.avgKR }}
+              {{ group.groupAVGMarks.avgKR == null ? noDataYet : group.groupAVGMarks.avgKR }}
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-right">
-              {{ group.groupAVGDispersion.avgKR == null ? 'No data yet' : group.groupAVGDispersion.avgKR }}
+              {{ group.groupAVGDispersion.avgKR == null ? noDataYet : group.groupAVGDispersion.avgKR }}
             </v-flex>
           </v-layout>
         </v-card-text>
       </v-card>
       <v-card class="mt-1">
         <v-card-title class="primary--text title">
-          Students
+          {{ $t('group.students') }}
           <v-spacer></v-spacer>
           <v-text-field
             append-icon="search"
-            label="Search"
+            :label="$t('utils.labels.search')"
             single-line
             hide-details
             v-model="seachStudent"
@@ -80,19 +80,19 @@
           <template slot="items" slot-scope="props">
             <td class="text-xs-left clickable"><router-link tag="span" :to="`/profile/${props.item.user.id}`">{{ props.item.user.fullName }}</router-link></td>
             <td class="text-xs-right">
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber }} |
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber }} |
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.thirdNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.thirdNumber }} |
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.fourthNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.fourthNumber }}
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.firstNumber }} |
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.secondNumber }} |
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.thirdNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.thirdNumber }} |
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.fourthNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllSR.avgAll.fourthNumber }}
             </td>
-            <td class="text-xs-right">{{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllKR || 'No data yet' }}</td>
+            <td class="text-xs-right">{{ props.item.clients.find(client => client.clientRole === 'student').client.avgMarks.avgAllKR || noDataYet }}</td>
             <td class="text-xs-right">
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.firstNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.firstNumber }} |
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.secondNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.secondNumber }} |
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.thirdNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.thirdNumber }} |
-              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.fourthNumber == null ? 'No data yet' : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.fourthNumber }}
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.firstNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.firstNumber }} |
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.secondNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.secondNumber }} |
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.thirdNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.thirdNumber }} |
+              {{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.fourthNumber == null ? noDataYet : props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allSr.fourthNumber }}
             </td>
-            <td class="text-xs-right">{{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allKr || 'No data yet' }}</td>
+            <td class="text-xs-right">{{ props.item.clients.find(client => client.clientRole === 'student').client.avgDispercion.allKr || noDataYet }}</td>
           </template>
           <template slot="pageText" slot-scope="{ pageStart, pageStop }">
             From {{ pageStart }} to {{ pageStop }}
@@ -102,11 +102,11 @@
 
       <v-card class="mt-1">
         <v-card-title class="primary--text title">
-          Teachers
+          {{ $t('group.teachers') }}
           <v-spacer></v-spacer>
           <v-text-field
             append-icon="search"
-            label="Search"
+            :label="$t('utils.labels.search')"
             single-line
             hide-details
             v-model="seachTeacher"
@@ -128,12 +128,12 @@
       </v-card>
       <v-card class="mt-1">
         <v-card-title class="primary--text title">
-          Marks (SR)
+          {{ $t('group.marksSR') }}
           <v-spacer></v-spacer>
           <v-select
             :items="[{text: 'Base', value: 'base'},{text: 'Full', value: 'full'},{text: 'Time', value: 'time'}]"
             v-model="srView"
-            label="Select View"
+            :label="$t('utils.labels.selectView')"
             single-line
             item-text="text"
             item-value="value"
@@ -142,19 +142,11 @@
           <v-select
             :items="subjects"
             v-model="currentSubjectSRId"
-            label="Select Subject"
+            :label="$t('utils.labels.selectSubject')"
             single-line
             item-text="name"
             item-value="_id"
           ></v-select>
-          <!-- <v-text-field
-            append-icon="search"
-            label="Search"
-            single-line
-            hide-details
-            v-model="seachTeacher"
-          ></v-text-field> -->
-
         </v-card-title>
         <v-card-title>
           <v-checkbox v-for="(task, index) in studentSRBySubject" :key="`task-${index}`"
@@ -184,19 +176,19 @@
                     No Data yet
                   </template>
                 </td>
-                <td v-if="srView === 'base'" :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[currentIndexOfSrTries[props.index][index]-1].mark : 'No Data yet' }}</td>
+                <td v-if="srView === 'base'" :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[currentIndexOfSrTries[props.index][index]-1].mark : noDataYet }}</td>
                 <td v-else-if="srView === 'full'" :key="`${props.item.studentId}-fourNumbers-${index}`" class="text-xs-right">
                   <template v-if="props.item.marks[index].fourthNumbers.length > 0">
                     {{ `${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].firstNumber} ${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].secondNumber.toFixed(1)}/${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].thirdNumber}  ${props.item.marks[index].fourthNumbers[currentIndexOfSrTries[props.index][index]-1].fourthNumber.toFixed(1)}` }}
                   </template>
                   <template v-else>
-                    {{ 'No Data yet' }}
+                    {{ noDataYet }}
                   </template>
                 </td>
                 <td v-else :key="`${props.item.studentId}-eachTime-${index}`" class="text-xs-right">
                   {{ props.item.marks[index].times[currentIndexOfSrTries[props.index][index]-1] }}
                 </td>
-                <td :key="`${props.item.studentId}-time-${index}`" class="text-xs-right">{{ typeof props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1] === 'undefined' ? 'No Data yet' : `${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].hours()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].minutes()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].seconds()}` }}</td>
+                <td :key="`${props.item.studentId}-time-${index}`" class="text-xs-right">{{ typeof props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1] === 'undefined' ? noDataYet : `${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].hours()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].minutes()}:${props.item.marks[index].totalDuration[currentIndexOfSrTries[props.index][index]-1].seconds()}` }}</td>
               </template>
 
             </template>
@@ -209,7 +201,7 @@
 
       <v-card class="mt-1">
         <v-card-title class="primary--text title">
-          Marks (KR)
+          {{ $t('group.marksKR') }}
           <v-spacer></v-spacer>
           <v-select
             :items="subjects"
@@ -242,8 +234,28 @@
             <template slot="items" slot-scope="props">
               <td>{{ props.item.fullName }}</td>
               <template v-for="(mark, index) in props.item.marks">
-                <td :key="`${props.item.studentId}-mark-${index}`" class="text-xs-right">{{ props.item.marks[index].marks.length > 0 ? props.item.marks[index].marks[0].mark : 'No Data yet' }}</td>
-                <td :key="`${props.item.studentId}-time-${index}`" class="text-xs-right">{{ typeof props.item.marks[index].totalDuration[0] === 'undefined' ? 'No Data yet' : `${props.item.marks[index].totalDuration[0].hours()}:${props.item.marks[index].totalDuration[0].minutes()}:${props.item.marks[index].totalDuration[0].seconds()}` }}</td>
+                <td
+                  :key="`${props.item.studentId}-mark-${index}`"
+                  class="text-xs-right">
+                  {{ props.item.marks[index].marks.length > 0
+                    ? props.item.marks[index].marks[0].mark : noDataYet }}
+                </td>
+                <td
+                  :key="`${props.item.studentId}-time-${index}`"
+                  class="text-xs-right">
+                  {{ typeof props.item.marks[index].totalDuration[0] === 'undefined'
+                    ? noDataYet
+                    : `${props.item.marks[index].totalDuration[0].hours()}:${props.item.marks[index].totalDuration[0].minutes()}:${props.item.marks[index].totalDuration[0].seconds()}` }}
+                </td>
+                <td
+                  :key="`${props.item.studentId}-review-${index}`"
+                  class="text-xs-right">
+                  <v-btn
+                    color="info"
+                    @click="redirectToReviewTask(props.item.marks[index].taskId, props.item.marks[index].variant, props.item.marks[index].fullAnswers)">
+                    Review
+                  </v-btn>
+                </td>
               </template>
 
             </template>
@@ -271,103 +283,28 @@ export default {
       tmp: '',
       seachStudent: '',
       seachTeacher: '',
-      pagination: {},
-      studentHeaders: [
-        { text: 'Full Name', align: 'left', value: 'user.fullName' },
-        { text: 'AVG SR Mark' },
-        { text: 'AVG KR Mark' },
-        { text: 'AVG SR Dispersion' },
-        { text: 'AVG KR Dispersion' },
-      ],
-      teacherHeaders: [
-        { text: 'Full Name', align: 'left', value: 'name' },
-        { text: 'Email', align: 'left', value: 'age' },
-      ],
-      items: [
-        {
-          value: false,
-          name: 'Frozen Yogurt',
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-        },
-        {
-          value: false,
-          name: 'Ice cream sandwich',
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: '8%',
-        },
-        {
-          value: false,
-          name: 'Eclair',
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: '6%',
-        },
-        {
-          value: false,
-          name: 'Cupcake',
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: '3%',
-        },
-        {
-          value: false,
-          name: 'Gingerbread',
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: '7%',
-        },
-        {
-          value: false,
-          name: 'Jelly bean',
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: '0%',
-        },
-        {
-          value: false,
-          name: 'Lollipop',
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: '0%',
-        },
-        {
-          value: false,
-          name: 'Honeycomb',
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: '0%',
-        },
-        {
-          value: false,
-          name: 'Donut',
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: '2%',
-        },
-        {
-          value: false,
-          name: 'KitKat',
-          carbs: 65,
-          protein: 7,
-          sodium: 54,
-          calcium: '12%',
-        },
-      ],
+      pagination: {}
     };
   },
   computed: {
+    noDataYet() {
+      return this.$t('utils.data.noDataYet');
+    },
+    studentHeaders() {
+      return [
+        { text: this.$t('group.FullName'), align: 'left', value: 'user.fullName' },
+        { text: this.$t('group.AVGSRMark'), align: 'right' },
+        { text: this.$t('group.AVGKRMark'), align: 'right' },
+        { text: this.$t('group.AVGSRDispersion'), align: 'right' },
+        { text: this.$t('group.AVGKRDispersion'), align: 'right' }
+      ];
+    },
+    teacherHeaders() {
+      return [
+        { text: this.$t('group.FullName'), align: 'left', value: 'name' },
+        { text: this.$t('group.email'), align: 'left', value: 'age' }
+      ];
+    },
     group() {
       return this.$store.getters.group;
     },
@@ -409,7 +346,7 @@ export default {
           });
         }
         headers.push({
-          text: `(${index + 1}) Time`, align: 'right', width: '20px', value: false, sortable: false,
+          text: `(${index + 1}) ${this.$t('group.time')}`, align: 'right', width: '20px', value: false, sortable: false,
         });
         return headers;
       }, []);
@@ -426,7 +363,10 @@ export default {
           text: `(${index + 1}) ${task.name}`, align: 'right', width: '30px', value: false, sortable: false,
         });
         headers.push({
-          text: `(${index + 1}) Time`, align: 'right', width: '20px', value: false, sortable: false,
+          text: `(${index + 1}) ${this.$t('group.time')}`, align: 'right', width: '20px', value: false, sortable: false,
+        });
+        headers.push({
+          text: this.$t('group.review'), align: 'center', width: '20px', value: false, sortable: false,
         });
         return headers;
       }, []);
@@ -469,10 +409,10 @@ export default {
     },
     studentKRMarksData() {
       if (typeof this.studentKRBySubject === 'undefined') return undefined;
-      return this.groupStudents.map((student) => {
-        const data = { studentId: student._id, fullName: student.fullName, marks: [] };
+      return this.groupStudents.map((studentUser) => {
+        const data = { studentId: studentUser._id, fullName: studentUser.fullName, marks: [] };
         this.studentKRBySubject.filter(KR => !this.checkForTaskFilter(KR._id, 'selectedKRTasks')).forEach((KR) => {
-          const grades = student.clients.gradeBook
+          const grades = studentUser.clients.gradeBook
             .filter(grade => grade.taskId._id === KR._id)
             .reduce((res, grade, index) => {
               res.marks.push(grade);
@@ -485,7 +425,16 @@ export default {
               res.totalDuration.push(totalDuration);
               return res;
             }, { marks: [], totalDuration: [] });
-          data.marks.push(grades);
+          if (grades.marks.length > 0) {
+            const currentStudentId = studentUser.clients.id;
+            grades.taskId = grades.marks[0].taskId._id;
+            grades.variant = this.plans
+              .find(plan => plan.subjectId._id === grades.marks[0].taskId.subjectId._id)
+              .timetable.find(({ taskId }) => taskId._id === grades.taskId)
+              .studentsVariants.find(({ studentId }) => (studentId === currentStudentId)).variant;
+            grades.fullAnswers = grades.marks[0].fullAnswers;
+            data.marks.push(grades);
+          }
         });
         return data;
       });
@@ -508,6 +457,11 @@ export default {
     },
   },
   methods: {
+    redirectToReviewTask(taskId, variant, fullAnswers) {
+      this.$store.commit('SET_VARIANT', variant);
+      this.$store.commit('SET_FULL_ANSWERS', fullAnswers);
+      this.$router.push(`/task-review/${taskId}`);
+    },
     calculateFourNumbersBySRMark(mark) {
       // Count of numbers(number of solved tasks)
       if (typeof mark === 'undefined') {

@@ -23,46 +23,72 @@
                 <h4>{{ props.item.name }}</h4>
                 <v-spacer></v-spacer>
                  <v-dialog v-model="addThemesDialogs[props.index]" max-width="800px">
-                  <v-btn color="success" slot="activator">Add themes</v-btn>
+                  <v-btn color="success" slot="activator">
+                    {{ $t('schoolLearningStuff.subjectsAndThemes.addThemes') }}
+                  </v-btn>
                   <v-card>
                     <v-card-title>
-                      <span class="headline">Add themes to {{ props.item.name }}</span>
+                      <span class="headline">
+                        {{ $t('schoolLearningStuff.subjectsAndThemes.addThemesTo', [props.item.name]) }}
+                      </span>
                     </v-card-title>
                     <v-card-text>
                       <v-container grid-list-md>
                         <v-card class="mb-1">
                           <v-card-text>
-                            <v-btn @click="addThemeToList" color="success" block>Add one</v-btn>
+                            <v-btn @click="addThemeToList" color="success" block>
+                              {{ $t('schoolLearningStuff.subjectsAndThemes.addOneTheme') }}
+                            </v-btn>
                           </v-card-text>
                         </v-card>
                         <v-card v-for="(theme, themeIndex) in themesToAdd" :key="`themesToAdd${themeIndex}`">
                           <v-card-text>
                             <v-layout wrap>
                               <v-flex sm12 md4>
-                                <v-text-field v-model="themesToAdd[themeIndex].name" label="Theme name" required></v-text-field>
+                                <v-text-field
+                                  v-model="themesToAdd[themeIndex].name"
+                                  :label="$t('utils.labels.themeName')"
+                                  required></v-text-field>
                               </v-flex>
                               <v-flex sm12 md4>
                                 <v-select
                                   v-model="themesToAdd[themeIndex].class"
-                                  label="Select Class"
+                                  :label="$t('utils.labels.selectClass')"
                                   required
                                   :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
                                 ></v-select>
                               </v-flex>
                               <v-flex sm12 md4>
-                                <v-text-field v-model="themesToAdd[themeIndex].order" label="Theme order" required></v-text-field>
+                                <v-text-field
+                                  v-model="themesToAdd[themeIndex].order"
+                                  :label="$t('utils.labels.themeOrder')"
+                                  required></v-text-field>
                               </v-flex>
                             </v-layout>
-                            <v-btn @click="deleteThemeFromList(themeIndex)" color="error" block>Delete this</v-btn>
+                            <v-btn @click="deleteThemeFromList(themeIndex)" color="error" block>
+                              {{ $t('utils.button.delete') }}
+                            </v-btn>
                           </v-card-text>
                         </v-card>
                       </v-container>
-                      <small>*indicates required field</small>
+                      <small>
+                        {{ $t('utils.hint.indicatesRequiredField') }}
+                      </small>
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="error" flat  @click.native="addThemesDialogs.splice(props.index, 1, false)">Close</v-btn>
-                      <v-btn color="success" flat @click.native="addThemesToSubject(props.index, props.index)">Add Themes</v-btn>
+                      <v-btn
+                        color="error"
+                        flat
+                        @click.native="addThemesDialogs.splice(props.index, 1, false)">
+                        {{ $t('utils.button.cancel') }}
+                      </v-btn>
+                      <v-btn
+                        color="success"
+                        flat
+                        @click.native="addThemesToSubject(props.index, props.index)">
+                        {{ $t('utils.button.create') }}
+                      </v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -88,21 +114,33 @@
                       <v-card-text>
                         <v-layout wrap>
                           <v-flex sm12 md4>
-                            <v-text-field label="Theme name" required></v-text-field>
+                            <v-text-field
+                              :label="$t('utils.labels.themeName')"
+                              required></v-text-field>
                           </v-flex>
                           <v-flex sm12 md4>
                             <v-select
-                              label="Select Class"
+                              :label="$t('utils.labels.selectClass')"
                               required
                               :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
                             ></v-select>
                           </v-flex>
                           <v-flex sm12 md4>
-                            <v-text-field label="Theme order" required></v-text-field>
+                            <v-text-field
+                              :label="$t('utils.labels.themeOrder')"
+                              required></v-text-field>
                           </v-flex>
                         </v-layout>
-                        <v-btn color="info" block>Update this</v-btn>
-                        <v-btn color="error" block>Delete this</v-btn>
+                        <v-btn
+                          color="info"
+                          block>
+                          {{ $t('utils.button.update') }}
+                        </v-btn>
+                        <v-btn
+                          color="error"
+                          block>
+                          {{ $t('utils.button.delete') }}
+                        </v-btn>
                       </v-card-text>
                     </v-card>
                   </template>
@@ -182,26 +220,7 @@ export default {
 
       ],
       addThemesDialogs: [],
-      listGroup: [],
-      themesHeaders: [
-        {
-          text: 'Name',
-          align: 'left',
-          value: 'name',
-          sortable: false,
-        },
-        {
-          text: 'Class',
-          align: 'right',
-          value: 'class',
-          sortable: false,
-        },
-        {
-          text: 'Order',
-          align: 'right',
-          value: 'order',
-        },
-      ],
+      listGroup: []
     };
   },
   watch: {
@@ -220,6 +239,29 @@ export default {
         this.listGroup.push(subject.themes.map(() => false));
       });
     },
+  },
+  computed: {
+    themesHeaders() {
+      return [
+        {
+          text: this.$t('schoolLearningStuff.subjectsAndThemes.themesHeaders.name'),
+          align: 'left',
+          value: 'name',
+          sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.subjectsAndThemes.themesHeaders.class'),
+          align: 'right',
+          value: 'class',
+          sortable: false,
+        },
+        {
+          text: this.$t('schoolLearningStuff.subjectsAndThemes.themesHeaders.order'),
+          align: 'right',
+          value: 'order',
+        },
+      ];
+    }
   },
   methods: {
     addThemeToList() {

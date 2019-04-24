@@ -1,17 +1,24 @@
 <template>
     <v-card>
       <v-card-title class="info white--text">
-        <span class="headline">Choose Plan</span>
+        <span class="headline">{{ $t('teacher.timetableAndPlan.timetable.choosePlan.name') }}</span>
       </v-card-title>
       <v-card-text>
-        <appPlansTable ref="plansTableRef" @plan-choosed="choosePlan($event)" :subjectId="subjectId" :chooseMode="true"></appPlansTable>
+        <appPlansTable
+          ref="plansTableRef"
+          @plan-choosed="choosePlan($event)"
+          :groupId="groupId"
+          :subjectId="subjectId"
+          :chooseMode="true"></appPlansTable>
       </v-card-text>
       <v-card-actions>
-        <!-- <v-form @submit.prevent="choosePlan"> -->
-          <v-spacer></v-spacer>
-          <v-btn color="error" flat @click.native="closePlanDialog">Close</v-btn>
-          <!-- <v-btn type="submit" color="success" flat @click.native="closePlanDialog">Choose</v-btn> -->
-        <!-- </v-form> -->
+        <v-spacer></v-spacer>
+        <v-btn
+          color="error"
+          flat
+          @click.native="closePlanDialog">
+          {{ $t('utils.button.close') }}
+        </v-btn>
       </v-card-actions>
     </v-card>
 </template>
@@ -42,19 +49,18 @@ export default {
     closePlanDialog() {
       this.$emit('closed-choose-plan-dialog', this.index);
     },
-    choosePlan(planId) {
-      this.$http.put(`plan/${planId}/set`, { planId, recordId: this.recordId, groupId: this.groupId })
+    choosePlan({ planId, studentsVariants }) {
+      this.$http.put(`plan/${planId}/set`, { planId, recordId: this.recordId, groupId: this.groupId, studentsVariants })
         .then(() => {
           this.$emit('plan-choosed');
         });
     },
     filter() {
-      console.log('filter1', this.subjectId);
       this.$refs.plansTableRef.filterPlans();
     },
   },
   components: {
-    appPlansTable: PlansTable,
+    appPlansTable: PlansTable
   },
 };
 </script>

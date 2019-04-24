@@ -13,14 +13,18 @@ import { store } from '../../../../store/store';
 export default {
   components: {
     appTask: Task,
-    appTeacherTask: TeacherTask,
+    appTeacherTask: TeacherTask
   },
   beforeRouteLeave(to, from, next) {
     function reset() {
+      store.commit('SET_SPACE', '');
       store.commit('SET_TASK', null);
       store.commit('SET_TASK_FINISHED', false);
       store.commit('SET_CURRENT_RESULT', []);
       store.commit('SET_SECTIONS', []);
+      store.commit('SET_VARIANT', 0);
+      store.commit('SET_FULL_ANSWERS', []);
+      // TODO reset resource
     }
     if (store.getters.taskFinished) {
       reset();

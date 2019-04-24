@@ -1,4 +1,5 @@
 const Group = require('./../models/group');
+const Student = require('./../models/student');
 const { findShoollId } = require('./../helpers/helpers');
 
 module.exports = {
@@ -32,9 +33,13 @@ module.exports = {
     // getGroupsBySchoolId(req, res) {
         
     // },
-    // getStudents(req, res) {
-
-    // },
+    getStudents(req, res) {
+        Student.find({ groupId: req.params.id }).populate({ path: 'userId' })
+            .then(students => {
+                res.send(students);
+            })
+            .catch(console.log);
+    },
     // getTeachers(req, res) {
 
     // },

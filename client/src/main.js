@@ -6,6 +6,7 @@ import './plugins/vuetify';
 import colors from 'vuetify/es5/util/colors';
 import VueResource from 'vue-resource';
 import Vuetify from 'vuetify';
+import VueI18n from 'vue-i18n';
 import VeeValidate from 'vee-validate';
 import VueAuth from '@websanova/vue-auth';
 import VueAlertify from 'vue-alertify';
@@ -14,7 +15,10 @@ import { store } from './store/store';
 import App from './App.vue';
 import router from './router';
 
+import messages from './locales';
+
 Vue.router = router;
+Vue.use(VueI18n);
 Vue.use(Vuetify, {
   theme: {
     primary: colors.blue.darken2,
@@ -66,11 +70,18 @@ Vue.http.interceptors.push((request, next) => {
   });
 });
 
+const i18n = new VueI18n({
+  locale: 'eng',
+  fallbackLocale: 'eng',
+  messages
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   template: '<App/>',
   components: { App },
 });

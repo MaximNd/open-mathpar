@@ -1,6 +1,8 @@
 <template>
   <v-dialog v-model="createPlanDialog" max-width="2000px">
-    <v-btn style="margin-right:-10px;" color="success" slot="activator">Create Plan</v-btn>
+    <v-btn style="margin-right:-10px;" color="success" slot="activator">
+      {{ $t('schoolLearningStuff.plans.createPlan.name') }}
+    </v-btn>
     <appCreatePlan
       @closed-create-plan-dialog="closePlanCreateDialog($event)"
       :lections="lections"

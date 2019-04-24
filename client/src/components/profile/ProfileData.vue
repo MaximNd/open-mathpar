@@ -6,7 +6,9 @@
                   <v-card-media :src="`http://mathpar.ukma.edu.ua/images/${$auth.user().image}`" height="450px">
                   </v-card-media>
                   <v-card-actions>
-                    <v-btn block flat color="blue" @click="changeDataDialog = !changeDataDialog">Edit profile</v-btn>
+                    <v-btn block flat color="blue" @click="changeDataDialog = !changeDataDialog">
+                      {{ $t('profile.editProfile') }}
+                    </v-btn>
                   </v-card-actions>
                 </template>
             </v-card>
@@ -15,7 +17,7 @@
             <v-card>
                 <v-card-title primary-title>
                     <div>
-                        <div class="headline">Account data:</div>
+                        <div class="headline">{{ $t('profile.accountData') }}:</div>
                     </div>
                 </v-card-title>
                 <v-data-table
@@ -68,16 +70,13 @@ export default {
     userTableData(currentUser) {
       if (typeof currentUser === 'undefined') return [];
       const user = [
-        { title: 'Full name', text: currentUser.fullName },
-        { title: 'Gender', text: currentUser.gender },
+        { title: this.$t('profile.userData.fullName'), text: currentUser.fullName },
+        { title: this.$t('profile.userData.gender'), text: currentUser.gender },
 
-        { title: 'Role', text: currentUser.role.map(role => `${role.charAt(0).toUpperCase()}${role.substring(1, role.length)}`).join(', ') },
-        { title: 'Email', text: currentUser.email },
-        { title: 'Birthday', text: new Date(currentUser.birthday).toDateString() },
-        { title: 'Age', text: currentUser.age },
-        // { title: 'School', text: 'School' },
-        // { title: 'Group', text: 'Group' },
-        // { title: 'Subjects', text: 'Subjects' }
+        { title: this.$t('profile.userData.role'), text: currentUser.role.map(role => `${role.charAt(0).toUpperCase()}${role.substring(1, role.length)}`).join(', ') },
+        { title: this.$t('profile.userData.email'), text: currentUser.email },
+        { title: this.$t('profile.userData.birthday'), text: new Date(currentUser.birthday).toDateString() },
+        { title: this.$t('profile.userData.age'), text: currentUser.age }
       ];
       return user;
     },
@@ -86,21 +85,22 @@ export default {
       const res = [];
       currentUser.clients.forEach((client) => {
         if (client.clientRole === 'director' || client.clientRole === 'headTeacher') {
-          res.push({ title: 'School', text: client.client.schoolId.name });
+          res.push({ title: this.$t('profile.directorData.school'), text: client.client.schoolId.name });
         } else if (client.clientRole === 'rector' || client.clientRole === 'dean' || client.clientRole === 'methodist') {
+          // TODO: UNIVERSITY
           res.push({ title: 'University', text: client.client.universityId.name });
         } else if (client.clientRole === 'teacher') {
           res.push({ title: client.client.schoolModel, text: client.client.schoolId.name });
           res.push({
-            title: 'Subjects',
+            title: this.$t('profile.teacherData.subjects'),
             text: client.client.timetable.map(lesson => lesson.subjectId.name).filter((subject, index, subjects) => subjects.indexOf(subject) === index).join(', '),
           });
         } else if (client.clientRole === 'student') {
-          res.push({ title: 'AVG SR Mark', text: `${client.client.avgMarks.avgAllSR.avgAll.firstNumber} | ${client.client.avgMarks.avgAllSR.avgAll.secondNumber} | ${client.client.avgMarks.avgAllSR.avgAll.thirdNumber} | ${client.client.avgMarks.avgAllSR.avgAll.fourthNumber}` });
-          res.push({ title: 'AVG KR Mark', text: client.client.avgMarks.avgAllKR == null ? 'No data yet' : client.client.avgMarks.avgAllKR });
-          res.push({ title: 'AVG SR Dispersion', text: `${client.client.avgDispercion.allSr.firstNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.secondNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.thirdNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.fourthNumber || 'No data yet'}` });
-          res.push({ title: 'AVG KR Dispersion', text: client.client.avgDispercion.allKr == null ? 'No data yet' : client.client.avgDispercion.allKr });
-          res.push({ title: 'School', text: client.client.schoolId.name });
+          res.push({ title: this.$t('profile.studentData.AVGSRMark'), text: `${client.client.avgMarks.avgAllSR.avgAll.firstNumber} | ${client.client.avgMarks.avgAllSR.avgAll.secondNumber} | ${client.client.avgMarks.avgAllSR.avgAll.thirdNumber} | ${client.client.avgMarks.avgAllSR.avgAll.fourthNumber}` });
+          res.push({ title: this.$t('profile.studentData.AVGKRMark'), text: client.client.avgMarks.avgAllKR == null ? 'No data yet' : client.client.avgMarks.avgAllKR });
+          res.push({ title: this.$t('profile.studentData.AVGSRDispersion'), text: `${client.client.avgDispercion.allSr.firstNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.secondNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.thirdNumber || 'No data yet'} | ${client.client.avgDispercion.allSr.fourthNumber || 'No data yet'}` });
+          res.push({ title: this.$t('profile.studentData.AVGKRDispersion'), text: client.client.avgDispercion.allKr == null ? 'No data yet' : client.client.avgDispercion.allKr });
+          res.push({ title: this.$t('profile.studentData.school'), text: client.client.schoolId.name });
         }
       });
       return res;

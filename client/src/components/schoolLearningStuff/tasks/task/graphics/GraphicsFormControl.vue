@@ -193,46 +193,46 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { delay } from './../../../../../utils/utils.js';
+import { delay } from '../../../../../utils/utils.js';
 
 export default {
   props: {
     sectionId: {
       type: Number,
-      required: true
+      required: true,
     },
     imgPath: {
       type: String,
-      required: true
+      required: true,
     },
     isPlot3d: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isPlot3dImplicit: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isPlot3dExplicit: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isPlot3dParametric: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isRenderMultipleSurfaces: {
       type: Boolean,
-      required: true
+      required: true,
     },
     isTablePlot: {
       type: Boolean,
-      required: true
+      required: true,
     },
     getImageUrl: {
       type: Function,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -247,8 +247,8 @@ export default {
       },
       parameters: {
         toggleParameters: 0,
-        ringParametersWithValues: []
-      }
+        ringParametersWithValues: [],
+      },
     };
   },
   computed: {
@@ -271,7 +271,7 @@ export default {
     initData() {
       this.parameters.ringParametersWithValues = this.ringParameters.map(parameter => ({
         parameter,
-        value: 1.00
+        value: 1.00,
       }));
       this.isDataInitialized = true;
     },
@@ -296,23 +296,19 @@ export default {
       const parameters = this.getArrayParameters();
       const data = {
         sectionId: this.sectionId,
-        task: `\\replot([${parameters.join()}], ${settings.join()});`
+        task: `\\replot([${parameters.join()}], ${settings.join()});`,
       };
       let initImage = '';
       this.$store.dispatch('calc', data)
-        .then(() => {
-          return new Promise((resolve, reject) => {
-            const image = new Image();
-            image.src = this.getImageUrl();
-            image.onload = function () {
-              initImage = image;
-              resolve();
-            };
-          });
-        })
-        .then(() => {
-          return this.getSpace()
-        })
+        .then(() => new Promise((resolve, reject) => {
+          const image = new Image();
+          image.src = this.getImageUrl();
+          image.onload = function () {
+            initImage = image;
+            resolve();
+          };
+        }))
+        .then(() => this.getSpace())
         // .then(() => {
         //   return this.$http.get(`${process.env.VUE_APP_API}/servlet/image`, {
         //     params: {
@@ -321,9 +317,7 @@ export default {
         //     }
         //   });
         // })
-        .then(() => {
-          return this.loadFrames(this.settings.frames, initImage);
-        })
+        .then(() => this.loadFrames(this.settings.frames, initImage))
         .then(async ({ framesNumber, images }) => {
           console.log('IMAGES: ', images);
           for (let i = 0; i < framesNumber; ++i) {
@@ -339,10 +333,10 @@ export default {
       const framesNumber = parseInt(this.settings.frames, 10);
       if (framesNumber > 1) {
         for (let i = 0; i < framesNumber; i++) {
-          window.open(this.getImageUrl(i) + '&download=true');
+          window.open(`${this.getImageUrl(i)}&download=true`);
         }
       } else {
-        window.open(this.imgPath + '&download=true');
+        window.open(`${this.imgPath}&download=true`);
       }
     },
     loadFrames(framesNumberStr, initImage) {
@@ -376,8 +370,8 @@ export default {
   created() {
     this.getSpace()
       .then(() => this.initData());
-  }
-}
+  },
+};
 </script>
 
 <style scoped>

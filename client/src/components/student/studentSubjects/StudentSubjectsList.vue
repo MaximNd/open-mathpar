@@ -8,12 +8,18 @@
                     </v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-title>
-                        <v-btn v-if="subject.subject.plan == null" block flat>Plan not ready yet</v-btn>
-                        <v-btn v-else block flat @click="showPlan(subject.subject.plan)">Show Plan</v-btn>
+                        <v-btn v-if="subject.subject.plan == null" block flat>
+                          {{ $t('student.subjects.planNotReady') }}
+                        </v-btn>
+                        <v-btn v-else block flat @click="showPlan(subject.subject.plan)">
+                          {{ $t('student.subjects.showPlan') }}
+                        </v-btn>
                     </v-toolbar-title>
                 </v-toolbar>
                 <v-card-text bolt>
-                    <v-btn block flat :to="`/profile/${subject.subject.teacher.id}`">{{ subject.subject.teacher.fullName }}</v-btn>
+                    <v-btn block flat :to="`/profile/${subject.subject.teacher.id}`">
+                      {{ subject.subject.teacher.fullName }}
+                    </v-btn>
                 </v-card-text>
             </v-card>
         </v-flex>

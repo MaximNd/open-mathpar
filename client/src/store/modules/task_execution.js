@@ -11,6 +11,8 @@ Vue.use(VueResource);
 const state = {
   space: '',
   task: null,
+  variant: 0,
+  fullAnswers: [],
   currentResults: [],
   sections: [],
   taskFinished: false,
@@ -66,6 +68,12 @@ const getters = {
   task(state) {
     return state.task;
   },
+  variant(state) {
+    return state.variant;
+  },
+  fullAnswers(state) {
+    return state.fullAnswers;
+  },
   taskFinished(state) {
     return state.taskFinished;
   },
@@ -93,14 +101,20 @@ const mutations = {
   SET_SECTIONS(state, payload) {
     state.sections = payload;
   },
-  resource(state, payload) {
+  SET_VARIANT(state, payload) {
+    state.variant = payload;
+  },
+  SET_FULL_ANSWERS(state, payload) {
+    state.fullAnswers = payload;
+  },
+  SET_RESOURCE(state, payload) {
     state.resource = payload;
   },
 };
 
 const actions = {
-  getTaskById({ commit }, payload) {
-    return new Promise((resolve, reject) => Vue.http.get(`task/${payload}`)
+  getTaskByIdWithOneVariant({ state, commit }, payload) {
+    return new Promise((resolve, reject) => Vue.http.get(`task/${payload}/${state.variant}`)
       .then((data) => {
         commit('SET_TASK', data.body);
         resolve({
@@ -113,10 +127,10 @@ const actions = {
     return state.resource.calc({}, { sectionId: payload.sectionId, task: payload.task });
   },
   giveUp({}, payload) {
-    return Vue.http.get(`task/${payload.id}/show-solution/${payload.exercise}`);
+    return Vue.http.get(`task/${payload.id}/show-solution/${payload.exerciseId}`);
   },
   check({}, payload) {
-    return Vue.http.get(`task/${payload.id}/check-answer/${payload.exercise}/${payload.studentAnswers}`);
+    return Vue.http.get(`task/${payload.id}/check-answer/${payload.exerciseId}/${payload.studentAnswers}`);
   },
   space({ commit, state }) {
     return state.resource.space()

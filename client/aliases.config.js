@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
 const path = require('path');
 
 function resolveSrc(_path) {
@@ -13,5 +15,5 @@ module.exports = {
 };
 for (const alias in aliases) {
   module.exports.webpack[alias] = resolveSrc(aliases[alias]);
-  module.exports.jest[`^${  alias  }/(.*)$`] =    `<rootDir>/${  aliases[alias]  }/$1`;
+  module.exports.jest[`^${alias}/(.*)$`] = `<rootDir>/${aliases[alias]}/$1`;
 }

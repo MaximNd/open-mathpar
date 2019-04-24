@@ -12,7 +12,7 @@ router.get('/group/:id', isAuthenticated, GroupsController.getGroupById);
 // router.get('/groups/school/:id', isAuthenticated, GroupsController.getGroupsBySchoolId);
 
 // Get students by group ID
-// router.get('/group/:id/students', isAuthenticated, GroupsController.getStudents);
+router.get('/groups/:id/students', isAuthenticated, GroupsController.getStudents);
 
 // Get teachers by group ID
 // router.get('/group/:id/teachers', isAuthenticated, GroupsController.getTeachers);
