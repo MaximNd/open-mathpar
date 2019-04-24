@@ -5,11 +5,11 @@
         <v-card>
           <v-form @submit.prevent="registerUser" method="POST">
           <v-toolbar class="primary white--text title">
-            <v-toolbar-title>Register</v-toolbar-title>
+            <v-toolbar-title>Register School</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
               <v-btn flat class="grey--text text--lighten-4" :to="'/register/university'">
-                <div class="x-padded">
+                <div class="x-padded my-button">
                   Register University
                 </div>
                 <v-icon right>school</v-icon>
@@ -296,5 +296,8 @@ export default {
   }
   .x-padded {
     padding-top: 2px;
+  }
+  .my-button {
+    text-decoration-line: underline!important;
   }
 </style>
