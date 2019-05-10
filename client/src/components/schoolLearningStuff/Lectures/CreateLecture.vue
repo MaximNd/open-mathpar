@@ -44,10 +44,10 @@
                       </v-card-text>
                     </v-card>
                   </v-flex>
-                  <v-flex xs12 v-for="(n, index) in lecture.text.length" :key="`lecture-text${index}`">
+                  <v-flex xs12 v-for="(n, index) in lecture.text" :key="`lecture-text${index}`">
                     <v-card class="mb-1">
                       <v-card-title>
-                        <span class="headline primary--text">TextField №{{ n }}</span>
+                        <span class="headline primary--text">TextField №{{ index + 1 }}</span>
                       </v-card-title>
                       <v-card-actions>
                         <v-container>
@@ -126,7 +126,11 @@ export default {
   },
   computed: {
     textFieldsIndexes() {
-      return Array(...{ length: this.lecture.text.length }).map((_, index) => ({ value: Number(index), text: Number(index + 1) }));
+      const arr = [];
+      for(let i = 0; i < this.lecture.text.length; i++) {
+        arr.push(i)
+      }
+      return arr.map((_, index) => ({ value: Number(index), text: Number(index + 1) }));
     },
   },
   methods: {
@@ -162,7 +166,7 @@ export default {
               this.swap(index);
             }
           }
-        });
+        }).catch(e => console.log('!ERROR'));
     },
     swap(index) {
       this.lecture.text[index].isLatex = !this.lecture.text[index].isLatex;
@@ -182,7 +186,7 @@ export default {
   created() {
     this.$http.get('subjects')
       .then((data) => { this.subjects = data.body; });
-    for (let i = 0; i < this.textCount; ++i) {
+    for (let i = 0; i < this.textCount; i++) {
       this.lecture.text.push({
         task: '',
         result: '',
