@@ -67,6 +67,7 @@
                   v-model="task.countOfVariants"
                   :label="$t('utils.labels.countOfVariants')"
                   type="number"
+                  min="1"
                   required></v-text-field>
               </v-flex>
               <v-flex md12 :lg4="!isTest" :lg6="isTest">
@@ -360,8 +361,7 @@ export default {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
-        const that = this;
-        reader.onload = function (e) {
+        reader.onload = () => {
           /** @type {String} */
           const content = reader.result;
           const lines = content.split(/[\r\n]+/g);
@@ -373,11 +373,11 @@ export default {
           let isSolutionParsing = false;
 
           let isWriteToText = true;
-          const taskRegExp = /TASK [\d]{2}/;
+          const taskRegExp = /TASK\s+[\d]{2}/;
           const endTextSeparatorRegExp = /---/;
           const endTaskBodySeparator = /===/;
 
-          lines.forEach((line, i) => {
+          lines.forEach((line) => {
             console.log(isTaskParsing);
             if (!isTaskParsing && taskRegExp.test(line)) {
               isTaskParsing = true;
@@ -396,6 +396,7 @@ export default {
                   latex: '<p>No result yet</p>',
                   isLatex: false,
                 },
+                variant: this.currentVariant
               });
             } else if (isTaskParsing && isTextParsing) {
               if (endTextSeparatorRegExp.test(line)) {
@@ -423,10 +424,11 @@ export default {
               }
             }
           });
-          that.task.exercises = exercises;
-          that.task.exercises.forEach((exercise, i) => {
-            that.execute(i, 'task');
-            that.execute(i, 'fullSolution');
+          console.log(exercises);
+          this.task.exercises.splice(this.currentVariant - 1, 1, exercises);
+          this.task.exercises[this.currentVariant - 1].forEach((exercise, i) => {
+            this.execute(i, 'task');
+            this.execute(i, 'fullSolution');
           });
         };
         reader.readAsText(file);
@@ -435,7 +437,7 @@ export default {
       }
     },
     saveText() {
-      const text = this.task.name + this.task.exercises.reduce((text, { task, fullSolution }) => {
+      const text = this.task.name + this.task.exercises[this.currentVariant - 1].reduce((text, { task, fullSolution }) => {
         text += (`${task.task}\r\n"---"\r\n${task.result}\r\n"==="\r\n${fullSolution.task}\r\n"---"\r\n${fullSolution.result}\r\n"==="\r\n`);
         return text;
       }, '');
