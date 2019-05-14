@@ -17,6 +17,13 @@ const actions = {
         .catch(err => reject(err));
     });
   },
+  createClassU({ commit }, payload) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('class-u', payload)
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  },
 };
 
 export default {

@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <appCreateGroup v-if="$auth.user().role.indexOf('headTeacher') !== -1"></appCreateGroup>
+        <appCreateGroup v-if="$auth.user().role.indexOf('headTeacher') !== -1 || $auth.user().role.indexOf('methodist') !== -1"></appCreateGroup>
         <appGroupsTable></appGroupsTable>
     </v-container>
 </template>

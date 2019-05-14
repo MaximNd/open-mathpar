@@ -26,9 +26,13 @@ module.exports = {
         const name = req.body.class.name;
         req.user.clients
             .then(clients => {
+                const role = clients.find(client => client.clientRole === "dean")
+                            ? "dean"
+                            : "director";
                 const _class = new Class({
                     name,
-                    schoolId: findShoollId(clients, 'director')
+                    schoolId: findShoollId(clients, role),
+                    schoolModel: role === 'dean' ? "University" : "School",
                 });
                 _class.save(err => {
                     if (err) {

@@ -11,6 +11,8 @@ const subject = require('./subject');
 const task = require('./task');
 const teacher = require('./teacher');
 const user = require('./user');
+const dean = require('./dean');
+const methodist = require('./methodist');
 
 
 module.exports = {
@@ -26,5 +28,7 @@ module.exports = {
   lection,
   task,
   plan,
-  school
+  school,
+  dean,
+  methodist,
 }

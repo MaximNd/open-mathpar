@@ -6,6 +6,9 @@ const Student = require('./../models/student');
 const Teacher = require('./../models/teacher');
 const HeadTeacher = require('./../models/headTeacher');
 const Director = require('../models/director');
+const Rector = require('../models/rector');
+const Dean = require('../models/dean');
+const Methodist = require('../models/methodist');
 const Authority = require('../models/authority');
 
 // User Schema
@@ -62,7 +65,10 @@ UserSchema.virtual('clients').get(function() {
             'teacher': Teacher,
             'headTeacher': HeadTeacher,
             'director': Director,
-            'admin': Authority
+            'admin': Authority,
+            'rector': Rector,
+            'dean': Dean,
+            'methodist': Methodist,
         }
         return user.role.map(role =>  {
             let resClientsPromise = rolesMap[role].find({ userId: user.id });
@@ -77,6 +83,10 @@ UserSchema.virtual('clients').get(function() {
             if (role === 'teacher') {
                 resClientsPromise.populate('timetable.subjectId').populate('timetable.groupId');
             }
+            if(role === 'rector' || role === 'dean' || role === 'methodist') {
+                resClientsPromise.populate('universityId').populate('name');
+            }
+            
             resClientsPromise.populate('schoolId', 'name');
             return resClientsPromise.then(client => {
                     const roles = {
@@ -84,7 +94,10 @@ UserSchema.virtual('clients').get(function() {
                         'Teacher': 'teacher',
                         'HeadTeacher': 'headTeacher',
                         'Director': 'director',
-                        'Authority': 'admin'
+                        'Authority': 'admin',
+                        'Rector': 'rector',
+                        'Dean': 'dean',
+                        'Methodist': 'methodist',
                     };
                     return { clientRole: roles[client[0].constructor.modelName], client: client[0] };
                 });
@@ -101,3 +114,8 @@ UserSchema.virtual('age').get(function() {
 });
 
 const User = module.exports = mongoose.model('User', UserSchema);
+
+let profileSchema = new mongoose.Schema({
+    fullName: String,
+    age: Number
+})

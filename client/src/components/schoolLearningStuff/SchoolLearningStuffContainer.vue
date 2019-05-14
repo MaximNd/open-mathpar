@@ -7,7 +7,7 @@
             <div slot="header" class="primary--text title">
               {{ $t('schoolLearningStuff.tasks.name') }}
             </div>
-            <appTasksContainer></appTasksContainer>
+            <appTasksContainer :schoolModel="schoolModel"></appTasksContainer>
           </v-expansion-panel-content>
           <v-expansion-panel-content lazy class="elevation-1">
             <div slot="header" class="primary--text title">
@@ -19,13 +19,13 @@
             <div slot="header" class="primary--text title">
               {{ $t('schoolLearningStuff.subjectsAndThemes.name') }}
             </div>
-            <appSubjectsContainer></appSubjectsContainer>
+            <appSubjectsContainer :schoolModel="schoolModel" :isSchool="isSchool"></appSubjectsContainer>
           </v-expansion-panel-content>
           <v-expansion-panel-content lazy class="elevation-1">
             <div slot="header" class="primary--text title">
               {{ $t('schoolLearningStuff.plans.name') }}
             </div>
-            <appPlansContainer></appPlansContainer>
+            <appPlansContainer :schoolModel="schoolModel"></appPlansContainer>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-flex>
@@ -50,6 +50,12 @@ export default {
     appLecturesContainer: LecturesContainer,
     appSubjectsContainer: SubjectsContainer,
     appPlansContainer: PlansContainer,
+  },
+  data () {
+    return {
+      schoolModel: this.$auth.user().clients[0].client.schoolModel,
+      isSchool: this.$auth.user().clients[0].client.schoolModel === "School",
+    }
   },
 };
 </script>

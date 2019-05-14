@@ -151,8 +151,8 @@ export default {
     },
     filterThisSchool() {
       return [
-        { text: this.$t('schoolLearningStuff.tasks.tasksTable.filters.findInThisSchool'), value: true },
-        { text: this.$t('schoolLearningStuff.tasks.tasksTable.filters.findInAllSchools'), value: false }
+        { text: this.$t('schoolLearningStuff.tasks.tasksTable.filters.' + (this.schoolModel === 'School' ? 'findInThisSchool' : 'findInThisUniversity')), value: true },
+        { text: this.$t('schoolLearningStuff.tasks.tasksTable.filters.' + (this.schoolModel === 'School' ? 'findInAllSchools' : 'findInAllUniversities')), value: false }
       ];
     },
     headers() {
@@ -185,7 +185,7 @@ export default {
           text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.teacher'), align: 'right', value: 'teacherId.userId.fullName', sortable: false,
         },
         {
-          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.school'), align: 'right', value: 'teacherId.schoolId.name', sortable: false,
+          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.' + (this.schoolModel === 'School' ? 'school' : 'university')), align: 'right', value: 'teacherId.schoolId.name', sortable: false,
         }
       ];
     }
@@ -230,6 +230,7 @@ export default {
         this.filter();
       });
   },
+  props: ['schoolModel'],
 };
 </script>
 

@@ -38,6 +38,11 @@ const actions = {
       .then(data => resolve(data))
       .catch(err => reject(err)));
   },
+  createGroupU({ commit }, payload) {
+    return new Promise((resolve, reject) => Vue.http.post('group-u', payload)
+      .then(data => resolve(data))
+      .catch(err => reject(err)));
+  },
   getGroupById({ commit }, payload) {
     return Vue.http.get(`group/${payload.groupId}`)
       .then(data => commit('SET_GROUP', data.body));

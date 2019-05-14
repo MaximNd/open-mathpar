@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const StudentsController = require('./../controllers/StudentsController');
 const isHeadTeacher = require('./../policies/checkRole')('headTeacher');
+const isMethodist = require('./../policies/checkRole')('methodist');
 
 const isAuthenticated = require('./../policies/isAuthenticated');
 const isStudent = require('./../policies/checkRole')('student');
@@ -29,6 +30,9 @@ router.get('/student/:id/tasks-full-answers/:task_id', isAuthenticated, Students
 
 // Create student
 router.post('/student', isAuthenticated, isHeadTeacher, StudentsController.createStudent);
+
+// Create student in university
+router.post('/student-u', isAuthenticated, isMethodist, StudentsController.createStudent);
 
 // Set mark by task
 router.put('/student/set-mark', isAuthenticated, StudentsController.setMarkByTask);

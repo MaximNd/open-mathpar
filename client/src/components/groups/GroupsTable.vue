@@ -78,7 +78,10 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('getGroupsBySchoolId', { schoolId: this.$auth.user().clients[0].client.schoolId._id });
+    const id = this.$auth.user().role.indexOf('methodist') !== -1
+      ? this.$auth.user().clients[0].client.universityId._id
+      : this.$auth.user().clients[0].client.schoolId._id
+    this.$store.dispatch('getGroupsBySchoolId', { schoolId: id });
   },
 };
 </script>

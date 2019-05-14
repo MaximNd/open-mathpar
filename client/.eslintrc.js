@@ -10,6 +10,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'linebreak-style': ["error", "windows"],
     'no-plusplus': 0,
     'no-underscore-dangle': 0,
     'comma-dangle': 0,
