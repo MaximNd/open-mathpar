@@ -358,6 +358,7 @@ export default {
       this.$refs.text_file.click();
     },
     uploadText(event) {
+      debugger;
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
