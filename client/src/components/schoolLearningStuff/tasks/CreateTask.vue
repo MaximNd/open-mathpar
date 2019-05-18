@@ -38,7 +38,7 @@
               <v-flex xs4>
                 <v-autocomplete
                   v-model="task.classNumber"
-                  :label="$t('utils.labels.class')"
+                  :label="$t(schoolModel === 'School' ? 'utils.labels.class' : 'utils.labels.year')"
                   :items="classes"
                   item-text="name"
                   item-value="_id"
@@ -290,7 +290,7 @@ export default {
       index: 0,
       currentVariant: 1,
       subjects: [],
-      classes: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      classes: this.schoolModel === 'School' ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] : [1,2,3,4,5,6],
       themes: [],
       exercisesCount: 2,
       createTaskDialog: false,

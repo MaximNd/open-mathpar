@@ -74,7 +74,7 @@
             <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-right">{{ props.item.subjectId.name }}</td>
             <td class="text-xs-right"><router-link :to="`/profile/${props.item.teacherId.userId._id}`">{{ props.item.teacherId.userId.fullName }}</router-link></td>
-            <td class="text-xs-right"><router-link :to="`/school/${props.item.teacherId.schoolId._id}`">{{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}</router-link></td>
+            <td class="text-xs-right"><router-link :to="`/school/${props.item.teacherId.schoolId._id}`">{{ (schoolModel === 'School' ? `№${props.item.teacherId.schoolId.number}` : '') + `${props.item.teacherId.schoolId.name}` }}</router-link></td>
           </tr>
         </template>
         <template slot="expand" slot-scope="props">

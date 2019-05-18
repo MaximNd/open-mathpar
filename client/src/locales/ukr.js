@@ -37,12 +37,14 @@ export default {
       birthday: 'День народження',
       password: 'Пароль',
       class: 'Клас',
+      year: 'Рік',
       group: 'Група',
       subject: 'Предмет',
       selectSubject: 'Вибрати Предмет',
       selectLecture: 'Вибрати Лекцію',
       selectTask: 'Вибрати Завдання',
       selectType: 'Вибрати тип',
+      selectYear: 'Вибрати рік',
       selectTheme: 'Вибрати тему',
       selectDifficultyLevel: 'Вибрати рівень складності',
       selectClass: 'Вибрати клас',
@@ -258,6 +260,7 @@ export default {
           taskNumber: '№ Завдання',
           task: 'Назва Завдання',
           class: 'Клас',
+          year: 'Рік',
           difficultyLevel: 'Рівень Складності',
           subject: 'Предмет',
           themeNumber: '№ Теми',
@@ -280,6 +283,7 @@ export default {
       themesHeaders: {
         name: 'Назва',
         class: 'Клас',
+        year: 'Рік',
         order: 'Порядок'
       }
     },

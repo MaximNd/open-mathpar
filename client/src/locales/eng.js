@@ -37,6 +37,7 @@ export default {
       birthday: 'Birthday',
       password: 'Password',
       class: 'Class',
+      year: 'Year',
       group: 'Group',
       subject: 'Subject',
       selectSubject: 'Select Subject',
@@ -46,6 +47,7 @@ export default {
       selectTheme: 'Select theme',
       selectDifficultyLevel: 'Select difficulty level',
       selectClass: 'Select class',
+      selectYear: 'Select year',
       planName: 'Plan Name',
       theme: 'Theme',
       themeName: 'Theme name',
@@ -258,6 +260,7 @@ export default {
           taskNumber: '№ Task',
           task: 'Task',
           class: 'Class',
+          year: 'Year',
           difficultyLevel: 'Difficulty Level',
           subject: 'Subject',
           themeNumber: '№ Theme',
@@ -280,6 +283,7 @@ export default {
       themesHeaders: {
         name: 'Name',
         class: 'Class',
+        year: 'Year',
         order: 'Order'
       }
     },
