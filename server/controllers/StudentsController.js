@@ -44,14 +44,17 @@ module.exports = {
 
             req.user.clients
                 .then(async clients => {
-                    try {   
+                    try {
+                        const role = clients.find(client => client.clientRole === "methodist")
+                            ? "methodist"
+                            : "headTeacher";
                         const student = new Student({
                             userId: studentUser._id,
-                            schoolId: findShoollId(clients, 'headTeacher'),
+                            schoolId: findShoollId(clients, role),
                             groupId,
-                            classId
+                            classId,
+                            schoolModel: role === 'methodist' ? "University" : "School",
                         });
-                    
                         await student.save();
                         res.status(200, { message: 'ok' }).end();
                     } catch (error) {

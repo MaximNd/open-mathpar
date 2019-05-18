@@ -2,7 +2,7 @@
   <v-card>
     <v-card-text>
       <appCreateTask></appCreateTask>
-      <appTasksTable></appTasksTable>
+      <appTasksTable :schoolModel="schoolModel"></appTasksTable>
     </v-card-text>
   </v-card>
 </template>
@@ -16,6 +16,7 @@ export default {
     appTasksTable: TasksTable,
     appCreateTask: CreateTask,
   },
+  props: ['schoolModel'],
 };
 </script>
 

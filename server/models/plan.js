@@ -9,13 +9,15 @@ const PlanSchema = new Schema({
     },
     schoolId: {
         type: ObjectId,
-        ref: 'School',
-        required: true
+        required: true,
+        //ref: 'School'
+        refPath: 'schoolModel'
     },
-    groupId: {
-        type: ObjectId,
-        ref: 'Group',
-        required: false
+    schoolModel: {
+      type: String,
+      required: true,
+      enum: ['School', 'University'],
+      default: 'School'
     },
     teacherId: {
         type: ObjectId,

@@ -319,6 +319,7 @@ export default {
         this.subjects = subjects.map(subject => ({ ...subject, value: false }));
       });
   },
+  props: ['schoolModel', 'isSchool'],
 };
 </script>
 

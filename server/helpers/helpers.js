@@ -6,7 +6,12 @@ const config = require('./../config/passport');
 
 module.exports = {
     findShoollId(clients, role) {
-        return clients.find(client => client.clientRole === role).client.schoolId;
+        const client = clients.find(client => client.clientRole === role).client;
+        return client.schoolId ? client.schoolId : client.universityId;
+    },
+    
+    findUniversityId(clients, role) {
+        return clients.find(client => client.clientRole === role).client.universityId;
     },
 
     calculateFourNumbersBySRMark(mark) {
@@ -116,7 +121,7 @@ module.exports = {
 
     jwtSignUser(user) {
         const ONE_WEEK = 60 * 60 * 24 * 7;
-        return jwt.sign({
+        return jwt.sign({   
             sub: user.id
         }, config.authentication.jwtSecret, {
             expiresIn: ONE_WEEK

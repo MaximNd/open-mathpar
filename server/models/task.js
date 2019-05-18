@@ -7,7 +7,14 @@ const ObjectId = Schema.Types.ObjectId;
 const TaskSchema = new Schema({
   schoolId: {
     type: ObjectId,
-    ref: 'School'
+    //ref: 'School'
+    refPath: 'schoolModel'
+  },
+  schoolModel: {
+    type: String,
+    required: false,
+    enum: ['School', 'University'],
+    default: 'School'
   },
   // filter
   subjectId: {

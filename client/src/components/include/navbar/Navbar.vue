@@ -88,9 +88,12 @@ export default {
   },
   computed: {
     menuItems() {
+      const schoolModel = this.$auth.user().clients[0].client.schoolModel === 'School' ? 'School' : 'University';
+      const schoolModelLowerCase = schoolModel.toLowerCase();
       if (this.$auth.user().role.indexOf('admin') !== -1) {
         return [];
-      } if (this.$auth.user().role.indexOf('director') !== -1) {
+      }
+      if (this.$auth.user().role.indexOf('director') !== -1) {
         return [
           { title: this.$t('navbar.profile'), icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
           { title: this.$t('navbar.createHeadTeacher'), icon: 'person_add', link: `/director/${this.$auth.user().id}/create-head-teacher` },
@@ -111,9 +114,9 @@ export default {
         return [
           { title: this.$t('navbar.profile'), icon: 'perm_identity', link: `/profile/${this.$auth.user().id}` },
           { title: this.$t('navbar.timetableAndPlan'), icon: 'subtitles', link: `/teacher/${this.$auth.user().id}/timetable_plan` },
-          { title: this.$t('navbar.schoolLearningStuff'), icon: 'import_contacts', link: '/school_learning_stuff' },
+          { title: this.$t('navbar.' + schoolModelLowerCase + 'LearningStuff'), icon: 'import_contacts', link: '/school_learning_stuff' },
           { title: this.$t('navbar.groups'), icon: 'people', link: '/groups' },
-          { title: this.$t('navbar.school', ['№445']), icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` },
+          { title: this.$t('navbar.' + schoolModelLowerCase, ['№445']), icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` },
         ];
       }
       if (this.$auth.user().role.indexOf('student') !== -1) {
@@ -122,7 +125,27 @@ export default {
           { title: this.$t('navbar.subjects'), icon: 'local_library', link: `/student/${this.$auth.user().id}/subjects` },
           { title: this.$t('navbar.gradebook'), icon: 'subtitles', link: `/student/${this.$auth.user().id}/gradebook` },
           { title: this.$t('navbar.group'), icon: 'people', link: `/group/${this.$auth.user().clients[0].client.groupId}` },
-          { title: this.$t('navbar.school', ['№445']), icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` },
+          { title: this.$t('navbar.' + schoolModelLowerCase, ['№445']), icon: 'school', link: `/school/${this.$auth.user().clients[0].client.schoolId._id}` },
+        ];
+      }
+      if (this.$auth.user().role.indexOf('rector') !== -1) {
+        return [
+          { title: this.$t('navbar.profile'), icon: 'description', link: `/profile/${this.$auth.user().id}` },
+          { title: this.$t('navbar.createDean'), icon: 'person_add', link: `/rector/new-dean` },
+        ];
+      }
+      if (this.$auth.user().role.indexOf('dean') !== -1) {
+        return [
+          { title: this.$t('navbar.profile'), icon: 'description', link: `/profile/${this.$auth.user().id}` },
+          { title: this.$t('navbar.createMethodist'), icon: 'person_add', link: `/dean/new-methodist` },
+          { title: this.$t('navbar.createSpecialty'), icon: 'account_balance', link: `/dean/create-specialty` },
+        ];
+      }
+      if (this.$auth.user().role.indexOf('methodist') !== -1) {
+        return [
+          { title: this.$t('navbar.profile'), icon: 'description', link: `/profile/${this.$auth.user().id}` },
+          { title: this.$t('navbar.createMember'), icon: 'person_add', link: `/methodist/new-member` },
+          { title: this.$t('navbar.group'), icon: 'people', link: '/groups' },
         ];
       }
       return [];

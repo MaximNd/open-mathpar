@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const TeachersController = require('./../controllers/TeachersController');
 const isHeadTeacher = require('./../policies/checkRole')('headTeacher');
+const isMethodist = require('./../policies/checkRole')('methodist');
 
 const Lection = require('./../models/lection');
 const Plan = require('./../models/plan');
@@ -29,6 +30,9 @@ router.get('/teacher/:id/timetable', isAuthenticated, TeachersController.getTeac
 
 // Create teacher
 router.post('/teacher', isAuthenticated, isHeadTeacher, TeachersController.createTeacher);
+
+// Create teacher in University
+router.post('/teacher-u', isAuthenticated, isMethodist, TeachersController.createTeacher);
 
 // Update teacher
 router.put('/teacher/:id', isAuthenticated, TeachersController.updateTeacher);

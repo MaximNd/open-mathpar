@@ -76,6 +76,9 @@ export default {
   },
   navbar: {
     profile: 'view profile',
+    createDean: 'New Dean',
+    createMethodist: 'New Methodist',
+    createSpecialty: 'Create Specialty',
     createHeadTeacher: 'Create Head Teacher',
     createClass: 'Create Class',
     createMember: 'Create Student/Teacher',
@@ -83,15 +86,18 @@ export default {
     gradebook: 'Gradebook',
     timetableAndPlan: 'timetable and plan',
     schoolLearningStuff: 'school learning stuff',
+    universityLearningStuff: 'university learning stuff',
     group: 'group',
     groups: 'groups',
     school: 'school  {0}',
+    university: 'university',
     locale: 'locale',
     logOut: 'log out'
   },
   profile: {
     editProfile: 'Edit profile',
     accountData: 'Account data',
+    university: 'University',
     userData: {
       fullName: 'Full name',
       gender: 'Gender',
@@ -244,7 +250,9 @@ export default {
         filters: {
           name: 'Filters',
           findInThisSchool: 'Find in this school',
-          findInAllSchools: 'Find in all schools'
+          findInAllSchools: 'Find in all schools',
+          findInThisUniversity: 'Find in this university',
+          findInAllUniversities: 'Find in all universities'
         },
         headers: {
           taskNumber: '№ Task',
@@ -256,7 +264,8 @@ export default {
           theme: 'Theme',
           type: 'Type',
           teacher: 'Teacher',
-          school: 'School'
+          school: 'School',
+          university: 'University'
         }
       }
     },
@@ -284,13 +293,16 @@ export default {
           name: 'Filters',
           filterPlans: 'Filter Plans',
           findInThisSchool: 'Find in this school',
-          findInAllSchools: 'Find in all schools'
+          findInAllSchools: 'Find in all schools',
+          findInThisUniversity: 'Find in this university',
+          findInAllUniversities: 'Find in all universities'
         },
         headers: {
           plan: 'Plan',
           subject: 'Subject',
           teacher: 'Teacher',
-          school: 'School'
+          school: 'School',
+          university: 'University'
         }
       }
     }

@@ -25,11 +25,15 @@ module.exports = {
             await teacherUser.save();
             req.user.clients
                 .then(async clients => {
+                    const role = clients.find(client => client.clientRole === "methodist")
+                            ? "methodist"
+                            : "headTeacher";
                     try {
                         const teacher = new Teacher({
                             userId: teacherUser._id,
-                            schoolId: findShoollId(clients, 'headTeacher'),
-                            timetable
+                            schoolId: findShoollId(clients, role),
+                            timetable,
+                            schoolModel: role === 'methodist' ? "University" : "School",
                         });
                     
                         await teacher.save();

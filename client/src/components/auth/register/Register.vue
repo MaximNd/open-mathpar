@@ -4,9 +4,18 @@
       <v-flex sm12 md10 lg8 xl6>
         <v-card>
           <v-form @submit.prevent="registerUser" method="POST">
-          <v-card-title class="primary white--text title">
-            Register
-          </v-card-title>
+          <v-toolbar class="primary white--text title">
+            <v-toolbar-title>Register School</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn flat class="grey--text text--lighten-4" :to="'/register/university'">
+                <div class="x-padded my-button">
+                  Register University
+                </div>
+                <v-icon right>school</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
 
           <v-card-text>
 
@@ -246,6 +255,7 @@ export default {
   },
   methods: {
     registerUser() {
+      this.testFormData = new FormData();
       this.testFormData.append('text', 'text');
       this.testFormData.append('director', JSON.stringify(this.director));
       this.testFormData.append('school', JSON.stringify(this.school));
@@ -283,5 +293,11 @@ export default {
   .title {
     font-size: 22px;
     font-weight: 400;
+  }
+  .x-padded {
+    padding-top: 2px;
+  }
+  .my-button {
+    text-decoration-line: underline!important;
   }
 </style>

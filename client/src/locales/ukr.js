@@ -76,22 +76,28 @@ export default {
   },
   navbar: {
     profile: 'Профіль',
+    createDean: 'Додати декана',
+    createMethodist: 'Додати методиста',
     createHeadTeacher: 'Створити завуча',
+    createSpecialty: 'Створити спеціальність',
     createClass: 'створити клас',
     createMember: 'Створити Учня/Вчителя',
     subjects: 'Предмети',
     gradebook: 'Оцінки',
     timetableAndPlan: 'Розклад і план',
     schoolLearningStuff: 'шкільний навчальний матеріал',
+    universityLearningStuff: 'навчальний матеріал університету',
     group: 'група',
     groups: 'групи',
     school: 'школа {0}',
+    university: 'університет',
     locale: 'мова',
     logOut: 'Вийти'
   },
   profile: {
     editProfile: 'Редагувати профіль',
     accountData: 'Данні профілю',
+    university: 'Університет',
     userData: {
       fullName: 'Повне ім\'я',
       gender: 'Стать',
@@ -244,7 +250,9 @@ export default {
         filters: {
           name: 'Фільтри',
           findInThisSchool: 'Шукати в вашій школі',
-          findInAllSchools: 'Шукати в усіх школах'
+          findInAllSchools: 'Шукати в усіх школах',
+          findInThisUniversity: 'Шукати у вашому університеті',
+          findInAllUniversities: 'Шукати у всіх університетах'
         },
         headers: {
           taskNumber: '№ Завдання',
@@ -256,7 +264,8 @@ export default {
           theme: 'Тема',
           type: 'Тип',
           teacher: 'Вчитель',
-          school: 'Школа'
+          school: 'Школа',
+          university: 'Університет'
         }
       }
     },
@@ -284,13 +293,16 @@ export default {
           name: 'Фільтри',
           filterPlans: 'Фільтрувати плани',
           findInThisSchool: 'Шукати в вашій школі',
-          findInAllSchools: 'Шукати в усіх школах'
+          findInAllSchools: 'Шукати в усіх школах',
+          findInThisUniversity: 'Шукати у вашому університеті',
+          findInAllUniversities: 'Шукати у всіх університетах'
         },
         headers: {
           plan: 'План',
           subject: 'Предмет',
           teacher: 'Вчитель',
-          school: 'Школа'
+          school: 'Школа',
+          university: 'Університет'
         }
       }
     }
