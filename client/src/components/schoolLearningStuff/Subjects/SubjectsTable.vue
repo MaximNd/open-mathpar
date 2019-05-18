@@ -53,9 +53,9 @@
                               <v-flex sm12 md4>
                                 <v-select
                                   v-model="themesToAdd[themeIndex].class"
-                                  :label="$t('utils.labels.selectClass')"
+                                  :label="$t(schoolModel === 'School' ? 'utils.labels.selectClass' : 'utils.labels.selectYear')"
                                   required
-                                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                                  :items="schoolModel === 'School' ? [1,2,3,4,5,6,7,8,9,10,11,12] : [1,2,3,4,5,6]"
                                 ></v-select>
                               </v-flex>
                               <v-flex sm12 md4>
@@ -120,9 +120,9 @@
                           </v-flex>
                           <v-flex sm12 md4>
                             <v-select
-                              :label="$t('utils.labels.selectClass')"
+                              :label="$t(schoolModel === 'School' ? 'utils.labels.selectClass' : 'utils.labels.selectYear')"
                               required
-                              :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                              :items="schoolModel === 'School' ? [1,2,3,4,5,6,7,8,9,10,11,12] : [1,2,3,4,5,6]"
                             ></v-select>
                           </v-flex>
                           <v-flex sm12 md4>
@@ -250,7 +250,7 @@ export default {
           sortable: false,
         },
         {
-          text: this.$t('schoolLearningStuff.subjectsAndThemes.themesHeaders.class'),
+          text: this.$t(this.schoolModel === 'School' ? 'schoolLearningStuff.subjectsAndThemes.themesHeaders.class' : 'schoolLearningStuff.subjectsAndThemes.themesHeaders.year'),
           align: 'right',
           value: 'class',
           sortable: false,

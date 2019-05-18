@@ -47,9 +47,9 @@
               </v-flex>
               <v-flex xs4>
                 <v-select
-                  :items="[1,2,3,4,5,6,7,8,9,10,11,12]"
+                  :items="schoolModel === 'School' ? [1,2,3,4,5,6,7,8,9,10,11,12] : [1,2,3,4,5,6]"
                   v-model="filterData.classNumber"
-                  :label="$t('utils.labels.selectClass')"
+                  :label="$t(schoolModel === 'School' ? 'utils.labels.selectClass' : 'utils.labels.selectYear')"
                   single-line
                 ></v-select>
               </v-flex>
@@ -112,7 +112,7 @@
           </td>
           <td class="text-xs-right clickable">
             <router-link :to="`/school/${props.item.teacherId.schoolId._id}`" tag="span">
-              {{ `№${props.item.teacherId.schoolId.number} ${props.item.teacherId.schoolId.name}` }}
+              {{ (schoolModel === 'School' ? `№${props.item.teacherId.schoolId.number}` : '') + `${props.item.teacherId.schoolId.name}` }}
             </router-link>
           </td>
         </template>
@@ -164,7 +164,7 @@ export default {
           text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.task'), align: 'left', value: 'name', sortable: false,
         },
         {
-          text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.class'), align: 'right', value: 'class', sortable: false,
+          text: this.$t(this.schoolModel === 'School' ? 'schoolLearningStuff.tasks.tasksTable.headers.class' : 'schoolLearningStuff.tasks.tasksTable.headers.year'), align: 'right', value: 'class', sortable: false,
         },
         {
           text: this.$t('schoolLearningStuff.tasks.tasksTable.headers.difficultyLevel'), align: 'right', value: 'difficultyLevel', sortable: false,
